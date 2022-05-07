@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Austin_Ma&#39;s Blog</title>
+    <link>https://mksasx.github.io/</link>
+    <description>Recent content on Austin_Ma&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Fri, 06 May 2022 13:25:38 +0800</lastBuildDate><atom:link href="https://mksasx.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>个人一些表演合集</title>
+      <link>https://mksasx.github.io/posts/music/%E4%B8%AA%E4%BA%BA%E8%A1%A8%E6%BC%94%E5%90%88%E9%9B%86/</link>
+      <pubDate>Fri, 06 May 2022 13:25:38 +0800</pubDate>
+      
+      <guid>https://mksasx.github.io/posts/music/%E4%B8%AA%E4%BA%BA%E8%A1%A8%E6%BC%94%E5%90%88%E9%9B%86/</guid>
+      <description>一些唱歌合集，唱的不好，敬请见谅，会陆续更新</description>
+    </item>
+    
+    <item>
+      <title>篮球壁纸</title>
+      <link>https://mksasx.github.io/posts/sport/bas_wallpaper/</link>
+      <pubDate>Fri, 06 May 2022 13:25:38 +0800</pubDate>
+      
+      <guid>https://mksasx.github.io/posts/sport/bas_wallpaper/</guid>
+      <description>一些篮球有关的壁纸</description>
+    </item>
+    
+    <item>
+      <title>篮球基本战术及图解</title>
+      <link>https://mksasx.github.io/posts/sport/%E7%AF%AE%E7%90%83%E5%9F%BA%E6%9C%AC%E6%88%98%E6%9C%AF%E5%8F%8A%E5%9B%BE%E8%A7%A3/</link>
+      <pubDate>Tue, 03 May 2022 13:25:38 +0800</pubDate>
+      
+      <guid>https://mksasx.github.io/posts/sport/%E7%AF%AE%E7%90%83%E5%9F%BA%E6%9C%AC%E6%88%98%E6%9C%AF%E5%8F%8A%E5%9B%BE%E8%A7%A3/</guid>
+      <description>篮球基本战术及图解</description>
+    </item>
+    
+    <item>
+      <title>五一节见闻</title>
+      <link>https://mksasx.github.io/posts/life/my-first-post/</link>
+      <pubDate>Wed, 04 May 2022 13:25:38 +0800</pubDate>
+      
+      <guid>https://mksasx.github.io/posts/life/my-first-post/</guid>
+      <description>五一节摆烂啦！</description>
+    </item>
+    
+    <item>
+      <title>FFT模板</title>
+      <link>https://mksasx.github.io/posts/tech/fft/</link>
+      <pubDate>Fri, 04 Mar 2022 13:25:38 +0800</pubDate>
+      
+      <guid>https://mksasx.github.io/posts/tech/fft/</guid>
+      <description>快速傅里叶变换模板</description>
+    </item>
+    
+    
+    <item>
+      <title>自我介绍</title>
+      <link>https://mksasx.github.io/about/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://mksasx.github.io/about/</guid>
+      <description>我的名字： Austin Ma 我来自： 美丽冰城：哈尔滨 我求学于： 北京航空航天大学2020级软件学院 我的微信： Austinmzy 我的QQ： 1263122871</description>
+    </item>
+    
+    
+    <item>
+      <title>🤝友链</title>
+      <link>https://mksasx.github.io/links/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://mksasx.github.io/links/</guid>
+      <description>Ma&amp;#39;s bilibili 一个北航软院学子的b站</description>
+    </item>
+    
+  </channel>
+</rss>
