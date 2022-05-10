@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>2022春-OS-Lab4-系统调用与Fork-实验报告 | Austin_Ma&#39;s Blog</title>
+<meta name="keywords" content="OS实验报告, 系统调用与Fork实验报告">
+<meta name="description" content="OS实验报告，系统调用与Fork实验报告">
+<meta name="author" content="
+作者:&nbsp;Austin_Ma">
+<link rel="canonical" href="https://mksasx.github.io/posts/tech/os/os_lab/lab4%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.min.27404baa763e5d74ea5ea0550d25afc77737bac118362487fad159f6127f434f.css" integrity="sha256-J0BLqnY&#43;XXTqXqBVDSWvx3c3usEYNiSH&#43;tFZ9hJ/Q08=" rel="preload stylesheet" as="style">
+<script defer crossorigin="anonymous" src="/assets/js/highlight.min.2840b7fccd34145847db71a290569594bdbdb00047097f75d6495d162f5d7dff.js" integrity="sha256-KEC3/M00FFhH23GikFaVlL29sABHCX911kldFi9dff8="
+    onload="hljs.initHighlightingOnLoad();"></script>
+<link rel="icon" href="https://mksasx.github.io/img/1.webp">
+<link rel="icon" type="image/png" sizes="16x16" href="https://mksasx.github.io/img/1.webp">
+<link rel="icon" type="image/png" sizes="32x32" href="https://mksasx.github.io/img/1.webp">
+<link rel="apple-touch-icon" href="https://mksasx.github.io/1.webp">
+<link rel="mask-icon" href="https://mksasx.github.io/1.webp">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --hljs-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:title" content="2022春-OS-Lab4-系统调用与Fork-实验报告" />
+<meta property="og:description" content="OS实验报告，系统调用与Fork实验报告" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://mksasx.github.io/posts/tech/os/os_lab/lab4%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/" /><meta property="article:section" content="posts" />
+
+<meta property="article:modified_time" content="2022-05-10T09:25:38&#43;08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="2022春-OS-Lab4-系统调用与Fork-实验报告"/>
+<meta name="twitter:description" content="OS实验报告，系统调用与Fork实验报告"/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "📜文章",
+      "item": "https://mksasx.github.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  3 ,
+      "name": "🖥️技术",
+      "item": "https://mksasx.github.io/posts/tech/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  4 ,
+      "name": "🖥️操作系统",
+      "item": "https://mksasx.github.io/posts/tech/os/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  5 ,
+      "name": "🀄操作系统实验报告",
+      "item": "https://mksasx.github.io/posts/tech/os/os_lab/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  6 ,
+      "name": "2022春-OS-Lab4-系统调用与Fork-实验报告",
+      "item": "https://mksasx.github.io/posts/tech/os/os_lab/lab4%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "2022春-OS-Lab4-系统调用与Fork-实验报告",
+  "name": "2022春-OS-Lab4-系统调用与Fork-实验报告",
+  "description": "OS实验报告，系统调用与Fork实验报告",
+  "keywords": [
+    "OS实验报告", "系统调用与Fork实验报告"
+  ],
+  "articleBody": "Lab4实验报告 思考题 4.1  内核保存现场时，将所有通用寄存器、CP0寄存器、当前PC值保存到栈里。但是，通用寄存器的值却非一成不变、完全保存。其中$k0，$k1，$v0的值被改变：$k0暂存$sp的值，$k1用于更新$sp的值，$v0用于存放非通用寄存器的值。而在MIPS中，$k0，$k1被定义为暂时的，随便使用的寄存器，vo则是用于存放函数的返回值，这三个寄存器的改写，对内核影响不大。从而，内核在保存现场的时候避免破坏了通用寄存器。 可以，系统调用核心部分(syscall_*)执行前（用到$a0−$a3前）的过程中$a0−$a3寄存器的值没有被改变过，因此可以直接使用。 参数的传递依赖于a0-a3参数寄存器和栈。只要我们保证a0-a3参数寄存器不变，栈能够以原本的样子复制到内核栈空间中，就能够让sys开头的函数认为参数相同。 处理中，Trapframe中CP0_EPC增加了4，使得系统调用结束后用户态可以从发生系统调用的下一条指令开始执行。并将执行系统调用后的返回值存入了$v0寄存器，使得系统调用结束后用户态可以获得正确的系统调用返回值。  4.2  mkenvid函数中，在生成进程id时，先用一个静态变量表示第几次调用这个函数，再将其左移11位，再加上这个env块在envs数组中的偏移，得到这个进程块所对应的env_id。如此生成ID可以给每个进程一个独一无二的进程号，同时还可以方便的通过进程号找到进程块进而获得进程的全部信息。  4.3  说明子进程和父进程共享代码段且具有大致相同的状态和数据。 说明子进程开始运行时的大部分上下文状态与原进程相同，子进程在创建时保存了父进程的上下文、PC值等，状态与父进程一致。  4.4  C  4.5  UTOP以上的用户空间对于用户进程来说不可改变，是内核相关的页表；系统空间对于每个进程来说是相同且不可改变的，因此UTOP以上空间不用进行保护； UXSTACKTOP - BY2PG到UXSTACKTOP的空间是用户进程的异常栈，若进行写时复制保护可能陷入死循环，因此不能被保护。 USTACKTOP到USTACKTOP + BY2PG的空间在空间分布图上是Invalid memory，用不到所以无需保护。 去除上述，需要保护的是在UTEXT与USTACKTOP之间且被使用的页面。  4.6   vpt中存放着二级页表数组，vpd中存放的是一级页表数组。其下标对应着第几个相应页表。对于虚拟地址va，(*vpt)[va  12]表示其对应的二级页表，(*vpt)[va  12]表示其对应的一级页表。\n  我们可以看到，定义\nextern volatile Pte *vpt[]; extern volatile Pde *vpd[]; 在entry.S中，有着如下代码\n.globl vpt vpt: .word UVPT .globl vpd vpd: .word (UVPT+(UVPT12)*4) vpt上存放的是UVPT (0x7fc00000),指向UVTP区域，也就是当前进程页表项所在的位置，变量类型为Pte数组。 vpd上存放的是(UVPT+(UVPT12)*4),是自映射机制下的一级页表地址，变量类型是Pde数组。\n  (UVPT+(UVPT12)*4)是vpd指向的地址，很好地体现了自映射。\n  用户进程无权限修改页表项。\n  4.7  在用户发生写时复制引发的缺页中断并进行处理时，可能会再次发生缺页中断，从而“中断重入”。 我们在用户进程处理此缺页中断，因此用户进程需要读取Trapframe中的值；同时用户进程在中断结束恢复现场时也需要用到Trapframe中数据，因此存到用户空间。  4.8  将操作交与用户自己完成，简化了操作系统的复杂度，符合微内核设计理念 首先使用存放函数调用返回值的$v0,$v1寄存器恢复非通用寄存器，之后通过$sp恢复通用寄存器，最后恢复$sp，保证了恢复后不破坏通用寄存器。  4.9  在父进程调用syscall_env_alloc过程中可能也需要进行缺页处理。 写时复制保护机制运行时，此时进程给__pgfault_handler变量赋值时就会触发缺页中断，但异常中断处理没有设置好，故无法进行正常处理。 不需要，子进程完全继承自父进程，复制了父进程中__pgfault_handler变量值。  实验难点图示 1.对于汇编语言的练习欠佳  对于寄存器的规则理解不够深入。在上学期计组的学习中，只使用了纯汇编编程，寄存器的使用由自己控制。这次存在C语言自动控制寄存器，因此要符合C语言对寄存器的使用规则。  V0和V1会存储函数返回值； A0 - A3会存储函数传入值（剩余传值在栈里） S0 - S7在调用函数前后不变 SP存放栈值 RA存放返回地址 K0,K1的使用    2.对于Trapframe中的寄存器对应不明确  TF_EPC(sp)-EPC,TF_REG4(sp)-返回值，TF_REG4(sp) -系统调用号(msyscall第1个参数，存入a0)，TF_REG5、6、7(sp)-msyscall第2,3,4参数(存入a1,a2,a3)，TF_REG29(sp) -用户栈指针  3.具体函数的书写 首先注意的是我们书写的这些函数所用到的va大多需要在UTOP以下\n  handle_sys：\n 这里需要注意的是需要把epc值加四，再放回去，以便用户进入时正确跳转。 同时注意A0 - A3会存储函数传入值（剩余传值在栈里）    sys_yield():\n 注意首先要将KERNEL_SP复制到TIMESTACK再执行sched_yield()    duppage()：\n  取出权限位perm = (*vpt)[pn] \u0026 0xfff;\n  根据不同的权限情况，选择映射时分配的权限位，其中PTE_R，PTE_COW映射时权限位需要有PTE_COW\nstatic void duppage(u_int envid, u_int pn) { \tu_int addr; \tu_int perm; \taddr=pn*BY2PG; \tperm = (*vpt)[pn] \u0026 0xfff; \tif(!(perm \u0026 PTE_R) || !(perm \u0026 PTE_V)) \t{ \tsyscall_mem_map(0,addr,envid,addr,perm); \t} \telse if(perm\u0026PTE_LIBRARY) \t{ \tsyscall_mem_map(0,addr,envid,addr,perm); \t} \telse if(perm\u0026PTE_COW) \t{ \tsyscall_mem_map(0, addr, envid, addr, perm); \t} \telse{ \tsyscall_mem_map(0, addr, envid, addr, (perm|PTE_COW));  syscall_mem_map(0, addr, 0, addr, (perm|PTE_COW)); \t} \t//\tuser_panic(\"duppage not implemented\"); }     page_fault_handler(struct Trapframe *tf)\n 设置好异常处理栈以及epc寄存器的值：tf*-cp0_epc=curenv-env_pgfault_handler;    pgfault(u_int va)\n 在mmu.h中可以看到USTACKTOP开始的一段内存Invalid memory  还没有使用过，将tmp设置到USTACKTOP 注意处理好映射关系     fork(void)\n  注意遍历父进程地址空间时，为了方便取出,用VPN(USTACKTOP)进行转换，同时注意对于(*vpd),需要i»10;\n  其他的按照提示即可\n  extern void __asm_pgfault_handler(void); int fork(void) { \t// Your code here. \tu_int newenvid; \textern struct Env *envs; \textern struct Env *env; \tu_int i; \tu_int envid; \tu_int parent_id = syscall_getenvid();  \t//The parent installs pgfault using set_pgfault_handler \tset_pgfault_handler(pgfault); \t//alloc a new alloc \tnewenvid=syscall_env_alloc(); \tif(newenvid==0){ \tenv=\u0026envs[ENVX(syscall_getenvid())]; \tenv - env_parent_id = parent_id; \treturn 0; \t} \tfor( i = 0; i  VPN(USTACKTOP) ; i++ ) \t{ \tif (((*vpd)[i  10] \u0026 PTE_V) \u0026\u0026 ((*vpt)[i] \u0026 PTE_V)) { \tduppage(newenvid, i); \t} \t} \tsyscall_mem_alloc(newenvid, UXSTACKTOP - BY2PG, PTE_V | PTE_R); \tsyscall_set_pgfault_handler(newenvid, __asm_pgfault_handler, UXSTACKTOP); \tsyscall_set_env_status(newenvid, ENV_RUNNABLE); \treturn newenvid; }     体会与感想  本次实验对于汇编代码有一定的要求，需要进行复习巩固 在本次实验中，难度较之前的实验有较大的提升，处理函数时需要综合lab1-3的很多知识，综合性很强。 C语言帮忙我们干了很多事情，函数调用时对寄存器的保存以及传值、恢复等，写C时候完全不可见。但一和汇编对接起来，就会感受到高级语言的美好。 要完成的函数很多，第一次接触这个函数会觉得无从下手，同时也牵扯到用户态和内核态。Fork函数的整个流程也需要一定的时间才能理解。本实验细节也很多，需要细心  ",
+  "wordCount" : "2783",
+  "inLanguage": "en",
+  "datePublished": "0001-01-01T00:00:00Z",
+  "dateModified": "2022-05-10T09:25:38+08:00",
+  "author":[{
+    "@type": "Person",
+    "name": "Austin_Ma"
+  }],
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://mksasx.github.io/posts/tech/os/os_lab/lab4%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Austin_Ma's Blog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://mksasx.github.io/img/1.webp"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://mksasx.github.io" accesskey="h" title="AustinMa&#39;s Blog (Alt + H)">
+                <img src="https://mksasx.github.io/img/1.webp" alt="logo" aria-label="logo"
+                    height="35">AustinMa&#39;s Blog</a>
+            <span class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </span>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://mksasx.github.io/search" title="🔍搜索 (Alt &#43; /)" accesskey=/>
+                    <span>🔍搜索</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://mksasx.github.io/" title="🏠主页">
+                    <span>🏠主页</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://mksasx.github.io/posts" title="📚文章">
+                    <span>📚文章</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://mksasx.github.io/archives/" title="⏱时间轴">
+                    <span>⏱时间轴</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://mksasx.github.io/tags" title="🔖标签">
+                    <span>🔖标签</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://mksasx.github.io/about" title="🙋🏻‍♂️关于">
+                    <span>🙋🏻‍♂️关于</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://mksasx.github.io/links" title="🤝友链">
+                    <span>🤝友链</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="https://mksasx.github.io">Home</a>&nbsp;»&nbsp;<a href="https://mksasx.github.io/posts/">📜文章</a>&nbsp;»&nbsp;<a href="https://mksasx.github.io/posts/tech/">🖥️技术</a>&nbsp;»&nbsp;<a href="https://mksasx.github.io/posts/tech/os/">🖥️操作系统</a>&nbsp;»&nbsp;<a href="https://mksasx.github.io/posts/tech/os/os_lab/">🀄操作系统实验报告</a></div>
+    <h1 class="post-title">
+      2022春-OS-Lab4-系统调用与Fork-实验报告
+    </h1>
+    <div class="post-meta">
+
+
+
+
+
+
+
+
+
+
+创建:&nbsp;<span title='2022-05-10 09:25:38 +0800 CST'>2022-05-10</span>&nbsp;|&nbsp;更新:&nbsp;2022-05-10&nbsp;|&nbsp;字数:&nbsp;2783字&nbsp;|&nbsp;时长: 6分钟
+
+</div>
+  </header> <aside id="toc-container" class="toc-container wide">
+    <div class="toc">
+        <details >
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">Table of Contents</span>
+        </summary>
+
+        <div class="inner"><ul>
+                <li>
+                    <a href="#lab4%e5%ae%9e%e9%aa%8c%e6%8a%a5%e5%91%8a" aria-label="Lab4实验报告">Lab4实验报告</a><ul>
+                        
+                <li>
+                    <a href="#%e6%80%9d%e8%80%83%e9%a2%98" aria-label="思考题">思考题</a><ul>
+                        
+                <li>
+                    <a href="#41" aria-label="4.1">4.1</a></li>
+                <li>
+                    <a href="#42" aria-label="4.2">4.2</a></li>
+                <li>
+                    <a href="#43" aria-label="4.3">4.3</a></li>
+                <li>
+                    <a href="#44" aria-label="4.4">4.4</a></li>
+                <li>
+                    <a href="#45" aria-label="4.5">4.5</a></li>
+                <li>
+                    <a href="#46" aria-label="4.6">4.6</a></li>
+                <li>
+                    <a href="#47" aria-label="4.7">4.7</a></li>
+                <li>
+                    <a href="#48" aria-label="4.8">4.8</a></li>
+                <li>
+                    <a href="#49" aria-label="4.9">4.9</a></li></ul>
+                </li>
+                <li>
+                    <a href="#%e5%ae%9e%e9%aa%8c%e9%9a%be%e7%82%b9%e5%9b%be%e7%a4%ba" aria-label="实验难点图示">实验难点图示</a><ul>
+                        
+                <li>
+                    <a href="#1%e5%af%b9%e4%ba%8e%e6%b1%87%e7%bc%96%e8%af%ad%e8%a8%80%e7%9a%84%e7%bb%83%e4%b9%a0%e6%ac%a0%e4%bd%b3" aria-label="1.对于汇编语言的练习欠佳">1.对于汇编语言的练习欠佳</a></li>
+                <li>
+                    <a href="#2%e5%af%b9%e4%ba%8etrapframe%e4%b8%ad%e7%9a%84%e5%af%84%e5%ad%98%e5%99%a8%e5%af%b9%e5%ba%94%e4%b8%8d%e6%98%8e%e7%a1%ae" aria-label="2.对于Trapframe中的寄存器对应不明确">2.对于Trapframe中的寄存器对应不明确</a></li>
+                <li>
+                    <a href="#3%e5%85%b7%e4%bd%93%e5%87%bd%e6%95%b0%e7%9a%84%e4%b9%a6%e5%86%99" aria-label="3.具体函数的书写">3.具体函数的书写</a></li></ul>
+                </li>
+                <li>
+                    <a href="#%e4%bd%93%e4%bc%9a%e4%b8%8e%e6%84%9f%e6%83%b3" aria-label="体会与感想">体会与感想</a>
+                </li>
+            </ul>
+            </li>
+            </ul>
+        </div>
+        </details>
+    </div>
+</aside>
+<script>
+    let activeElement;
+    let elements;
+    window.addEventListener('DOMContentLoaded', function (event) {
+        checkTocPosition();
+
+        elements = document.querySelectorAll('h1[id],h2[id],h3[id],h4[id],h5[id],h6[id]');
+        
+        activeElement = elements[0];
+        const id = encodeURI(activeElement.getAttribute('id')).toLowerCase();
+        document.querySelector(`.inner ul li a[href="#${id}"]`).classList.add('active');
+    }, false);
+
+    window.addEventListener('resize', function(event) {
+        checkTocPosition();
+    }, false);
+
+    window.addEventListener('scroll', () => {
+        
+        activeElement = Array.from(elements).find((element) => {
+            if ((getOffsetTop(element) - window.pageYOffset) > 0 &&
+                (getOffsetTop(element) - window.pageYOffset) < window.innerHeight/2) {
+                return element;
+            }
+        }) || activeElement
+
+        elements.forEach(element => {
+            const id = encodeURI(element.getAttribute('id')).toLowerCase();
+            if (element === activeElement){
+                document.querySelector(`.inner ul li a[href="#${id}"]`).classList.add('active');
+            } else {
+                document.querySelector(`.inner ul li a[href="#${id}"]`).classList.remove('active');
+            }
+        })
+    }, false);
+
+    const main = parseInt(getComputedStyle(document.body).getPropertyValue('--article-width'), 10);
+    const toc = parseInt(getComputedStyle(document.body).getPropertyValue('--toc-width'), 10);
+    const gap = parseInt(getComputedStyle(document.body).getPropertyValue('--gap'), 10);
+
+    function checkTocPosition() {
+        const width = document.body.scrollWidth;
+
+        if (width - main - (toc * 2) - (gap * 4) > 0) {
+            document.getElementById("toc-container").classList.add("wide");
+        } else {
+            document.getElementById("toc-container").classList.remove("wide");
+        }
+    }
+
+    function getOffsetTop(element) {
+        if (!element.getClientRects().length) {
+            return 0;
+        }
+        let rect = element.getBoundingClientRect();
+        let win = element.ownerDocument.defaultView;
+        return rect.top + win.pageYOffset;
+    }
+</script>
+
+  <div class="post-content"><h1 id="lab4实验报告">Lab4实验报告<a hidden class="anchor" aria-hidden="true" href="#lab4实验报告">#</a></h1>
+<h2 id="思考题">思考题<a hidden class="anchor" aria-hidden="true" href="#思考题">#</a></h2>
+<h3 id="41">4.1<a hidden class="anchor" aria-hidden="true" href="#41">#</a></h3>
+<ul>
+<li>内核保存现场时，将所有通用寄存器、CP0寄存器、当前PC值保存到栈里。但是，通用寄存器的值却非一成不变、完全保存。其中$k0，$k1，$v0的值被改变：$k0暂存$sp的值，$k1用于更新$sp的值，$v0用于存放非通用寄存器的值。而在MIPS中，$k0，$k1被定义为暂时的，随便使用的寄存器，vo则是用于存放函数的返回值，这三个寄存器的改写，对内核影响不大。从而，内核在保存现场的时候避免破坏了通用寄存器。</li>
+<li>可以，系统调用核心部分(<code>syscall_*</code>)执行前（用到$a0−$a3前）的过程中$a0−$a3寄存器的值没有被改变过，因此可以直接使用。</li>
+<li>参数的传递依赖于a0-a3参数寄存器和栈。只要我们保证a0-a3参数寄存器不变，栈能够以原本的样子复制到内核栈空间中，就能够让sys开头的函数认为参数相同。</li>
+<li>处理中，Trapframe中CP0_EPC增加了4，使得系统调用结束后用户态可以从发生系统调用的下一条指令开始执行。并将执行系统调用后的返回值存入了$v0寄存器，使得系统调用结束后用户态可以获得正确的系统调用返回值。</li>
+</ul>
+<h3 id="42">4.2<a hidden class="anchor" aria-hidden="true" href="#42">#</a></h3>
+<ul>
+<li><code>mkenvid</code>函数中，在生成进程id时，先用一个静态变量表示第几次调用这个函数，再将其左移11位，再加上这个env块在envs数组中的偏移，得到这个进程块所对应的<code>env_id</code>。如此生成ID可以给每个进程一个独一无二的进程号，同时还可以方便的通过进程号找到进程块进而获得进程的全部信息。</li>
+</ul>
+<h3 id="43">4.3<a hidden class="anchor" aria-hidden="true" href="#43">#</a></h3>
+<ul>
+<li>说明子进程和父进程共享代码段且具有大致相同的状态和数据。</li>
+<li>说明子进程开始运行时的大部分上下文状态与原进程相同，子进程在创建时保存了父进程的上下文、PC值等，状态与父进程一致。</li>
+</ul>
+<h3 id="44">4.4<a hidden class="anchor" aria-hidden="true" href="#44">#</a></h3>
+<ul>
+<li>C</li>
+</ul>
+<h3 id="45">4.5<a hidden class="anchor" aria-hidden="true" href="#45">#</a></h3>
+<ul>
+<li>UTOP以上的用户空间对于用户进程来说不可改变，是内核相关的页表；系统空间对于每个进程来说是相同且不可改变的，因此UTOP以上空间不用进行保护；</li>
+<li>UXSTACKTOP - BY2PG到UXSTACKTOP的空间是用户进程的异常栈，若进行写时复制保护可能陷入死循环，因此不能被保护。</li>
+<li>USTACKTOP到USTACKTOP + BY2PG的空间在空间分布图上是Invalid memory，用不到所以无需保护。</li>
+<li>去除上述，需要保护的是在UTEXT与USTACKTOP之间且被使用的页面。</li>
+</ul>
+<h3 id="46">4.6<a hidden class="anchor" aria-hidden="true" href="#46">#</a></h3>
+<ul>
+<li>
+<p><code>vpt</code>中存放着二级页表数组，<code>vpd</code>中存放的是一级页表数组。其下标对应着第几个相应页表。对于虚拟地址<code>va</code>，<code>(*vpt)[va &gt;&gt; 12]</code>表示其对应的二级页表，<code>(*vpt)[va &gt;&gt; 12]</code>表示其对应的一级页表。</p>
+</li>
+<li>
+<p>我们可以看到，定义</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#66d9ef">extern</span> <span style="color:#66d9ef">volatile</span> Pte <span style="color:#f92672">*</span>vpt[]; 
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">extern</span> <span style="color:#66d9ef">volatile</span> Pde <span style="color:#f92672">*</span>vpd[];
+</span></span></code></pre></div><p>在<code>entry.S</code>中，有着如下代码</p>
+<pre tabindex="0"><code class="language-assembly" data-lang="assembly">.globl vpt 
+vpt:     
+     .word UVPT 
+     .globl vpd 
+vpd:     
+     .word (UVPT+(UVPT&gt;&gt;12)*4) 
+</code></pre><p><code>vpt</code>上存放的是<code>UVPT</code> (0x7fc00000),指向<code>UVTP</code>区域，也就是当前进程页表项所在的位置，变量类型为Pte数组。<code> vpd</code>上存放的是<code>(UVPT+(UVPT&gt;&gt;12)*4)</code>,是自映射机制下的一级页表地址，变量类型是<code>Pde</code>数组。</p>
+</li>
+<li>
+<p><code>(UVPT+(UVPT&gt;&gt;12)*4)</code>是<code>vpd</code>指向的地址，很好地体现了自映射。</p>
+</li>
+<li>
+<p>用户进程无权限修改页表项。</p>
+</li>
+</ul>
+<h3 id="47">4.7<a hidden class="anchor" aria-hidden="true" href="#47">#</a></h3>
+<ul>
+<li>在用户发生写时复制引发的缺页中断并进行处理时，可能会再次发生缺页中断，从而“中断重入”。</li>
+<li>我们在用户进程处理此缺页中断，因此用户进程需要读取Trapframe中的值；同时用户进程在中断结束恢复现场时也需要用到Trapframe中数据，因此存到用户空间。</li>
+</ul>
+<h3 id="48">4.8<a hidden class="anchor" aria-hidden="true" href="#48">#</a></h3>
+<ul>
+<li>将操作交与用户自己完成，简化了操作系统的复杂度，符合微内核设计理念</li>
+<li>首先使用存放函数调用返回值的$v0,$v1寄存器恢复非通用寄存器，之后通过$sp恢复通用寄存器，最后恢复$sp，保证了恢复后不破坏通用寄存器。</li>
+</ul>
+<h3 id="49">4.9<a hidden class="anchor" aria-hidden="true" href="#49">#</a></h3>
+<ul>
+<li>在父进程调用<code>syscall_env_alloc</code>过程中可能也需要进行缺页处理。</li>
+<li>写时复制保护机制运行时，此时进程给__pgfault_handler变量赋值时就会触发缺页中断，但异常中断处理没有设置好，故无法进行正常处理。</li>
+<li>不需要，子进程完全继承自父进程，复制了父进程中__pgfault_handler变量值。</li>
+</ul>
+<h2 id="实验难点图示">实验难点图示<a hidden class="anchor" aria-hidden="true" href="#实验难点图示">#</a></h2>
+<h3 id="1对于汇编语言的练习欠佳">1.对于汇编语言的练习欠佳<a hidden class="anchor" aria-hidden="true" href="#1对于汇编语言的练习欠佳">#</a></h3>
+<ul>
+<li>对于寄存器的规则理解不够深入。在上学期计组的学习中，只使用了纯汇编编程，寄存器的使用由自己控制。这次存在C语言自动控制寄存器，因此要符合C语言对寄存器的使用规则。
+<ul>
+<li>V0和V1会存储函数返回值；</li>
+<li>A0 - A3会存储函数传入值（剩余传值在栈里）</li>
+<li>S0 - S7在调用函数前后不变</li>
+<li>SP存放栈值</li>
+<li>RA存放返回地址</li>
+<li>K0,K1的使用</li>
+</ul>
+</li>
+</ul>
+<h3 id="2对于trapframe中的寄存器对应不明确">2.对于Trapframe中的寄存器对应不明确<a hidden class="anchor" aria-hidden="true" href="#2对于trapframe中的寄存器对应不明确">#</a></h3>
+<ul>
+<li>TF_EPC(sp)-EPC,TF_REG4(sp)-返回值，TF_REG4(sp) -系统调用号(msyscall第1个参数，存入a0)，TF_REG5、6、7(sp)-msyscall第2,3,4参数(存入a1,a2,a3)，TF_REG29(sp) -用户栈指针</li>
+</ul>
+<h3 id="3具体函数的书写">3.具体函数的书写<a hidden class="anchor" aria-hidden="true" href="#3具体函数的书写">#</a></h3>
+<p>首先注意的是我们书写的这些函数所用到的va大多需要在UTOP以下</p>
+<ul>
+<li>
+<p>handle_sys：</p>
+<ul>
+<li>这里需要注意的是需要把epc值加四，再放回去，以便用户进入时正确跳转。</li>
+<li>同时注意A0 - A3会存储函数传入值（剩余传值在栈里）</li>
+</ul>
+</li>
+<li>
+<p>sys_yield():</p>
+<ul>
+<li>注意首先要将KERNEL_SP复制到TIMESTACK再执行sched_yield()</li>
+</ul>
+</li>
+<li>
+<p>duppage()：</p>
+<ul>
+<li>
+<p>取出权限位perm = (*vpt)[pn] &amp; 0xfff;</p>
+</li>
+<li>
+<p>根据不同的权限情况，选择映射时分配的权限位，其中PTE_R，PTE_COW映射时权限位需要有PTE_COW</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#66d9ef">static</span> <span style="color:#66d9ef">void</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">duppage</span>(u_int envid, u_int pn)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>	u_int addr;
+</span></span><span style="display:flex;"><span>	u_int perm;
+</span></span><span style="display:flex;"><span>	addr<span style="color:#f92672">=</span>pn<span style="color:#f92672">*</span>BY2PG;
+</span></span><span style="display:flex;"><span>	perm <span style="color:#f92672">=</span> (<span style="color:#f92672">*</span>vpt)[pn] <span style="color:#f92672">&amp;</span> <span style="color:#ae81ff">0xfff</span>;
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span>(<span style="color:#f92672">!</span>(perm <span style="color:#f92672">&amp;</span> PTE_R) <span style="color:#f92672">||</span> <span style="color:#f92672">!</span>(perm <span style="color:#f92672">&amp;</span> PTE_V))
+</span></span><span style="display:flex;"><span>	{
+</span></span><span style="display:flex;"><span>		syscall_mem_map(<span style="color:#ae81ff">0</span>,addr,envid,addr,perm);
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span>(perm<span style="color:#f92672">&amp;</span>PTE_LIBRARY)
+</span></span><span style="display:flex;"><span>	{
+</span></span><span style="display:flex;"><span>		syscall_mem_map(<span style="color:#ae81ff">0</span>,addr,envid,addr,perm);
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span>(perm<span style="color:#f92672">&amp;</span>PTE_COW)
+</span></span><span style="display:flex;"><span>	{
+</span></span><span style="display:flex;"><span>		syscall_mem_map(<span style="color:#ae81ff">0</span>, addr, envid, addr, perm);
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">else</span>{
+</span></span><span style="display:flex;"><span>		syscall_mem_map(<span style="color:#ae81ff">0</span>, addr, envid, addr, (perm<span style="color:#f92672">|</span>PTE_COW));
+</span></span><span style="display:flex;"><span>        syscall_mem_map(<span style="color:#ae81ff">0</span>, addr, <span style="color:#ae81ff">0</span>, addr, (perm<span style="color:#f92672">|</span>PTE_COW));
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">//	user_panic(&#34;duppage not implemented&#34;);
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>}
+</span></span></code></pre></div></li>
+</ul>
+</li>
+<li>
+<p>page_fault_handler(struct <em>Trapframe</em> *<em>tf</em>)</p>
+<ul>
+<li>设置好异常处理栈以及epc寄存器的值：tf*-&gt;cp0_epc=curenv-&gt;env_pgfault_handler;</li>
+</ul>
+</li>
+<li>
+<p>pgfault(<em>u_int</em> <em>va</em>)</p>
+<ul>
+<li>在mmu.h中可以看到USTACKTOP开始的一段内存<code>Invalid memory </code> 还没有使用过，将tmp设置到USTACKTOP</li>
+<li>注意处理好映射关系</li>
+<li><img loading="lazy" src="C:%5cUsers%5cGOD%5cAppData%5cRoaming%5cTypora%5ctypora-user-images%5cimage-20220510111111223.png" alt="image-20220510111111223"  />
+</li>
+</ul>
+</li>
+<li>
+<p>fork(void)</p>
+<ul>
+<li>
+<p>注意遍历父进程地址空间时，为了方便取出,用VPN(USTACKTOP)进行转换，同时注意对于(*vpd),需要i&raquo;10;</p>
+</li>
+<li>
+<p>其他的按照提示即可</p>
+</li>
+<li>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#66d9ef">extern</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">__asm_pgfault_handler</span>(<span style="color:#66d9ef">void</span>);
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">int</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">fork</span>(<span style="color:#66d9ef">void</span>)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// Your code here.
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	u_int newenvid;
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">extern</span> <span style="color:#66d9ef">struct</span> Env <span style="color:#f92672">*</span>envs;
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">extern</span> <span style="color:#66d9ef">struct</span> Env <span style="color:#f92672">*</span>env;
+</span></span><span style="display:flex;"><span>	u_int i;
+</span></span><span style="display:flex;"><span>	u_int envid;
+</span></span><span style="display:flex;"><span>	u_int parent_id <span style="color:#f92672">=</span> syscall_getenvid();
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">//The parent installs pgfault using set_pgfault_handler
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	set_pgfault_handler(pgfault);
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">//alloc a new alloc
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	newenvid<span style="color:#f92672">=</span>syscall_env_alloc();
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span>(newenvid<span style="color:#f92672">==</span><span style="color:#ae81ff">0</span>){
+</span></span><span style="display:flex;"><span>		env<span style="color:#f92672">=&amp;</span>envs[ENVX(syscall_getenvid())];
+</span></span><span style="display:flex;"><span>		env <span style="color:#f92672">-&gt;</span> env_parent_id <span style="color:#f92672">=</span> parent_id;
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">for</span>( i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> VPN(USTACKTOP) ; i<span style="color:#f92672">++</span> )
+</span></span><span style="display:flex;"><span>	{
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">if</span> (((<span style="color:#f92672">*</span>vpd)[i <span style="color:#f92672">&gt;&gt;</span> <span style="color:#ae81ff">10</span>] <span style="color:#f92672">&amp;</span> PTE_V) <span style="color:#f92672">&amp;&amp;</span> ((<span style="color:#f92672">*</span>vpt)[i] <span style="color:#f92672">&amp;</span> PTE_V)) {
+</span></span><span style="display:flex;"><span>			duppage(newenvid, i);
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	syscall_mem_alloc(newenvid, UXSTACKTOP <span style="color:#f92672">-</span> BY2PG, PTE_V <span style="color:#f92672">|</span> PTE_R);
+</span></span><span style="display:flex;"><span>	syscall_set_pgfault_handler(newenvid, __asm_pgfault_handler, UXSTACKTOP);
+</span></span><span style="display:flex;"><span>	syscall_set_env_status(newenvid, ENV_RUNNABLE);
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> newenvid;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div></li>
+</ul>
+</li>
+</ul>
+<h2 id="体会与感想">体会与感想<a hidden class="anchor" aria-hidden="true" href="#体会与感想">#</a></h2>
+<ul>
+<li>本次实验对于汇编代码有一定的要求，需要进行复习巩固</li>
+<li>在本次实验中，难度较之前的实验有较大的提升，处理函数时需要综合lab1-3的很多知识，综合性很强。</li>
+<li>C语言帮忙我们干了很多事情，函数调用时对寄存器的保存以及传值、恢复等，写C时候完全不可见。但一和汇编对接起来，就会感受到高级语言的美好。</li>
+<li>要完成的函数很多，第一次接触这个函数会觉得无从下手，同时也牵扯到用户态和内核态。Fork函数的整个流程也需要一定的时间才能理解。本实验细节也很多，需要细心</li>
+</ul>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="https://mksasx.github.io/tags/os%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/">OS实验报告</a></li>
+      <li><a href="https://mksasx.github.io/tags/%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%94%A8%E4%B8%8Efork%E5%AE%9E%E9%AA%8C%E6%8A%A5%E5%91%8A/">系统调用与Fork实验报告</a></li>
+    </ul>
+<nav class="paginav">
+  <a class="prev" href="https://mksasx.github.io/posts/sport/basketball/bas_wallpaper/">
+    <span class="title">« Prev Page</span>
+    <br>
+    <span>篮球壁纸</span>
+  </a>
+  <a class="next" href="https://mksasx.github.io/posts/sport/basketball/%E7%AF%AE%E7%90%83%E5%9F%BA%E6%9C%AC%E6%88%98%E6%9C%AF%E5%8F%8A%E5%9B%BE%E8%A7%A3/">
+    <span class="title">Next Page »</span>
+    <br>
+    <span>篮球基本战术及图解</span>
+  </a>
+</nav>
+
+
+<div class="share-buttons">
+    <a target="_blank" rel="noopener noreferrer" aria-label="share 2022春-OS-Lab4-系统调用与Fork-实验报告 on twitter"
+        href="https://twitter.com/intent/tweet/?text=2022%e6%98%a5-OS-Lab4-%e7%b3%bb%e7%bb%9f%e8%b0%83%e7%94%a8%e4%b8%8eFork-%e5%ae%9e%e9%aa%8c%e6%8a%a5%e5%91%8a&amp;url=https%3a%2f%2fmksasx.github.io%2fposts%2ftech%2fos%2fos_lab%2flab4%25E5%25AE%259E%25E9%25AA%258C%25E6%258A%25A5%25E5%2591%258A%2f&amp;hashtags=OS%e5%ae%9e%e9%aa%8c%e6%8a%a5%e5%91%8a%2c%e7%b3%bb%e7%bb%9f%e8%b0%83%e7%94%a8%e4%b8%8eFork%e5%ae%9e%e9%aa%8c%e6%8a%a5%e5%91%8a">
+        <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve">
+            <path
+                d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-253.927,424.544c135.939,0 210.268,-112.643 210.268,-210.268c0,-3.218 0,-6.437 -0.153,-9.502c14.406,-10.421 26.973,-23.448 36.935,-38.314c-13.18,5.824 -27.433,9.809 -42.452,11.648c15.326,-9.196 26.973,-23.602 32.49,-40.92c-14.252,8.429 -30.038,14.56 -46.896,17.931c-13.487,-14.406 -32.644,-23.295 -53.946,-23.295c-40.767,0 -73.87,33.104 -73.87,73.87c0,5.824 0.613,11.494 1.992,16.858c-61.456,-3.065 -115.862,-32.49 -152.337,-77.241c-6.284,10.881 -9.962,23.601 -9.962,37.088c0,25.594 13.027,48.276 32.95,61.456c-12.107,-0.307 -23.448,-3.678 -33.41,-9.196l0,0.92c0,35.862 25.441,65.594 59.311,72.49c-6.13,1.686 -12.72,2.606 -19.464,2.606c-4.751,0 -9.348,-0.46 -13.946,-1.38c9.349,29.426 36.628,50.728 68.965,51.341c-25.287,19.771 -57.164,31.571 -91.8,31.571c-5.977,0 -11.801,-0.306 -17.625,-1.073c32.337,21.15 71.264,33.41 112.95,33.41Z" />
+        </svg>
+    </a>
+    <a target="_blank" rel="noopener noreferrer" aria-label="share 2022春-OS-Lab4-系统调用与Fork-实验报告 on linkedin"
+        href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https%3a%2f%2fmksasx.github.io%2fposts%2ftech%2fos%2fos_lab%2flab4%25E5%25AE%259E%25E9%25AA%258C%25E6%258A%25A5%25E5%2591%258A%2f&amp;title=2022%e6%98%a5-OS-Lab4-%e7%b3%bb%e7%bb%9f%e8%b0%83%e7%94%a8%e4%b8%8eFork-%e5%ae%9e%e9%aa%8c%e6%8a%a5%e5%91%8a&amp;summary=2022%e6%98%a5-OS-Lab4-%e7%b3%bb%e7%bb%9f%e8%b0%83%e7%94%a8%e4%b8%8eFork-%e5%ae%9e%e9%aa%8c%e6%8a%a5%e5%91%8a&amp;source=https%3a%2f%2fmksasx.github.io%2fposts%2ftech%2fos%2fos_lab%2flab4%25E5%25AE%259E%25E9%25AA%258C%25E6%258A%25A5%25E5%2591%258A%2f">
+        <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve">
+            <path
+                d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-288.985,423.278l0,-225.717l-75.04,0l0,225.717l75.04,0Zm270.539,0l0,-129.439c0,-69.333 -37.018,-101.586 -86.381,-101.586c-39.804,0 -57.634,21.891 -67.617,37.266l0,-31.958l-75.021,0c0.995,21.181 0,225.717 0,225.717l75.02,0l0,-126.056c0,-6.748 0.486,-13.492 2.474,-18.315c5.414,-13.475 17.767,-27.434 38.494,-27.434c27.135,0 38.007,20.707 38.007,51.037l0,120.768l75.024,0Zm-307.552,-334.556c-25.674,0 -42.448,16.879 -42.448,39.002c0,21.658 16.264,39.002 41.455,39.002l0.484,0c26.165,0 42.452,-17.344 42.452,-39.002c-0.485,-22.092 -16.241,-38.954 -41.943,-39.002Z" />
+        </svg>
+    </a>
+    <a target="_blank" rel="noopener noreferrer" aria-label="share 2022春-OS-Lab4-系统调用与Fork-实验报告 on reddit"
+        href="https://reddit.com/submit?url=https%3a%2f%2fmksasx.github.io%2fposts%2ftech%2fos%2fos_lab%2flab4%25E5%25AE%259E%25E9%25AA%258C%25E6%258A%25A5%25E5%2591%258A%2f&title=2022%e6%98%a5-OS-Lab4-%e7%b3%bb%e7%bb%9f%e8%b0%83%e7%94%a8%e4%b8%8eFork-%e5%ae%9e%e9%aa%8c%e6%8a%a5%e5%91%8a">
+        <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve">
+            <path
+                d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-3.446,265.638c0,-22.964 -18.616,-41.58 -41.58,-41.58c-11.211,0 -21.361,4.457 -28.841,11.666c-28.424,-20.508 -67.586,-33.757 -111.204,-35.278l18.941,-89.121l61.884,13.157c0.756,15.734 13.642,28.29 29.56,28.29c16.407,0 29.706,-13.299 29.706,-29.701c0,-16.403 -13.299,-29.702 -29.706,-29.702c-11.666,0 -21.657,6.792 -26.515,16.578l-69.105,-14.69c-1.922,-0.418 -3.939,-0.042 -5.585,1.036c-1.658,1.073 -2.811,2.761 -3.224,4.686l-21.152,99.438c-44.258,1.228 -84.046,14.494 -112.837,35.232c-7.468,-7.164 -17.589,-11.591 -28.757,-11.591c-22.965,0 -41.585,18.616 -41.585,41.58c0,16.896 10.095,31.41 24.568,37.918c-0.639,4.135 -0.99,8.328 -0.99,12.576c0,63.977 74.469,115.836 166.33,115.836c91.861,0 166.334,-51.859 166.334,-115.836c0,-4.218 -0.347,-8.387 -0.977,-12.493c14.564,-6.47 24.735,-21.034 24.735,-38.001Zm-119.474,108.193c-20.27,20.241 -59.115,21.816 -70.534,21.816c-11.428,0 -50.277,-1.575 -70.522,-21.82c-3.007,-3.008 -3.007,-7.882 0,-10.889c3.003,-2.999 7.882,-3.003 10.885,0c12.777,12.781 40.11,17.317 59.637,17.317c19.522,0 46.86,-4.536 59.657,-17.321c3.016,-2.999 7.886,-2.995 10.885,0.008c3.008,3.011 3.003,7.882 -0.008,10.889Zm-5.23,-48.781c-16.373,0 -29.701,-13.324 -29.701,-29.698c0,-16.381 13.328,-29.714 29.701,-29.714c16.378,0 29.706,13.333 29.706,29.714c0,16.374 -13.328,29.698 -29.706,29.698Zm-160.386,-29.702c0,-16.381 13.328,-29.71 29.714,-29.71c16.369,0 29.689,13.329 29.689,29.71c0,16.373 -13.32,29.693 -29.689,29.693c-16.386,0 -29.714,-13.32 -29.714,-29.693Z" />
+        </svg>
+    </a>
+    <a target="_blank" rel="noopener noreferrer" aria-label="share 2022春-OS-Lab4-系统调用与Fork-实验报告 on facebook"
+        href="https://facebook.com/sharer/sharer.php?u=https%3a%2f%2fmksasx.github.io%2fposts%2ftech%2fos%2fos_lab%2flab4%25E5%25AE%259E%25E9%25AA%258C%25E6%258A%25A5%25E5%2591%258A%2f">
+        <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve">
+            <path
+                d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-106.468,0l0,-192.915l66.6,0l12.672,-82.621l-79.272,0l0,-53.617c0,-22.603 11.073,-44.636 46.58,-44.636l36.042,0l0,-70.34c0,0 -32.71,-5.582 -63.982,-5.582c-65.288,0 -107.96,39.569 -107.96,111.204l0,62.971l-72.573,0l0,82.621l72.573,0l0,192.915l-191.104,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Z" />
+        </svg>
+    </a>
+    <a target="_blank" rel="noopener noreferrer" aria-label="share 2022春-OS-Lab4-系统调用与Fork-实验报告 on whatsapp"
+        href="https://api.whatsapp.com/send?text=2022%e6%98%a5-OS-Lab4-%e7%b3%bb%e7%bb%9f%e8%b0%83%e7%94%a8%e4%b8%8eFork-%e5%ae%9e%e9%aa%8c%e6%8a%a5%e5%91%8a%20-%20https%3a%2f%2fmksasx.github.io%2fposts%2ftech%2fos%2fos_lab%2flab4%25E5%25AE%259E%25E9%25AA%258C%25E6%258A%25A5%25E5%2591%258A%2f">
+        <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve">
+            <path
+                d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-58.673,127.703c-33.842,-33.881 -78.847,-52.548 -126.798,-52.568c-98.799,0 -179.21,80.405 -179.249,179.234c-0.013,31.593 8.241,62.428 23.927,89.612l-25.429,92.884l95.021,-24.925c26.181,14.28 55.659,21.807 85.658,21.816l0.074,0c98.789,0 179.206,-80.413 179.247,-179.243c0.018,-47.895 -18.61,-92.93 -52.451,-126.81Zm-126.797,275.782l-0.06,0c-26.734,-0.01 -52.954,-7.193 -75.828,-20.767l-5.441,-3.229l-56.386,14.792l15.05,-54.977l-3.542,-5.637c-14.913,-23.72 -22.791,-51.136 -22.779,-79.287c0.033,-82.142 66.867,-148.971 149.046,-148.971c39.793,0.014 77.199,15.531 105.329,43.692c28.128,28.16 43.609,65.592 43.594,105.4c-0.034,82.149 -66.866,148.983 -148.983,148.984Zm81.721,-111.581c-4.479,-2.242 -26.499,-13.075 -30.604,-14.571c-4.105,-1.495 -7.091,-2.241 -10.077,2.241c-2.986,4.483 -11.569,14.572 -14.182,17.562c-2.612,2.988 -5.225,3.364 -9.703,1.12c-4.479,-2.241 -18.91,-6.97 -36.017,-22.23c-13.314,-11.876 -22.304,-26.542 -24.916,-31.026c-2.612,-4.484 -0.279,-6.908 1.963,-9.14c2.016,-2.007 4.48,-5.232 6.719,-7.847c2.24,-2.615 2.986,-4.484 4.479,-7.472c1.493,-2.99 0.747,-5.604 -0.374,-7.846c-1.119,-2.241 -10.077,-24.288 -13.809,-33.256c-3.635,-8.733 -7.327,-7.55 -10.077,-7.688c-2.609,-0.13 -5.598,-0.158 -8.583,-0.158c-2.986,0 -7.839,1.121 -11.944,5.604c-4.105,4.484 -15.675,15.32 -15.675,37.364c0,22.046 16.048,43.342 18.287,46.332c2.24,2.99 31.582,48.227 76.511,67.627c10.685,4.615 19.028,7.371 25.533,9.434c10.728,3.41 20.492,2.929 28.209,1.775c8.605,-1.285 26.499,-10.833 30.231,-21.295c3.732,-10.464 3.732,-19.431 2.612,-21.298c-1.119,-1.869 -4.105,-2.99 -8.583,-5.232Z" />
+        </svg>
+    </a>
+    <a target="_blank" rel="noopener noreferrer" aria-label="share 2022春-OS-Lab4-系统调用与Fork-实验报告 on telegram"
+        href="https://telegram.me/share/url?text=2022%e6%98%a5-OS-Lab4-%e7%b3%bb%e7%bb%9f%e8%b0%83%e7%94%a8%e4%b8%8eFork-%e5%ae%9e%e9%aa%8c%e6%8a%a5%e5%91%8a&amp;url=https%3a%2f%2fmksasx.github.io%2fposts%2ftech%2fos%2fos_lab%2flab4%25E5%25AE%259E%25E9%25AA%258C%25E6%258A%25A5%25E5%2591%258A%2f">
+        <svg version="1.1" xml:space="preserve" viewBox="2 2 28 28">
+            <path
+                d="M26.49,29.86H5.5a3.37,3.37,0,0,1-2.47-1,3.35,3.35,0,0,1-1-2.47V5.48A3.36,3.36,0,0,1,3,3,3.37,3.37,0,0,1,5.5,2h21A3.38,3.38,0,0,1,29,3a3.36,3.36,0,0,1,1,2.46V26.37a3.35,3.35,0,0,1-1,2.47A3.38,3.38,0,0,1,26.49,29.86Zm-5.38-6.71a.79.79,0,0,0,.85-.66L24.73,9.24a.55.55,0,0,0-.18-.46.62.62,0,0,0-.41-.17q-.08,0-16.53,6.11a.59.59,0,0,0-.41.59.57.57,0,0,0,.43.52l4,1.24,1.61,4.83a.62.62,0,0,0,.63.43.56.56,0,0,0,.4-.17L16.54,20l4.09,3A.9.9,0,0,0,21.11,23.15ZM13.8,20.71l-1.21-4q8.72-5.55,8.78-5.55c.15,0,.23,0,.23.16a.18.18,0,0,1,0,.06s-2.51,2.3-7.52,6.8Z" />
+        </svg>
+    </a>
+</div>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>&copy; 2022 <a href="https://mksasx.github.io">Austin_Ma&#39;s Blog</a></span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://git.io/hugopapermod" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerText = 'copy';
+
+        function copyingDone() {
+            copybutton.innerText = 'copied!';
+            setTimeout(() => {
+                copybutton.innerText = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>
