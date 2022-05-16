@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>2022春-OS-第四次作业-进程 | Austin_Ma&#39;s Blog</title>
+<meta name="keywords" content="OS进程, 作业">
+<meta name="description" content="OS进程作业">
+<meta name="author" content="
+作者:&nbsp;Austin_Ma">
+<link rel="canonical" href="https://mksasx.github.io/posts/tech/os/os_lesson_text/%E4%BD%9C%E4%B8%9A4/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.min.268ac6fecf5bc8588ae1be0bf15d435ff1832b3d9f8e945a602436f8694ecb23.css" integrity="sha256-JorG/s9byFiK4b4L8V1DX/GDKz2fjpRaYCQ2&#43;GlOyyM=" rel="preload stylesheet" as="style">
+<script defer crossorigin="anonymous" src="/assets/js/highlight.min.2840b7fccd34145847db71a290569594bdbdb00047097f75d6495d162f5d7dff.js" integrity="sha256-KEC3/M00FFhH23GikFaVlL29sABHCX911kldFi9dff8="
+    onload="hljs.initHighlightingOnLoad();"></script>
+<link rel="icon" href="https://mksasx.github.io/img/1.webp">
+<link rel="icon" type="image/png" sizes="16x16" href="https://mksasx.github.io/img/1.webp">
+<link rel="icon" type="image/png" sizes="32x32" href="https://mksasx.github.io/img/1.webp">
+<link rel="apple-touch-icon" href="https://mksasx.github.io/1.webp">
+<link rel="mask-icon" href="https://mksasx.github.io/1.webp">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --hljs-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:title" content="2022春-OS-第四次作业-进程" />
+<meta property="og:description" content="OS进程作业" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://mksasx.github.io/posts/tech/os/os_lesson_text/%E4%BD%9C%E4%B8%9A4/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-05-02T13:25:38&#43;08:00" />
+<meta property="article:modified_time" content="2022-05-02T13:25:38&#43;08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="2022春-OS-第四次作业-进程"/>
+<meta name="twitter:description" content="OS进程作业"/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "📜文章",
+      "item": "https://mksasx.github.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  3 ,
+      "name": "🖥️技术",
+      "item": "https://mksasx.github.io/posts/tech/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  4 ,
+      "name": "🖥️操作系统",
+      "item": "https://mksasx.github.io/posts/tech/os/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  5 ,
+      "name": "📝操作系统课程作业",
+      "item": "https://mksasx.github.io/posts/tech/os/os_lesson_text/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  6 ,
+      "name": "2022春-OS-第四次作业-进程",
+      "item": "https://mksasx.github.io/posts/tech/os/os_lesson_text/%E4%BD%9C%E4%B8%9A4/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "2022春-OS-第四次作业-进程",
+  "name": "2022春-OS-第四次作业-进程",
+  "description": "OS进程作业",
+  "keywords": [
+    "OS进程", "作业"
+  ],
+  "articleBody": "作业四 进程  20373793 202111 马泽远\n  读者写者问题（写者优先）: 1）共享读; 2）互斥写、读写互斥; 3）写者优先于读者（一旦有写者，则后续读者必须等待，唤醒时优先考虑写者）。  int readers_count=0,writers_count=0; Semaphore w=1;//写互斥 Semaphore r=1;//当一个写进程进入时，禁止所有读进程进入 Semaphore writers_mutex=1;//writers_count修改互斥 Semaphore readers_mutex=1;//writers_count修改互斥 Semaphore writer_priorty=1;//保证写者优先于读者(保证在read_write上没有长队列)  Readers (){  while(true){  P(writer_priorty);  P(r);  P(readers_mutex);  readers_count++;  if(readcount==1)  P(w);  V(readers_mutex);  V(r);  V(writer_priorty);  read();  P(readers_mutex);  readers_count--;  if(readcount==0)  V(w);  V(readers_mutex);  } } Writers(){  while(true){  P(writers_mutex);  writers_count++;  if(writers_count==1)  P(r);  V(writers_mutex);  P(w);  write();  V(w);  P(writers_mutex);  writers_count--;  if(writers_count==0)  V(r);  V(writers_mutex);  } } 2.寿司店问题。假设一个寿司店有 5 个座位，如果你到达的时候有一个空座位，你可以立刻就坐。但是如果你到达的时候 5 个座位都是满的有人已经就坐，这就意味着这些人都是一起来吃饭的，那么你需要等待所有的人一起离开才能就坐。编写同步原语，实现这个场景的约束。\nbool full=false; int eating=0,waiting=0,n,i; Semaphore mutex=1; Semaphore queue=0; Customer(){  P(mutex);  if(full)  {  waiting++;  V(mutex);  P(queue);  }  else{  eating++;  if(eating==5)  {  full=true;  }  V(mutex);  }  eat();  P(mutex);  eating--;  if(eating==0)  {  n=min(5,waiting);  waiting-=n  eating+=n;  if(eating==5)  {  full=true;  }  for(i=0;in;i++)  {  V(queue);  }  }  V(mutex); }  三个进程 P1、P2、P3 互斥使用一个包含 N（N0）个单元的缓冲区。P1 每次用 produce() 生成一个正整数并用 put()送入缓冲区某一个空单元中；P2 每次用 getodd()从该缓冲区中取 出一个奇数并用 countodd()统计奇数个数；P3 每次用 geteven()从该缓冲区中取出一个偶数 并用 counteven()统计偶数个数。请用信号量机制实现这三个进程的同步与互斥活动，并说 明所定义的信号量的含义。要求用伪代码描述。\nSemaphore mutex=1; Semaphore even=0,odd=0,empty=N; P1(){  while(true){  int number;  number=produce();  P(empty);  P(mutex);  put();  V(mutex);  if(number%2==0)  {  V(even);  }  else{  V(odd);  }  } }  P2(){  while(true){  P(odd);  P(mutex);  getodd();  V(mutex);  V(empty);  countodd();  } }  P3(){  while(true){  P(evend);  P(mutex);  geteven();  V(mutex);  V(empty);  counteven();  } }   4、搜索-插入-删除问题。三个线程对一个单链表进行并发的访问，分别进行搜索、插入和删 除。搜索线程仅仅读取链表，因此多个搜索线程可以并发。插入线程把数据项插入到链表最 后的位置；多个插入线程必须互斥防止同时执行插入操作。但是，一个插入线程可以和多个 搜索线程并发执行。最后，删除线程可以从链表中任何一个位置删除数据。一次只能有一个 删除线程执行；删除线程之间，删除线程和搜索线程，删除线程和插入线程都不能同时执行。 请编写三类线程的同步互斥代码，描述这种三路的分类互斥问题。\nSemaphore iMutex = 1; //用于插入进程之间的互斥 Semaphore insertMutex =1; // 保护int变量 Semaphore searchMutex = 1; // 保护int变量 Semaphore No_search = 1; // 顾名思义，为1时没有搜索进程访问 Semaphore No_insert = 1; // 为1时没有插入进程访问 //当上述两个信号量同时为1，删除者才可以进行删除操作 int searcher_cnt = 0, inserter_cnt = 0;  Search(){  P(searchMutex);  searcher_cnt++;  if (searcher_cnt= 1)\t// 第一个进来的搜索者加锁  P(No_search)  V(searchMutex);  Searching(); // 访问临界区，多个搜索无需互斥  P(searchMutex);  searcher_cnt--;  if (t searcher_cnt==0)  V(No_search);\t// 表示此时没有搜索线程在进行，解锁  V(searchMutex); }  Insert(){  P(insertMutex);  inserter_cnt++;  if (inserter_cnt == 1)  P(No_insert)  V(insertMutex);   P(iMutex); // 既然可以和搜索线程并行，那么不用管t Inserting();\t// 访问临界区，多个插入者要互斥访问，一次一个\\ Inserting();  V(iMutex);   P(insertMutex);  inserter_cnt--;  if (inserter_cnt == 0)  V(No_insert); // 解锁，可唤醒删除者  V(insertMutex); }  Delete(){\t// 删除线程与其他任何线程互斥  P(No_search);  P(No_insert); // 若为1则可进入，这个信号量顺便也可以当作删除者的互斥保护  Deleting();\t// 搜索和插入线程都没，成功进入临界区  V(No_insert);  V(No_search);\t} ",
+  "wordCount" : "1234",
+  "inLanguage": "en",
+  "datePublished": "2022-05-02T13:25:38+08:00",
+  "dateModified": "2022-05-02T13:25:38+08:00",
+  "author":[{
+    "@type": "Person",
+    "name": "Austin_Ma"
+  }],
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://mksasx.github.io/posts/tech/os/os_lesson_text/%E4%BD%9C%E4%B8%9A4/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Austin_Ma's Blog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://mksasx.github.io/img/1.webp"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://mksasx.github.io" accesskey="h" title="AustinMa&#39;s Blog (Alt + H)">
+                <img src="https://mksasx.github.io/img/1.webp" alt="logo" aria-label="logo"
+                    height="35">AustinMa&#39;s Blog</a>
+            <span class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </span>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://mksasx.github.io/search" title="🔍搜索 (Alt &#43; /)" accesskey=/>
+                    <span>🔍搜索</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://mksasx.github.io/" title="🏠主页">
+                    <span>🏠主页</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://mksasx.github.io/posts" title="📚文章">
+                    <span>📚文章</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://mksasx.github.io/archives/" title="⏱时间轴">
+                    <span>⏱时间轴</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://mksasx.github.io/tags" title="🔖标签">
+                    <span>🔖标签</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://mksasx.github.io/about" title="🙋🏻‍♂️关于">
+                    <span>🙋🏻‍♂️关于</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://mksasx.github.io/links" title="🤝友链">
+                    <span>🤝友链</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="https://mksasx.github.io">Home</a>&nbsp;»&nbsp;<a href="https://mksasx.github.io/posts/">📜文章</a>&nbsp;»&nbsp;<a href="https://mksasx.github.io/posts/tech/">🖥️技术</a>&nbsp;»&nbsp;<a href="https://mksasx.github.io/posts/tech/os/">🖥️操作系统</a>&nbsp;»&nbsp;<a href="https://mksasx.github.io/posts/tech/os/os_lesson_text/">📝操作系统课程作业</a></div>
+    <h1 class="post-title">
+      2022春-OS-第四次作业-进程
+    </h1>
+    <div class="post-description">
+      OS进程作业
+    </div>
+    <div class="post-meta">
+
+
+
+
+
+
+
+
+
+
+创建:&nbsp;<span title='2022-05-02 13:25:38 +0800 CST'>2022-05-02</span>&nbsp;|&nbsp;更新:&nbsp;2022-05-02&nbsp;|&nbsp;字数:&nbsp;1234字&nbsp;|&nbsp;时长: 3分钟
+
+</div>
+  </header> <aside id="toc-container" class="toc-container wide">
+    <div class="toc">
+        <details >
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">Table of Contents</span>
+        </summary>
+
+        <div class="inner"><ul>
+                <li>
+                    <a href="#%e4%bd%9c%e4%b8%9a%e5%9b%9b-%e8%bf%9b%e7%a8%8b" aria-label="作业四 进程">作业四 进程</a>
+                </li>
+            </ul>
+        </div>
+        </details>
+    </div>
+</aside>
+<script>
+    let activeElement;
+    let elements;
+    window.addEventListener('DOMContentLoaded', function (event) {
+        checkTocPosition();
+
+        elements = document.querySelectorAll('h1[id],h2[id],h3[id],h4[id],h5[id],h6[id]');
+        
+        activeElement = elements[0];
+        const id = encodeURI(activeElement.getAttribute('id')).toLowerCase();
+        document.querySelector(`.inner ul li a[href="#${id}"]`).classList.add('active');
+    }, false);
+
+    window.addEventListener('resize', function(event) {
+        checkTocPosition();
+    }, false);
+
+    window.addEventListener('scroll', () => {
+        
+        activeElement = Array.from(elements).find((element) => {
+            if ((getOffsetTop(element) - window.pageYOffset) > 0 &&
+                (getOffsetTop(element) - window.pageYOffset) < window.innerHeight/2) {
+                return element;
+            }
+        }) || activeElement
+
+        elements.forEach(element => {
+            const id = encodeURI(element.getAttribute('id')).toLowerCase();
+            if (element === activeElement){
+                document.querySelector(`.inner ul li a[href="#${id}"]`).classList.add('active');
+            } else {
+                document.querySelector(`.inner ul li a[href="#${id}"]`).classList.remove('active');
+            }
+        })
+    }, false);
+
+    const main = parseInt(getComputedStyle(document.body).getPropertyValue('--article-width'), 10);
+    const toc = parseInt(getComputedStyle(document.body).getPropertyValue('--toc-width'), 10);
+    const gap = parseInt(getComputedStyle(document.body).getPropertyValue('--gap'), 10);
+
+    function checkTocPosition() {
+        const width = document.body.scrollWidth;
+
+        if (width - main - (toc * 2) - (gap * 4) > 0) {
+            document.getElementById("toc-container").classList.add("wide");
+        } else {
+            document.getElementById("toc-container").classList.remove("wide");
+        }
+    }
+
+    function getOffsetTop(element) {
+        if (!element.getClientRects().length) {
+            return 0;
+        }
+        let rect = element.getBoundingClientRect();
+        let win = element.ownerDocument.defaultView;
+        return rect.top + win.pageYOffset;
+    }
+</script>
+
+  <div class="post-content"><h3 id="作业四-进程">作业四 进程<a hidden class="anchor" aria-hidden="true" href="#作业四-进程">#</a></h3>
+<blockquote>
+<p>20373793 202111 马泽远</p>
+</blockquote>
+<ol>
+<li>读者写者问题（写者优先）: 1）共享读; 2）互斥写、读写互斥; 3）写者优先于读者（一旦有写者，则后续读者必须等待，唤醒时优先考虑写者）。</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#66d9ef">int</span> readers_count<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>,writers_count<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>Semaphore w<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>;<span style="color:#75715e">//写互斥
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>Semaphore r<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>;<span style="color:#75715e">//当一个写进程进入时，禁止所有读进程进入
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>Semaphore writers_mutex<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>;<span style="color:#75715e">//writers_count修改互斥
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>Semaphore readers_mutex<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>;<span style="color:#75715e">//writers_count修改互斥
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>Semaphore writer_priorty<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>;<span style="color:#75715e">//保证写者优先于读者(保证在read_write上没有长队列)
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span>Readers (){
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">while</span>(true){
+</span></span><span style="display:flex;"><span>        P(writer_priorty);
+</span></span><span style="display:flex;"><span>            P(r);
+</span></span><span style="display:flex;"><span>                P(readers_mutex);
+</span></span><span style="display:flex;"><span>                    readers_count<span style="color:#f92672">++</span>;
+</span></span><span style="display:flex;"><span>                    <span style="color:#66d9ef">if</span>(readcount<span style="color:#f92672">==</span><span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>                        P(w);
+</span></span><span style="display:flex;"><span>                V(readers_mutex);
+</span></span><span style="display:flex;"><span>            V(r);
+</span></span><span style="display:flex;"><span>        V(writer_priorty);
+</span></span><span style="display:flex;"><span>        read();
+</span></span><span style="display:flex;"><span>        P(readers_mutex);
+</span></span><span style="display:flex;"><span>            readers_count<span style="color:#f92672">--</span>;
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span>(readcount<span style="color:#f92672">==</span><span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span>                V(w);
+</span></span><span style="display:flex;"><span>        V(readers_mutex);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>Writers(){
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">while</span>(true){
+</span></span><span style="display:flex;"><span>        P(writers_mutex);
+</span></span><span style="display:flex;"><span>            writers_count<span style="color:#f92672">++</span>;
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">if</span>(writers_count<span style="color:#f92672">==</span><span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>                    P(r);
+</span></span><span style="display:flex;"><span>        V(writers_mutex);
+</span></span><span style="display:flex;"><span>        P(w);
+</span></span><span style="display:flex;"><span>        write();
+</span></span><span style="display:flex;"><span>        V(w);
+</span></span><span style="display:flex;"><span>        P(writers_mutex);
+</span></span><span style="display:flex;"><span>            writers_count<span style="color:#f92672">--</span>;
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span>(writers_count<span style="color:#f92672">==</span><span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span>                V(r);
+</span></span><span style="display:flex;"><span>        V(writers_mutex);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>2.寿司店问题。假设一个寿司店有 5 个座位，如果你到达的时候有一个空座位，你可以立刻就坐。但是如果你到达的时候 5 个座位都是满的有人已经就坐，这就意味着这些人都是一起来吃饭的，那么你需要等待所有的人一起离开才能就坐。编写同步原语，实现这个场景的约束。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#66d9ef">bool</span> full<span style="color:#f92672">=</span>false;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">int</span> eating<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>,waiting<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>,n,i;
+</span></span><span style="display:flex;"><span>Semaphore mutex<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>Semaphore queue<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>Customer(){
+</span></span><span style="display:flex;"><span>    P(mutex);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span>(full)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        waiting<span style="color:#f92672">++</span>;
+</span></span><span style="display:flex;"><span>        V(mutex);
+</span></span><span style="display:flex;"><span>        P(queue);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">else</span>{
+</span></span><span style="display:flex;"><span>        eating<span style="color:#f92672">++</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span>(eating<span style="color:#f92672">==</span><span style="color:#ae81ff">5</span>)
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            full<span style="color:#f92672">=</span>true;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        V(mutex);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    eat();
+</span></span><span style="display:flex;"><span>    P(mutex);
+</span></span><span style="display:flex;"><span>    eating<span style="color:#f92672">--</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span>(eating<span style="color:#f92672">==</span><span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        n<span style="color:#f92672">=</span>min(<span style="color:#ae81ff">5</span>,waiting);
+</span></span><span style="display:flex;"><span>        waiting<span style="color:#f92672">-=</span>n
+</span></span><span style="display:flex;"><span>        eating<span style="color:#f92672">+=</span>n;
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span>(eating<span style="color:#f92672">==</span><span style="color:#ae81ff">5</span>)
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            full<span style="color:#f92672">=</span>true;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span>(i<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>;i<span style="color:#f92672">&lt;</span>n;i<span style="color:#f92672">++</span>)
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            V(queue);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    V(mutex);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><ol start="3">
+<li>
+<p>三个进程 P1、P2、P3 互斥使用一个包含 N（N&gt;0）个单元的缓冲区。P1 每次用 produce() 生成一个正整数并用 put()送入缓冲区某一个空单元中；P2 每次用 getodd()从该缓冲区中取 出一个奇数并用 countodd()统计奇数个数；P3 每次用 geteven()从该缓冲区中取出一个偶数 并用 counteven()统计偶数个数。请用信号量机制实现这三个进程的同步与互斥活动，并说 明所定义的信号量的含义。要求用伪代码描述。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span>Semaphore mutex<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>Semaphore even<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>,odd<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>,empty<span style="color:#f92672">=</span>N;
+</span></span><span style="display:flex;"><span>P1(){
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">while</span>(true){
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">int</span> number;
+</span></span><span style="display:flex;"><span>        number<span style="color:#f92672">=</span>produce();
+</span></span><span style="display:flex;"><span>        P(empty);
+</span></span><span style="display:flex;"><span>        P(mutex);
+</span></span><span style="display:flex;"><span>        put();
+</span></span><span style="display:flex;"><span>    	   V(mutex);
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span>(number<span style="color:#f92672">%</span><span style="color:#ae81ff">2</span><span style="color:#f92672">==</span><span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            V(even);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">else</span>{
+</span></span><span style="display:flex;"><span>            V(odd);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>P2(){
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">while</span>(true){
+</span></span><span style="display:flex;"><span>        P(odd);
+</span></span><span style="display:flex;"><span>        P(mutex);
+</span></span><span style="display:flex;"><span>        getodd();
+</span></span><span style="display:flex;"><span>    	   V(mutex);
+</span></span><span style="display:flex;"><span>        V(empty);
+</span></span><span style="display:flex;"><span>        countodd();
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>P3(){
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">while</span>(true){
+</span></span><span style="display:flex;"><span>        P(evend);
+</span></span><span style="display:flex;"><span>        P(mutex);
+</span></span><span style="display:flex;"><span>        geteven();
+</span></span><span style="display:flex;"><span>    	   V(mutex);
+</span></span><span style="display:flex;"><span>        V(empty);
+</span></span><span style="display:flex;"><span>        counteven();
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div></li>
+</ol>
+<p>4、搜索-插入-删除问题。三个线程对一个单链表进行并发的访问，分别进行搜索、插入和删 除。搜索线程仅仅读取链表，因此多个搜索线程可以并发。插入线程把数据项插入到链表最 后的位置；多个插入线程必须互斥防止同时执行插入操作。但是，一个插入线程可以和多个 搜索线程并发执行。最后，删除线程可以从链表中任何一个位置删除数据。一次只能有一个 删除线程执行；删除线程之间，删除线程和搜索线程，删除线程和插入线程都不能同时执行。 请编写三类线程的同步互斥代码，描述这种三路的分类互斥问题。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span>Semaphore iMutex <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>; <span style="color:#75715e">//用于插入进程之间的互斥
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>Semaphore insertMutex <span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>; <span style="color:#75715e">// 保护int变量
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>Semaphore searchMutex <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>; <span style="color:#75715e">// 保护int变量
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>Semaphore No_search <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>; <span style="color:#75715e">// 顾名思义，为1时没有搜索进程访问
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>Semaphore No_insert <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>; <span style="color:#75715e">// 为1时没有插入进程访问
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">//当上述两个信号量同时为1，删除者才可以进行删除操作
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">int</span> searcher_cnt <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>, inserter_cnt <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Search(){
+</span></span><span style="display:flex;"><span>    P(searchMutex);
+</span></span><span style="display:flex;"><span>    searcher_cnt<span style="color:#f92672">++</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (searcher_cnt<span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>)	<span style="color:#75715e">// 第一个进来的搜索者加锁
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        P(No_search)
+</span></span><span style="display:flex;"><span>    V(searchMutex);
+</span></span><span style="display:flex;"><span>    Searching(); <span style="color:#75715e">// 访问临界区，多个搜索无需互斥
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    P(searchMutex);
+</span></span><span style="display:flex;"><span>  	searcher_cnt<span style="color:#f92672">--</span>;
+</span></span><span style="display:flex;"><span>  	<span style="color:#66d9ef">if</span> (t searcher_cnt<span style="color:#f92672">==</span><span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span>    V(No_search);	 <span style="color:#75715e">// 表示此时没有搜索线程在进行，解锁
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    V(searchMutex);
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Insert(){
+</span></span><span style="display:flex;"><span>  P(insertMutex);
+</span></span><span style="display:flex;"><span>  	inserter_cnt<span style="color:#f92672">++</span>;
+</span></span><span style="display:flex;"><span>  	<span style="color:#66d9ef">if</span> (inserter_cnt <span style="color:#f92672">==</span> <span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>      P(No_insert)
+</span></span><span style="display:flex;"><span>  V(insertMutex);
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>  P(iMutex); <span style="color:#75715e">// 既然可以和搜索线程并行，那么不用管t Inserting();	// 访问临界区，多个插入者要互斥访问，一次一个\
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">  Inserting();
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  V(iMutex);
+</span></span><span style="display:flex;"><span>  
+</span></span><span style="display:flex;"><span>  P(insertMutex);
+</span></span><span style="display:flex;"><span>  	inserter_cnt<span style="color:#f92672">--</span>;
+</span></span><span style="display:flex;"><span>  	<span style="color:#66d9ef">if</span> (inserter_cnt <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span>      V(No_insert); <span style="color:#75715e">// 解锁，可唤醒删除者
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  V(insertMutex);
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Delete(){	  <span style="color:#75715e">// 删除线程与其他任何线程互斥
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    P(No_search);
+</span></span><span style="display:flex;"><span>    P(No_insert); <span style="color:#75715e">// 若为1则可进入，这个信号量顺便也可以当作删除者的互斥保护
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  	Deleting();	<span style="color:#75715e">// 搜索和插入线程都没，成功进入临界区
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  	V(No_insert);
+</span></span><span style="display:flex;"><span>    V(No_search);	
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div>
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="https://mksasx.github.io/tags/os%E8%BF%9B%E7%A8%8B/">OS进程</a></li>
+      <li><a href="https://mksasx.github.io/tags/%E4%BD%9C%E4%B8%9A/">作业</a></li>
+    </ul>
+<nav class="paginav">
+  <a class="prev" href="https://mksasx.github.io/posts/sport/basketball/%E7%AF%AE%E7%90%83%E5%9F%BA%E6%9C%AC%E6%88%98%E6%9C%AF%E5%8F%8A%E5%9B%BE%E8%A7%A3/">
+    <span class="title">« Prev</span>
+    <br>
+    <span>篮球基本战术及图解</span>
+  </a>
+  <a class="next" href="https://mksasx.github.io/posts/life/my-first-post/">
+    <span class="title">Next »</span>
+    <br>
+    <span>五一节见闻</span>
+  </a>
+</nav>
+
+  </footer>
+<div>
+    <div class="pagination__title">
+        <span class="pagination__title-h" style="font-size: 20px;">💬评论</span>
+        <hr />
+    </div>
+    <div id="tcomment"></div>
+    <script src="https://cdn.jsdelivr.net/npm/twikoo@1.5.10/dist/twikoo.all.min.js"></script>
+    <script>
+        twikoo.init({
+            envId: "https://vercal-mogodb-comment.vercel.app/",  
+            el: "#tcomment",
+            lang: 'zh-CN',
+            region: 'ap-shanghai',  
+            path: window.TWIKOO_MAGIC_PATH||window.location.pathname,
+        });
+    </script>
+</div>
+
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>&copy; 2022 <a href="https://mksasx.github.io">Austin_Ma&#39;s Blog</a></span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://git.io/hugopapermod" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerText = 'copy';
+
+        function copyingDone() {
+            copybutton.innerText = 'copied!';
+            setTimeout(() => {
+                copybutton.innerText = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>
