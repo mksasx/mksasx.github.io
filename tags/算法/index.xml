@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>算法 on AustinMa&#39;s Blog</title>
+    <link>https://mksasx.github.io/tags/%E7%AE%97%E6%B3%95/</link>
+    <description>Recent content in 算法 on AustinMa&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Fri, 04 Mar 2022 13:25:38 +0800</lastBuildDate><atom:link href="https://mksasx.github.io/tags/%E7%AE%97%E6%B3%95/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>FFT模板</title>
+      <link>https://mksasx.github.io/posts/tech/algorithm/fft/</link>
+      <pubDate>Fri, 04 Mar 2022 13:25:38 +0800</pubDate>
+      
+      <guid>https://mksasx.github.io/posts/tech/algorithm/fft/</guid>
+      <description>快速傅里叶变换模板</description>
+    </item>
+    
+  </channel>
+</rss>
