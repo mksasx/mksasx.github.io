@@ -1,0 +1,1339 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>操作系统申优文档 | AustinMa&#39;s Blog</title>
+<meta name="keywords" content="操作系统申优, os">
+<meta name="description" content="这是我的操作系统课程申优文档">
+<meta name="author" content="
+作者:&nbsp;AustinMa">
+<link rel="canonical" href="https://mksasx.github.io/posts/tech/os/great/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.557197a4f061e753a7b8e859202b40c279a6f38f74d06feec3d54053779f1ae2.css" integrity="" rel="preload stylesheet" as="style">
+<script defer crossorigin="anonymous" src="/assets/js/highlight.acb54fd32bbc1982428b8850317e45d076b95012730a5936667e6bc21777692a.js" integrity="sha256-rLVP0yu8GYJCi4hQMX5F0Ha5UBJzClk2Zn5rwhd3aSo="
+        onload="hljs.initHighlightingOnLoad();"></script>
+<link rel="icon" href="https://mksasx.github.io/img/1.jpg">
+<link rel="icon" type="image/png" sizes="16x16" href="https://mksasx.github.io/img/1.jpg">
+<link rel="icon" type="image/png" sizes="32x32" href="https://mksasx.github.io/img/1.jpg">
+<link rel="apple-touch-icon" href="https://mksasx.github.io/img/1.jpg">
+<link rel="mask-icon" href="https://mksasx.github.io/img/1.jpg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --hljs-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript>
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = ""; 
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+<meta property="og:title" content="操作系统申优文档" />
+<meta property="og:description" content="这是我的操作系统课程申优文档" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://mksasx.github.io/posts/tech/os/great/" />
+<meta property="og:image" content="https://mksasx.github.io/posts/tech/os/great.png" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-10-09T16:31:30&#43;08:00" />
+<meta property="article:modified_time" content="2022-10-09T16:31:30&#43;08:00" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://mksasx.github.io/posts/tech/os/great.png" />
+<meta name="twitter:title" content="操作系统申优文档"/>
+<meta name="twitter:description" content="这是我的操作系统课程申优文档"/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "📚文章",
+      "item": "https://mksasx.github.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "👨🏻‍💻 技术",
+      "item": "https://mksasx.github.io/posts/tech/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  3 ,
+      "name": "⚛️ 操作系统",
+      "item": "https://mksasx.github.io/posts/tech/os/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  4 ,
+      "name": "操作系统申优文档",
+      "item": "https://mksasx.github.io/posts/tech/os/great/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "操作系统申优文档",
+  "name": "操作系统申优文档",
+  "description": "这是我的操作系统课程申优文档",
+  "keywords": [
+    "操作系统申优", "os"
+  ],
+  "articleBody": "Lab6-Challenge 实验报告 实验概述 在本实验中，我通过编写新函数，新的方法实现一些小组件以及附加功能，丰富了我们的 shell的功能，包括\"后台运行\"，“一行多命令”，“简单引号支持”，“tree /mkdir /touch 命令”，“清屏”，“彩色输出”，“历史命令”，“环境变量”，“cd 命令\"等任务。\n各部分实现思路及代码 Easy部分 （1）实现后台运行 1、首先在getc.S中，修改汇编代码，以防止前台被阻塞，手动忽略输入。\nLEAF(sys_cgetc) 1: lb t0, 0x90000000 //beqz t0, 1b //nop move v0,t0 jr ra nop END(sys_cgetc) 2、修改shell\n在sh.c中runcmd()定义一个变量 hang 标记是否要后台运行，初始化为0。\ncase '\u0026': hang = 1; break; 在运行命令的时候，若无\u0026，正常等待程序运行结束，若有\u0026，那么就调用fork()生成子进程，同时要防止阻塞，并且在程序运行结束后，输出提示信息。\n//无\u0026，就等进程结束 if (!hang) wait(r); //有\u0026，就fork一个子进程，等待新加载的程序运行完成，输出提示信息 else { pid = fork(); if (pid == 0) //创建cmd子进程 { wait(r); //等待新加载的程序运行完 writef(\"\\n[%d] DONE\\t\", r);//提示信息 for (i = 0; i \u003c argc; ++i) writef(\"%s \", argv[i]); char curpath[MAXPATHLEN]; int envid = syscall_getenvid(); int shellid = syscall_getfaid(envid); curpath_get(shellid, curpath); writef(\"\\n\" LIGHT_BLUE(% s) \" \" BOLD_GREEN($) \" \", curpath); writef(\"\\b \\b\"); exit(); } } （2）一行多命令 使用 fork 创建一个子进程执行已经识别的命令，cmd进程则继续解析下一条指令，需要注意的是，每一条指令运行前，都需要对相应的状态变量进行初始化，然后后一条指令在子进程运行结束后，再进行运行。\ncase ';': if ((pid = fork()) == 0) //创建子进程 { goto runit; } wait(pid);//等待子进程运行结束 //参数重新初始化 argc = 0; hang = 0; rightpipe = 0; //父进程跳出switch， 继续解析下一个命令 file_input = -1; file_output = -1; break; （3）引号支持 修改 token 的部分，识别到引号的时候一直继续读，直到遇到下一个引号。\nif (*s == '\\\"') { *p1 = ++s; while (*s \u0026\u0026 !(*s == '\\\"' \u0026\u0026 *(s - 1) != '\\\\')) { ++s; } *s++ = 0; *p2 = s; return 'w'; } （4）tree / mkdir /touch tree\n主函数tree()通过参数的解析来调用walk()\nvoid tree(char *path, char *prefix) { struct Stat status; int r = stat(path, \u0026status); if (r \u003c 0) user_panic(\"stat %s: %e\", path, r); walk(path, 0); } walk()函数实现内部的递归调用,传入路径和层级数量,遍历文件。对于嵌套的目录，使用递归的方式遍历。\n输出时借助于层级数量来格式化输出结果。\nvoid walk(char *path, int len) { int dir_fd; struct File f; int i; char newpath[MAXPATHLEN] = {0}; dir_fd = open(path, O_RDONLY); if (dir_fd \u003c 0) user_panic(\"failed: open %s: %e\", *path*, dir_fd); while (readn(dir_fd, \u0026f, sizeof (struct File)) == sizeof (struct File)) { if (f.f_name[0]) { struct File *dir = \u0026f; //格式化输出 for (i = 0; i \u003c len*4; i++) fwritef(1, \" \"); fwritef(1, \"\\n\"); for (i = 0; i \u003c len*4; i++) fwritef(1, \" \"); fwritef(1, \"|-- \"); // 输出当前文件或目录 if (dir-\u003ef_type == FTYPE_REG) { fwritef(1, YELLOW(%s), dir-\u003ef_name); } //递归输出子目录 else if (dir-\u003ef_type == FTYPE_DIR) { fwritef(1, PURPLE(%s), dir-\u003ef_name); //拼接子目录路径 strcat(newpath, path); strcat(newpath, dir-\u003ef_name); strcat(newpath, \"/\"); // writef(\"nxtpath:\\n%s\", npath);* walk(newpath, len + 1); } } } } mkdir\n为了简化操作，实现后续mkdir，增加系统调用来实现获得shell的id\nu_int sys_get_ShellId(int *sysno*, u_int *envid*) { struct Env *e ; envid2env(*envid*, \u0026e, 0); return e-\u003eenv_parent_id; } 得到当前地址curpath，拼接得到完整地址\n对O_MKDIR进行open\nvoid mkdir(char *path, char *prefix) { char curpath[MAXPATHLEN] = {0}; // writef(\"mkdir :envid是 %d shellid是 %d\\n\", id, shellid); int r; //获取相应的id int id = syscall_getenvid(); int shellid = syscall_get_ShellId(syscall_get_ShellId(id)); if ((r = curpath_get(shellid, curpath) )\u003c 0) user_panic(\"mkdir: Error: curpath get\\n\"); //path的拼接 if (path[0] == '/') { strcat(curpath, path); } else { if (curpath[strlen(curpath) - 1] != '/') strcat(curpath, \"/\"); strcat(curpath, path); } //调用open r = open(curpath, O_RDWR|O_MKDIR); if (r \u003c 0) user_panic(\"Directory %s created error\\n\", curpath); fwritef(1, \"%s created successfully\\n\", curpath); } touch\n类似于mkdir，只不过是open的时候使用O_CREAT参数。\nvoid touch(char *path, char *prefix) { char curpath[MAXPATHLEN] = {0}; int r; //获取相应的id int id=syscall_getenvid(); int shell_id = syscall_get_ShellId(syscall_get_ShellId(id)); if ((r= curpath_get(shell_id, curpath)) \u003c 0) { fwritef(1, \"mkdir: Error: get curpath\\n\"); return; } //path拼接 if (path[0] == '/') { strcpy(curpath, path); } else { if (curpath[strlen(curpath) - 1] != '/') strcat(curpath, \"/\"); strcat(curpath, path); } r = open(curpath, O_CREAT|O_RDWR); if (r \u003c 0) { fwritef(1, \"mkdir: Error: create file\\n\"); return; } fwritef(1, \"File %s created!\", curpath); } Normal部分 历史命令功能 首先创建读取/写入历史文件 API\nvoid history_init(); void history_save(char *s); int history_read(char(*cmd)[128]); 初始化函数\nvoid history_init() { int r; if ((r = open(\"/.history\", O_CREAT | O_RDWR)) \u003c 0) user_panic(\"His : Init Failed: %d.\", r); } 将每一个输入执行的指令，利用history_save()保存进一个文件中，我创建的是.history文件，每行存放一条指令。\nvoid history_save(char *s) { int r; if ((r = open(\"/.history\", O_CREAT | O_RDWR | O_APPEND)) \u003c 0) { user_panic(\"His : Open failed\"); } fwritef(r, s); fwritef(r, \"\\n\"); close(r); } int history_read(char cmd[][128]) { int r, fd; char buf[128 * 128]; if ((fd = open(\"/.history\", O_RDONLY)) \u003c 0) { user_panic(\"His : Open failed\"); } if ((r = read(fd, buf, sizeof(buf))) \u003c 0) { user_panic(\"His : Read failed\"); } close(fd); int i = 0, cmdi = 0; while (buf[i]) { int cmdj = 0; while (buf[i] \u0026\u0026 buf[i] != '\\n') cmd[cmdi][cmdj++] = buf[i++]; if (!buf[i]) break; ++i; ++cmdi; } return cmdi; } 通过编写一个用户态程序 history.b文件并写入磁盘中，使得每次调用history.b 时，能够将文件（ .history ）的内容全部输出。在 user/history.c 中 进行读取/.history文件\n#include \"lib.h\" void umain(int argc, char **argv) { if (argc != 1) { fwritef(1, \"usage: history\\n\"); return; } int his = open(\".history\", O_RDONLY | O_CREAT); char ch; fwritef(1, \"\\x1b[33m-*- HISTORY -*-\\x1b[0m\\n\"); fwritef(1, \"\\x1b[33m1\\x1b[0m\\t\"); int cnt = 1; int fl = 0; while (read(his, \u0026ch, 1) == 1) { if (fl) { fwritef(1, \"\\x1b[33m%d\\x1b[0m\\t\", cnt); fl = 0; } fwritef(1, \"%c\", ch); if (ch == '\\n') { cnt++; fl = 1; } } } 按键识别，键入上下键时，切换历史命令\n经查阅资料，光标键对应的字符如下：\n按键 常规模式 应用程序模式 ↑ ESC [ A ESC O A ↓ ESC [ B ESC O B 步骤\n获取缓冲区buf[]后三个字符 捕获到后，抵消光标移动操作 清空缓冲区，将光标移到左侧 打印出相应顺序的指令 代码分析\nif (i \u003e= 2 \u0026\u0026 buf[i - 2] == 27 \u0026\u0026 buf[i - 1] == 91 \u0026\u0026 buf[i] == 65) { writef(\"%c%c%c\", 27, 91, 65); for (i -= 2; i; --i) writef(\"\\b \\b\"); if (cmdi) strcpy(buf, cmds[--cmdi]); else strcpy(buf, cmds[cmdi]); writef(\"%s\", buf); i = strlen(buf) - 1; } else if (i \u003e= 2 \u0026\u0026 buf[i - 2] == 27 \u0026\u0026 buf[i - 1] == 91 \u0026\u0026 buf[i] == 66) { if (cmdi \u003c nn - 1) { for (i -= 2; i; --i) writef(\"\\b \\b\"); strcpy(buf, cmds[++cmdi]); writef(\"%s\", buf); } else { buf[i - 2] = buf[i - 1] = buf[i] = '\\0'; } i = strlen(buf) - 1; } Challenge部分 环境变量 在本部分，我与部分同学进行了进行了交流与探讨，最终结合助教的提示以及问题描述，得到了下面一种较为有效的解决方案。\n首先我们需要自定一个新的结构体，来表示环境变量，其中需要有这些属性：环境变量拥有者的id、环境变量的名字 、环境变量的值、只读性、局部性、有效性，然后建立一个环境变量表，以达到多个程序使用的目的\nstruct Var { int envid; //环境变量拥有者的id char name[64]; //环境变量的名字 char val[128]; //环境变量的值 int readonly; //只读性 int local; //局部性 int ava; //有效性,为0代表还未生效，即不存在（狭义理解） }; 新增系统调用,以实现对环境变量的增删改查\n在lib/syscall.S:\n.word sys_get_var .word sys_set_var user/syscall_lib.c\nint syscall_get_var(u_int envid, char *name, char *val, int op) { return msyscall(SYS_get_var, envid, name, val, op, 0); } int syscall_set_var(u_int envid, char *name, char *val, int op, int perm) { return msyscall(SYS_set_var, envid, name, val, op, perm); } 增：syscall_set_var(op=0)——遍历环境变量表，找到第一个ava=0的Var，写入这个Var\n删：syscall_set_var(op=1)——遍历环境变量表，找到name对应的要删除的var，设置其ava=0\n改：syscall_set_var(op=0)——遍历环境变量表，找到name对应的要修改的var，改为参数中的这个var\n查：查询特定的有效的环境变量/全部有效的环境变量\n特定的：syscall_get_var(op=0)——遍历环境变量表，找到所有ava=1的，且名字与查询条件相同的var 全部的：syscall_get_var(op=1)——遍历环境变量表，找到所有ava=1的var 具体代码实现，受限于篇幅，不完整贴上，需要注意的几点\n设置set时的权限位 VAR_LOCAL ， VAR_RDONLY 来控制访问权限,设置对应Var的local，readonly变量\n新增了错误类型 E_VAR_NOT_FOUND , E_VAR_FULL , E_VAR_RDONLY\n在进行后三者时，要注意额外判断当前维护变量是否为局部的以及其与当前shellid的关系，写一个简单的函数进行判断。\n//shellid通过系统调用传入 int judge(u_int shellid, struct Var *var) { if (var-\u003elocal == 0) { return 1; } else { if (shellid == var-\u003eenvid) { return 1; } else { return 0; } } } 主要使用strcat，strcmp，strcpy进行字符串处理，比较。利用了比较傻的for循环。\n然后比如说判断是否有对应name，构建了一个小函数，方便判断\nint contain_name(char *name) { int i = 0; for (i = 0; i \u003c NVARS; i++) { struct Var *v = \u0026vars[i]; if (v-\u003eava \u0026\u0026 strcmp(v-\u003ename, *name*) == 0) { return 1; } } return 0; } 注意权限位的设置\ndeclare\n在umain中，设置flag,以及perm\nvoid umain(int argc, char **argv) { int i; ARGBEGIN { default: usage(); case 'r': flag[(u_char) ARGC()]++; case 'x': flag[(u_char) ARGC()]++; break; } ARGEND int perm = 0; if (flag['r']) { perm |= VAR_RDONLY; } if (flag['x']) { perm |= VAR_LOCAL; } char *arg2 = argv[1]; while(*arg2 == '=') { arg2++; } if (argc == 0) declare_nothing(); else if (argc == 1) set(argv[0], \"\", perm); else if (argc == 2) set(argv[0], arg2, perm); else writef(1, \"too many args\"); //writef(\"declare ok**\"); } 在set函数中调用前述所写系统调用，实现declare，需要注意的是权限位的设定，以及传入参数\nvoid set(char *name, char *value, int perm) { int r; int shellid = syscall_get_ShellId(syscall_get_ShellId(syscall_getenvid())); if ((r = syscall_set_var(shellid, name, value, 0, perm)) \u003c 0) { if (r == -E_VAR_FULL) fwritef(1, \"declare: vars are full\\n\", name); if (r == -E_VAR_RDONLY) fwritef(1, \"declare: [%s] is readonly\\n\", name); return; } } echo\n在实现echo的时候，在umain解析的时候，需要对其进行修改\nvoid umain(int argc, char **argv) { int i, nflag; nflag = 0; if (argc \u003e 1 \u0026\u0026 strcmp(argv[1], \"-n\") == 0) { nflag = 1; argc--; argv++; } for (i = 1; i \u003c argc; i++) { if (i \u003e 1) write(1, \" \", 1); if (argv[i][0] == '$') { char value[128]; syscall_env_var(\u0026argv[i][1], value, 1); write(1, value, strlen(value)); } else { write(1, argv[i], strlen(argv[i])); } } if (!nflag) write(1, \"\\n\", 1); } unset\n在unset.c 中， 直接调用syscall_set_var 即可.\n其他支持或者前置条件 （1）clear清屏 #define CLEAR() printf(\"\\033[2J\") （2）彩色输出 定义在sh.h中\n用类似于\\033[32m 实现绿色输出，类似可以实现其他颜色的输出。\n用 \\033[1m 可以实现加粗效果。\n用 \\033[m 表示颜色输出结束。\n（3）cd命令 利用环境变量维护curpath(当前路径)，利用系统调用可以获取和设置当前路径，并封装一套 API；\nvoid curpath_init(int envid,char *path); int curpath_get(int envid,char *path); int curpath_set(int envid,char *path); int curpath_get_parent(int envid,char *path); 当使用∶\ncd.∶不改变路径\ncd ..∶返回上一级目录（若为根目录，则不再返回）\ncd folder ∶进入目录时\n对所有的命令都重写，加入 curpath 的获取。如果传入的命令是一个以 /开头的路径，则为绝对路径;否则为相对路径。\nint i, r; int path[256]; int faid = syscall_get_ShellId(syscall_get_ShellId(syscall_getenvid())); if (argc == 1) { fwritef(1, \"cd: too few args\\n\"); return; } else { for (i = 1; i \u003c argc; i++) { //显示当前目录 if (strcmp(argv[i], \".\") == 0) return; //上一级目录 if (strcmp(argv[i], \"..\") == 0) { curpath_get_parent(faid, path); curpath_set(faid, path); fwritef(1, \"cd(now_path): %s\", path); return; } else //进入某一个目录 { if ((r = curpath_get(faid, path)) \u003c 0) { fwritef(1, \"cd: get environment var failed\"); return; } strcat(path, argv[i]); int len = strlen(path); if (path[len - 1] != '/') strcat(path, \"/\"); struct Stat st; r = stat(path, \u0026st); if (r == -E_VAR_NOT_FOUND) fwritef(1, \"cd: %s not found\\n\", path); else if (r \u003c 0) fwritef(1, \"cd: cannot cd %s\\n\", path); else if (!st.st_isdir) fwritef(1, \"cd: %s is not directory\\n\", path); else { if ((r = curpath_set(faid, path)) \u003c 0) fwritef(1, \"Environment var not found\"); fwritef(1, \"curpath: %s\", path); } return; } } } （4）rm命令 //类似于创建文件，有小改动 if ((r = remove(curpath)) \u003c 0) { fwritef(1, \"File %s Not Exists!\\n\", curpath); return; } （5）open修改 在open()中，首先需要加入APPEND,MKDIR,CREAT代码。\n#define O_APPEND 0x1000\nuser/file.c中的open() 中加入O_APPEND打开方式扩充代码\nif ((mode \u0026 O_APPEND) != 0) { ffd-\u003ef_fd.fd_offset = size; } fs/serv.c中的serve_open()中加入CREAT, MKDIR打开方式扩充.\nif ((r = file_open((char *) path, \u0026f)) \u003c 0) { if (r == -E_NOT_FOUND \u0026\u0026 (rq-\u003ereq_omode \u0026 O_CREAT)) { if ((r = file_create((char *)path, \u0026f)) \u003c 0) { return; } f-\u003ef_type = FTYPE_REG; } else if (r == -E_NOT_FOUND \u0026\u0026 (rq-\u003ereq_omode \u0026 O_MKDIR)) { if ((r = file_create((char *)path, \u0026f)) \u003c 0) { return; } f-\u003ef_type = FTYPE_DIR; } else { ipc_send(envid, r, 0, 0); return; } } （6）环境变量的获取，当前地址的操作 void curpath_init(int envid, char *path) { int r; // set op 0 declare with perm if ((r = syscall_set_var(envid, CURPATH_KEY, path, 0, 0)) \u003c 0) user_panic(\"Init curpath failed: %u.\", r); return ; } int curpath_get(int envid, char *path) { int r; //op1 get one //writef(\"get from env : %d\", envid); if ((r = syscall_get_var(envid, CURPATH_KEY, path, 1)) \u003c 0) return r; return 0; } int curpath_set(int envid, char *path) { int r; // op0 declare with perm if ((r = syscall_set_var(envid, CURPATH_KEY, path, 0, 0)) \u003c 0) return r; return r; } int curpath_get_parent(int envid, char *path) { int r, i; if ((r = curpath_get(envid, path)) \u003c 0) return r; if (strlen(path) == 1) return 0; for (i = strlen(path) - 2; path[i - 1] != '/'; i--); path[i] = 0; return r; } 实验难点及总结 在本实验中，我通过编写新函数，新的方法实现一些小组件以及附加功能，丰富了我们的 shell的功能，包括\"后台运行”，“一行多命令”，“简单引号支持”，“tree /mkdir /touch 命令”，“清屏”，“彩色输出”，“历史命令”，“环境变量”，“cd 命令\"等任务。\n我认为实验的主要难点在于\n修改若干的指令，使之成为内置的指令 在历史命令中，如何实现识别键位（通过查阅资料得知），如何实现历史命令保存，输出 以及在challenge部分的环境变量的实现（新定义结构体，并且书写相应的系统调用，以及增加相应的open（）参数，错误码，并加以合理运用） 一些字符串处理方法的使用，以及各个细节的注意以及逐个击破。 终于度过了难捱的一学期学习，在做完了lab6挑战性任务以后，我对os的学习体会有了进一步的升华，也对课程内容有了更深入的理解，感谢os课程组对我们的磨练以及提升！\n",
+  "wordCount" : "4641",
+  "inLanguage": "en",
+  "image":"https://mksasx.github.io/posts/tech/os/great.png","datePublished": "2022-10-09T16:31:30+08:00",
+  "dateModified": "2022-10-09T16:31:30+08:00",
+  "author":[{
+    "@type": "Person",
+    "name": "AustinMa"
+  }],
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://mksasx.github.io/posts/tech/os/great/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "AustinMa's Blog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://mksasx.github.io/img/1.jpg"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+
+
+<script async src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://mksasx.github.io/" accesskey="h" title="AustinMa&#39;s Blog (Alt + H)">
+            <img src="https://mksasx.github.io/img/Avator.jpg" alt="logo" aria-label="logo"
+                 height="35">AustinMa&#39;s Blog</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                         fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                         stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                         fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                         stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://mksasx.github.io/search" title="🔍 搜索 (Alt &#43; /)" accesskey=/>
+                <span>🔍 搜索</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://mksasx.github.io/" title="🏠 主页">
+                <span>🏠 主页</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://mksasx.github.io/posts" title="📚 文章">
+                <span>📚 文章</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://mksasx.github.io/tags" title="🧩 标签">
+                <span>🧩 标签</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://mksasx.github.io/archives/" title="⏱ 时间轴">
+                <span>⏱ 时间轴</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://mksasx.github.io/about" title="🙋🏻‍♂️ 关于">
+                <span>🙋🏻‍♂️ 关于</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://mksasx.github.io/links" title="🤝 友链">
+                <span>🤝 友链</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main page">
+<article class="post-single">
+    <div id="single-content">
+        <header class="post-header">
+            <div class="breadcrumbs" style="margin-bottom: 5px;"><a href="https://mksasx.github.io/">🏠主页</a>&nbsp;»&nbsp;<a href="https://mksasx.github.io/posts/">📚文章</a>&nbsp;»&nbsp;<a href="https://mksasx.github.io/posts/tech/">👨🏻‍💻 技术</a>&nbsp;»&nbsp;<a href="https://mksasx.github.io/posts/tech/os/">⚛️ 操作系统</a></div>
+            <h1 class="post-title">
+                操作系统申优文档
+            </h1>
+            <div class="post-description">
+                这是我的操作系统课程申优文档
+            </div>
+            <div class="post-meta">创建:&nbsp;<span title='2022-10-09 16:31:30 +0800 CST'>2022-10-09</span>&nbsp;|&nbsp;更新:&nbsp;2022-10-09&nbsp;|&nbsp;字数:&nbsp;4641字&nbsp;|&nbsp;时长:&nbsp;10分钟&nbsp;|&nbsp;
+作者:&nbsp;AustinMa
+
+
+
+                &nbsp;|&nbsp;标签: &nbsp;
+                <ul class="post-tags-meta">
+                    <a href="https://mksasx.github.io/tags/os/">os</a>
+                </ul>
+
+                
+                <span id="busuanzi_container_page_pv">
+                &nbsp;| 访问: <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+</div>
+        </header> 
+<figure class="entry-cover1"><img loading="lazy" src="https://mksasx.github.io/posts/tech/os/great.png" alt="">
+        
+</figure>
+        <aside id="toc-container" class="toc-container wide">
+    <div class="toc">
+        <details  open>
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">文章目录</span>
+        </summary>
+
+        <div class="inner"><ul>
+                <li>
+                    <a href="#lab6-challenge-%e5%ae%9e%e9%aa%8c%e6%8a%a5%e5%91%8a" aria-label="Lab6-Challenge 实验报告">Lab6-Challenge 实验报告</a><ul>
+                        
+                <li>
+                    <a href="#%e5%ae%9e%e9%aa%8c%e6%a6%82%e8%bf%b0" aria-label="实验概述">实验概述</a></li>
+                <li>
+                    <a href="#%e5%90%84%e9%83%a8%e5%88%86%e5%ae%9e%e7%8e%b0%e6%80%9d%e8%b7%af%e5%8f%8a%e4%bb%a3%e7%a0%81" aria-label="各部分实现思路及代码">各部分实现思路及代码</a><ul>
+                        
+                <li>
+                    <a href="#easy%e9%83%a8%e5%88%86" aria-label="Easy部分">Easy部分</a><ul>
+                        
+                <li>
+                    <a href="#1%e5%ae%9e%e7%8e%b0%e5%90%8e%e5%8f%b0%e8%bf%90%e8%a1%8c" aria-label="（1）实现后台运行">（1）实现后台运行</a></li>
+                <li>
+                    <a href="#2%e4%b8%80%e8%a1%8c%e5%a4%9a%e5%91%bd%e4%bb%a4" aria-label="（2）一行多命令">（2）一行多命令</a></li>
+                <li>
+                    <a href="#3%e5%bc%95%e5%8f%b7%e6%94%af%e6%8c%81" aria-label="（3）引号支持">（3）引号支持</a></li>
+                <li>
+                    <a href="#4tree--mkdir-touch" aria-label="（4）tree / mkdir /touch">（4）tree / mkdir /touch</a></li></ul>
+                </li>
+                <li>
+                    <a href="#normal%e9%83%a8%e5%88%86" aria-label="Normal部分">Normal部分</a><ul>
+                        
+                <li>
+                    <a href="#%e5%8e%86%e5%8f%b2%e5%91%bd%e4%bb%a4%e5%8a%9f%e8%83%bd" aria-label="历史命令功能">历史命令功能</a></li></ul>
+                </li>
+                <li>
+                    <a href="#challenge%e9%83%a8%e5%88%86" aria-label="Challenge部分">Challenge部分</a><ul>
+                        
+                <li>
+                    <a href="#%e7%8e%af%e5%a2%83%e5%8f%98%e9%87%8f" aria-label="环境变量">环境变量</a></li></ul>
+                </li>
+                <li>
+                    <a href="#%e5%85%b6%e4%bb%96%e6%94%af%e6%8c%81%e6%88%96%e8%80%85%e5%89%8d%e7%bd%ae%e6%9d%a1%e4%bb%b6" aria-label="其他支持或者前置条件">其他支持或者前置条件</a><ul>
+                        
+                <li>
+                    <a href="#1clear%e6%b8%85%e5%b1%8f" aria-label="（1）clear清屏">（1）clear清屏</a></li>
+                <li>
+                    <a href="#2%e5%bd%a9%e8%89%b2%e8%be%93%e5%87%ba" aria-label="（2）彩色输出">（2）彩色输出</a></li>
+                <li>
+                    <a href="#3cd%e5%91%bd%e4%bb%a4" aria-label="（3）cd命令">（3）cd命令</a></li>
+                <li>
+                    <a href="#4rm%e5%91%bd%e4%bb%a4" aria-label="（4）rm命令">（4）rm命令</a></li>
+                <li>
+                    <a href="#5open%e4%bf%ae%e6%94%b9" aria-label="（5）open修改">（5）open修改</a></li>
+                <li>
+                    <a href="#6%e7%8e%af%e5%a2%83%e5%8f%98%e9%87%8f%e7%9a%84%e8%8e%b7%e5%8f%96%e5%bd%93%e5%89%8d%e5%9c%b0%e5%9d%80%e7%9a%84%e6%93%8d%e4%bd%9c" aria-label="（6）环境变量的获取，当前地址的操作">（6）环境变量的获取，当前地址的操作</a></li></ul>
+                </li></ul>
+                </li>
+                <li>
+                    <a href="#%e5%ae%9e%e9%aa%8c%e9%9a%be%e7%82%b9%e5%8f%8a%e6%80%bb%e7%bb%93" aria-label="实验难点及总结">实验难点及总结</a>
+                </li>
+            </ul>
+            </li>
+            </ul>
+        </div>
+        </details>
+    </div>
+</aside>
+<script>
+    let activeElement;
+    let elements;
+    window.addEventListener('DOMContentLoaded', function (event) {
+        checkTocPosition();
+
+        elements = document.querySelectorAll('h1[id],h2[id],h3[id],h4[id],h5[id],h6[id]');
+        
+        activeElement = elements[0];
+        const id = encodeURI(activeElement.getAttribute('id')).toLowerCase();
+        document.querySelector(`.inner ul li a[href="#${id}"]`).classList.add('active');
+    }, false);
+
+    window.addEventListener('resize', function(event) {
+        checkTocPosition();
+    }, false);
+
+    window.addEventListener('scroll', () => {
+        
+        activeElement = Array.from(elements).find((element) => {
+            if ((getOffsetTop(element) - window.pageYOffset) > 0 &&
+                (getOffsetTop(element) - window.pageYOffset) < window.innerHeight/2) {
+                return element;
+            }
+        }) || activeElement
+
+        elements.forEach(element => {
+            const id = encodeURI(element.getAttribute('id')).toLowerCase();
+            if (element === activeElement){
+                document.querySelector(`.inner ul li a[href="#${id}"]`).classList.add('active');
+            } else {
+                document.querySelector(`.inner ul li a[href="#${id}"]`).classList.remove('active');
+            }
+        })
+    }, false);
+
+    const main = parseInt(getComputedStyle(document.body).getPropertyValue('--article-width'), 10);
+    const toc = parseInt(getComputedStyle(document.body).getPropertyValue('--toc-width'), 10);
+    const gap = parseInt(getComputedStyle(document.body).getPropertyValue('--gap'), 10);
+
+    function checkTocPosition() {
+        const width = document.body.scrollWidth;
+
+        if (width - main - (toc * 2) - (gap * 4) > 0) {
+            document.getElementById("toc-container").classList.add("wide");
+        } else {
+            document.getElementById("toc-container").classList.remove("wide");
+        }
+    }
+
+    function getOffsetTop(element) {
+        if (!element.getClientRects().length) {
+            return 0;
+        }
+        let rect = element.getBoundingClientRect();
+        let win = element.ownerDocument.defaultView;
+        return rect.top + win.pageYOffset;
+    }
+</script>
+        
+        <div class="post-content"><h1 id="lab6-challenge-实验报告">Lab6-Challenge 实验报告<a hidden class="anchor" aria-hidden="true" href="#lab6-challenge-实验报告">#</a></h1>
+<h2 id="实验概述">实验概述<a hidden class="anchor" aria-hidden="true" href="#实验概述">#</a></h2>
+<p>在本实验中，我通过编写新函数，新的方法实现一些小组件以及附加功能，丰富了我们的 shell的功能，包括&quot;后台运行&quot;，&ldquo;一行多命令&rdquo;，&ldquo;简单引号支持&rdquo;，&ldquo;tree /mkdir /touch 命令&rdquo;，&ldquo;清屏&rdquo;，&ldquo;彩色输出&rdquo;，&ldquo;历史命令&rdquo;，&ldquo;环境变量&rdquo;，&ldquo;cd 命令&quot;等任务。</p>
+<h2 id="各部分实现思路及代码">各部分实现思路及代码<a hidden class="anchor" aria-hidden="true" href="#各部分实现思路及代码">#</a></h2>
+<h3 id="easy部分">Easy部分<a hidden class="anchor" aria-hidden="true" href="#easy部分">#</a></h3>
+<h4 id="1实现后台运行">（1）实现后台运行<a hidden class="anchor" aria-hidden="true" href="#1实现后台运行">#</a></h4>
+<p><strong>1、首先在getc.S中，修改汇编代码，以防止前台被阻塞，手动忽略输入。</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>LEAF(sys_cgetc)
+</span></span><span style="display:flex;"><span>1:  lb  t0, 0x90000000
+</span></span><span style="display:flex;"><span>  //beqz   t0, 1b
+</span></span><span style="display:flex;"><span>  //nop
+</span></span><span style="display:flex;"><span>  move   v0,t0
+</span></span><span style="display:flex;"><span>  jr  ra
+</span></span><span style="display:flex;"><span>  nop
+</span></span><span style="display:flex;"><span>END(sys_cgetc) 
+</span></span></code></pre></div><p><strong>2、修改shell</strong></p>
+<p>在<code>sh.c</code>中<code>runcmd()</code>定义一个变量 hang 标记是否要后台运行，初始化为0。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#39;&amp;&#39;</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>	hang <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">break</span>;
+</span></span></code></pre></div><p>在运行命令的时候，若无&amp;，正常等待程序运行结束，若有&amp;，那么就调用<code>fork()</code>生成子进程，同时要防止阻塞，并且在程序运行结束后，输出提示信息。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#75715e">//无&amp;，就等进程结束
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>hang)
+</span></span><span style="display:flex;"><span>       wait(r); 
+</span></span><span style="display:flex;"><span><span style="color:#75715e">//有&amp;，就fork一个子进程，等待新加载的程序运行完成，输出提示信息
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">else</span>
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>       pid <span style="color:#f92672">=</span> fork();
+</span></span><span style="display:flex;"><span>       <span style="color:#66d9ef">if</span> (pid <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>) <span style="color:#75715e">//创建cmd子进程
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>       {
+</span></span><span style="display:flex;"><span>           wait(r); <span style="color:#75715e">//等待新加载的程序运行完
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>           writef(<span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">[%d] DONE</span><span style="color:#ae81ff">\t</span><span style="color:#e6db74">&#34;</span>, r);<span style="color:#75715e">//提示信息
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>           <span style="color:#66d9ef">for</span> (i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> argc; <span style="color:#f92672">++</span>i)
+</span></span><span style="display:flex;"><span>           writef(<span style="color:#e6db74">&#34;%s &#34;</span>, argv[i]);
+</span></span><span style="display:flex;"><span>           <span style="color:#66d9ef">char</span> curpath[MAXPATHLEN];
+</span></span><span style="display:flex;"><span>           <span style="color:#66d9ef">int</span> envid <span style="color:#f92672">=</span> syscall_getenvid();
+</span></span><span style="display:flex;"><span>           <span style="color:#66d9ef">int</span> shellid <span style="color:#f92672">=</span> syscall_getfaid(envid);
+</span></span><span style="display:flex;"><span>           curpath_get(shellid, curpath);
+</span></span><span style="display:flex;"><span>           writef(<span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span> LIGHT_BLUE(<span style="color:#f92672">%</span> s) <span style="color:#e6db74">&#34; &#34;</span> BOLD_GREEN(<span style="color:#960050;background-color:#1e0010">$</span>) <span style="color:#e6db74">&#34; &#34;</span>, curpath);
+</span></span><span style="display:flex;"><span>           writef(<span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\b</span><span style="color:#e6db74"> </span><span style="color:#ae81ff">\b</span><span style="color:#e6db74">&#34;</span>);
+</span></span><span style="display:flex;"><span>           exit();
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h4 id="2一行多命令">（2）一行多命令<a hidden class="anchor" aria-hidden="true" href="#2一行多命令">#</a></h4>
+<p>使用 fork 创建一个子进程执行已经识别的命令，cmd进程则继续解析下一条指令，需要注意的是，每一条指令运行前，都需要对相应的状态变量进行初始化，然后后一条指令在子进程运行结束后，再进行运行。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#39;;&#39;</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> ((pid <span style="color:#f92672">=</span> fork()) <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>) <span style="color:#75715e">//创建子进程
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">goto</span> runit;  
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    wait(pid);<span style="color:#75715e">//等待子进程运行结束
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#75715e">//参数重新初始化
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    argc <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>    hang <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>    rightpipe <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; 
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">//父进程跳出switch， 继续解析下一个命令
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    file_input <span style="color:#f92672">=</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>;  
+</span></span><span style="display:flex;"><span>    file_output <span style="color:#f92672">=</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>; 
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">break</span>;
+</span></span></code></pre></div><h4 id="3引号支持">（3）引号支持<a hidden class="anchor" aria-hidden="true" href="#3引号支持">#</a></h4>
+<p>修改 token 的部分，识别到引号的时候一直继续读，直到遇到下一个引号。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#66d9ef">if</span> (<span style="color:#f92672">*</span>s <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;\&#34;&#39;</span>)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">*</span>p1 <span style="color:#f92672">=</span> <span style="color:#f92672">++</span>s;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">while</span> (<span style="color:#f92672">*</span>s <span style="color:#f92672">&amp;&amp;</span> <span style="color:#f92672">!</span>(<span style="color:#f92672">*</span>s <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;\&#34;&#39;</span> <span style="color:#f92672">&amp;&amp;</span> <span style="color:#f92672">*</span>(s <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>) <span style="color:#f92672">!=</span> <span style="color:#e6db74">&#39;\\&#39;</span>))
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">++</span>s;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">*</span>s<span style="color:#f92672">++</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">*</span>p2 <span style="color:#f92672">=</span> s;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#e6db74">&#39;w&#39;</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h4 id="4tree--mkdir-touch">（4）tree / mkdir /touch<a hidden class="anchor" aria-hidden="true" href="#4tree--mkdir-touch">#</a></h4>
+<ul>
+<li>
+<p><strong>tree</strong></p>
+<p>主函数<code>tree()</code>通过参数的解析来调用<code>walk()</code></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">tree</span>(<span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>path, <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>prefix) {    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">struct</span> Stat status;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int</span> r <span style="color:#f92672">=</span> stat(path, <span style="color:#f92672">&amp;</span>status); 
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> (r <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">0</span>) user_panic(<span style="color:#e6db74">&#34;stat %s: %e&#34;</span>, path, r);
+</span></span><span style="display:flex;"><span>    walk(path, <span style="color:#ae81ff">0</span>);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p><code>walk()</code>函数实现内部的递归调用,传入路径和层级数量,遍历文件。对于嵌套的目录，使用递归的方式遍历。</p>
+<p>输出时借助于层级数量来格式化输出结果。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">walk</span>(<span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>path, <span style="color:#66d9ef">int</span> len) {
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">int</span> dir_fd; 
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">struct</span> File f;
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">int</span> i; 
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">char</span> newpath[MAXPATHLEN] <span style="color:#f92672">=</span> {<span style="color:#ae81ff">0</span>}; 
+</span></span><span style="display:flex;"><span>  dir_fd <span style="color:#f92672">=</span> open(path, O_RDONLY); 
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> (dir_fd <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">0</span>) user_panic(<span style="color:#e6db74">&#34;failed: open %s: %e&#34;</span>, <span style="color:#f92672">*</span>path<span style="color:#f92672">*</span>, dir_fd);  
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">while</span> (readn(dir_fd, <span style="color:#f92672">&amp;</span>f, <span style="color:#66d9ef">sizeof</span> (<span style="color:#66d9ef">struct</span> File)) <span style="color:#f92672">==</span> <span style="color:#66d9ef">sizeof</span> (<span style="color:#66d9ef">struct</span> File)) 
+</span></span><span style="display:flex;"><span>  {
+</span></span><span style="display:flex;"><span>   	<span style="color:#66d9ef">if</span> (f.f_name[<span style="color:#ae81ff">0</span>]) {
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">struct</span> File <span style="color:#f92672">*</span>dir <span style="color:#f92672">=</span> <span style="color:#f92672">&amp;</span>f;
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e">//格式化输出
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>      <span style="color:#66d9ef">for</span> (i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> len<span style="color:#f92672">*</span><span style="color:#ae81ff">4</span>; i<span style="color:#f92672">++</span>) fwritef(<span style="color:#ae81ff">1</span>, <span style="color:#e6db74">&#34; &#34;</span>);
+</span></span><span style="display:flex;"><span>      fwritef(<span style="color:#ae81ff">1</span>, <span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>);  
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">for</span> (i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> len<span style="color:#f92672">*</span><span style="color:#ae81ff">4</span>; i<span style="color:#f92672">++</span>) fwritef(<span style="color:#ae81ff">1</span>, <span style="color:#e6db74">&#34; &#34;</span>);
+</span></span><span style="display:flex;"><span>      fwritef(<span style="color:#ae81ff">1</span>, <span style="color:#e6db74">&#34;|-- &#34;</span>); 
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e">// 输出当前文件或目录
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>      <span style="color:#66d9ef">if</span> (dir<span style="color:#f92672">-&gt;</span>f_type <span style="color:#f92672">==</span> FTYPE_REG) {
+</span></span><span style="display:flex;"><span>        fwritef(<span style="color:#ae81ff">1</span>, YELLOW(<span style="color:#f92672">%</span>s), dir<span style="color:#f92672">-&gt;</span>f_name); 
+</span></span><span style="display:flex;"><span>      } 
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e">//递归输出子目录
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>      <span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> (dir<span style="color:#f92672">-&gt;</span>f_type <span style="color:#f92672">==</span> FTYPE_DIR) {
+</span></span><span style="display:flex;"><span>        fwritef(<span style="color:#ae81ff">1</span>, PURPLE(<span style="color:#f92672">%</span>s), dir<span style="color:#f92672">-&gt;</span>f_name); 
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">//拼接子目录路径
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        strcat(newpath, path);        
+</span></span><span style="display:flex;"><span>		strcat(newpath, dir<span style="color:#f92672">-&gt;</span>f_name); 
+</span></span><span style="display:flex;"><span>        strcat(newpath, <span style="color:#e6db74">&#34;/&#34;</span>); 
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">// writef(&#34;nxtpath:\n%s&#34;, npath);*
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        walk(newpath, len <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>);
+</span></span><span style="display:flex;"><span>     }
+</span></span><span style="display:flex;"><span>   }
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div></li>
+<li>
+<p><strong>mkdir</strong></p>
+<ul>
+<li>
+<p>为了简化操作，实现后续mkdir，增加系统调用来实现获得shell的id</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span>u_int <span style="color:#a6e22e">sys_get_ShellId</span>(<span style="color:#66d9ef">int</span> <span style="color:#f92672">*</span>sysno<span style="color:#f92672">*</span>, u_int <span style="color:#f92672">*</span>envid<span style="color:#f92672">*</span>) 
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">struct</span> Env <span style="color:#f92672">*</span>e ; 
+</span></span><span style="display:flex;"><span>  envid2env(<span style="color:#f92672">*</span>envid<span style="color:#f92672">*</span>, <span style="color:#f92672">&amp;</span>e, <span style="color:#ae81ff">0</span>); 
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">return</span> e<span style="color:#f92672">-&gt;</span>env_parent_id; 
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div></li>
+<li>
+<p>得到当前地址curpath，拼接得到完整地址</p>
+</li>
+<li>
+<p>对O_MKDIR进行open</p>
+</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">mkdir</span>(<span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>path, <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>prefix) {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">char</span> curpath[MAXPATHLEN] <span style="color:#f92672">=</span> {<span style="color:#ae81ff">0</span>};
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// writef(&#34;mkdir :envid是 %d shellid是 %d\n&#34;, id, shellid); 
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#66d9ef">int</span> r; 
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">//获取相应的id
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">int</span> id <span style="color:#f92672">=</span> syscall_getenvid(); 
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">int</span> shellid <span style="color:#f92672">=</span> syscall_get_ShellId(syscall_get_ShellId(id)); 
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> ((r <span style="color:#f92672">=</span> curpath_get(shellid, curpath) )<span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">0</span>) user_panic(<span style="color:#e6db74">&#34;mkdir: Error: curpath get</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">//path的拼接
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#66d9ef">if</span> (path[<span style="color:#ae81ff">0</span>] <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;/&#39;</span>) {
+</span></span><span style="display:flex;"><span>		strcat(curpath, path); 
+</span></span><span style="display:flex;"><span>	} <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">if</span> (curpath[strlen(curpath) <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>] <span style="color:#f92672">!=</span> <span style="color:#e6db74">&#39;/&#39;</span>)
+</span></span><span style="display:flex;"><span>            strcat(curpath, <span style="color:#e6db74">&#34;/&#34;</span>);
+</span></span><span style="display:flex;"><span>        strcat(curpath, path);
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">//调用open
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	r <span style="color:#f92672">=</span> open(curpath, O_RDWR<span style="color:#f92672">|</span>O_MKDIR); 
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> (r <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">0</span>) user_panic(<span style="color:#e6db74">&#34;Directory %s created error</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, curpath); 
+</span></span><span style="display:flex;"><span>	fwritef(<span style="color:#ae81ff">1</span>, <span style="color:#e6db74">&#34;%s created successfully</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, curpath);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div></li>
+<li>
+<p><strong>touch</strong></p>
+<p>类似于mkdir，只不过是open的时候使用O_CREAT参数。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">touch</span>(<span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>path, <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>prefix) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">char</span> curpath[MAXPATHLEN] <span style="color:#f92672">=</span> {<span style="color:#ae81ff">0</span>}; 
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">int</span> r;  
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">//获取相应的id
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">int</span> id<span style="color:#f92672">=</span>syscall_getenvid();
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int</span> shell_id <span style="color:#f92672">=</span> syscall_get_ShellId(syscall_get_ShellId(id));  
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> ((r<span style="color:#f92672">=</span> curpath_get(shell_id, curpath)) <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">0</span>) {
+</span></span><span style="display:flex;"><span>		fwritef(<span style="color:#ae81ff">1</span>, <span style="color:#e6db74">&#34;mkdir: Error: get curpath</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>); 
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span>; 
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">//path拼接
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#66d9ef">if</span> (path[<span style="color:#ae81ff">0</span>] <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;/&#39;</span>) {
+</span></span><span style="display:flex;"><span>		strcpy(curpath, path);  		
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">if</span> (curpath[strlen(curpath) <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>] <span style="color:#f92672">!=</span> <span style="color:#e6db74">&#39;/&#39;</span>)
+</span></span><span style="display:flex;"><span>			strcat(curpath, <span style="color:#e6db74">&#34;/&#34;</span>);
+</span></span><span style="display:flex;"><span>		strcat(curpath, path); 
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	r <span style="color:#f92672">=</span> open(curpath, O_CREAT<span style="color:#f92672">|</span>O_RDWR); 
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> (r <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">0</span>) {
+</span></span><span style="display:flex;"><span>		fwritef(<span style="color:#ae81ff">1</span>, <span style="color:#e6db74">&#34;mkdir: Error: create file</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>); 
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span>; 
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	fwritef(<span style="color:#ae81ff">1</span>, <span style="color:#e6db74">&#34;File %s created!&#34;</span>, curpath);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div></li>
+</ul>
+<h3 id="normal部分">Normal部分<a hidden class="anchor" aria-hidden="true" href="#normal部分">#</a></h3>
+<h4 id="历史命令功能">历史命令功能<a hidden class="anchor" aria-hidden="true" href="#历史命令功能">#</a></h4>
+<ol>
+<li>
+<p><strong>首先创建读取/写入历史文件 API</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">history_init</span>();
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">history_save</span>(<span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>s);
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">history_read</span>(<span style="color:#66d9ef">char</span>(<span style="color:#f92672">*</span>cmd)[<span style="color:#ae81ff">128</span>]);
+</span></span></code></pre></div><p><strong>初始化函数</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">history_init</span>()
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int</span> r;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> ((r <span style="color:#f92672">=</span> open(<span style="color:#e6db74">&#34;/.history&#34;</span>, O_CREAT <span style="color:#f92672">|</span> O_RDWR)) <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span>        user_panic(<span style="color:#e6db74">&#34;His : Init Failed: %d.&#34;</span>, r);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div></li>
+<li>
+<p><strong>将每一个输入执行的指令，利用<code>history_save()</code>保存进一个文件中，我创建的是<code>.history</code>文件，每行存放一条指令。</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">history_save</span>(<span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>s)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int</span> r;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> ((r <span style="color:#f92672">=</span> open(<span style="color:#e6db74">&#34;/.history&#34;</span>, O_CREAT <span style="color:#f92672">|</span> O_RDWR <span style="color:#f92672">|</span> O_APPEND)) <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        user_panic(<span style="color:#e6db74">&#34;His : Open failed&#34;</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    fwritef(r, s);
+</span></span><span style="display:flex;"><span>    fwritef(r, <span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>);
+</span></span><span style="display:flex;"><span>    close(r);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">history_read</span>(<span style="color:#66d9ef">char</span> cmd[][<span style="color:#ae81ff">128</span>])
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int</span> r, fd;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">char</span> buf[<span style="color:#ae81ff">128</span> <span style="color:#f92672">*</span> <span style="color:#ae81ff">128</span>];
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> ((fd <span style="color:#f92672">=</span> open(<span style="color:#e6db74">&#34;/.history&#34;</span>, O_RDONLY)) <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        user_panic(<span style="color:#e6db74">&#34;His : Open failed&#34;</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> ((r <span style="color:#f92672">=</span> read(fd, buf, <span style="color:#66d9ef">sizeof</span>(buf))) <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        user_panic(<span style="color:#e6db74">&#34;His : Read failed&#34;</span>);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    close(fd);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>, cmdi <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">while</span> (buf[i])
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">int</span> cmdj <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">while</span> (buf[i] <span style="color:#f92672">&amp;&amp;</span> buf[i] <span style="color:#f92672">!=</span> <span style="color:#e6db74">&#39;\n&#39;</span>)
+</span></span><span style="display:flex;"><span>            cmd[cmdi][cmdj<span style="color:#f92672">++</span>] <span style="color:#f92672">=</span> buf[i<span style="color:#f92672">++</span>];
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>buf[i])
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">break</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">++</span>i;
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">++</span>cmdi;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> cmdi;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div></li>
+<li>
+<p><strong>通过编写一个用户态程序</strong> <code>history.b</code>文件并写入磁盘中，使得每次调用<code>history.b </code>时，能够将文件（ .history ）的内容全部输出。在 user/history.c 中 进行读取/.history文件</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#75715e">#include</span> <span style="color:#75715e">&#34;lib.h&#34;</span><span style="color:#75715e">
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">umain</span>(<span style="color:#66d9ef">int</span> argc, <span style="color:#66d9ef">char</span> <span style="color:#f92672">**</span>argv)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> (argc <span style="color:#f92672">!=</span> <span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>	{
+</span></span><span style="display:flex;"><span>		fwritef(<span style="color:#ae81ff">1</span>, <span style="color:#e6db74">&#34;usage: history</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>);
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span>;
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">int</span> his <span style="color:#f92672">=</span> open(<span style="color:#e6db74">&#34;.history&#34;</span>, O_RDONLY <span style="color:#f92672">|</span> O_CREAT);
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">char</span> ch;
+</span></span><span style="display:flex;"><span>	fwritef(<span style="color:#ae81ff">1</span>, <span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\x1b</span><span style="color:#e6db74">[33m-*- HISTORY -*-</span><span style="color:#ae81ff">\x1b</span><span style="color:#e6db74">[0m</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>);
+</span></span><span style="display:flex;"><span>	fwritef(<span style="color:#ae81ff">1</span>, <span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\x1b</span><span style="color:#e6db74">[33m1</span><span style="color:#ae81ff">\x1b</span><span style="color:#e6db74">[0m</span><span style="color:#ae81ff">\t</span><span style="color:#e6db74">&#34;</span>);
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">int</span> cnt <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">int</span> fl <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">while</span> (read(his, <span style="color:#f92672">&amp;</span>ch, <span style="color:#ae81ff">1</span>) <span style="color:#f92672">==</span> <span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>	{
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">if</span> (fl)
+</span></span><span style="display:flex;"><span>		{
+</span></span><span style="display:flex;"><span>			fwritef(<span style="color:#ae81ff">1</span>, <span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\x1b</span><span style="color:#e6db74">[33m%d</span><span style="color:#ae81ff">\x1b</span><span style="color:#e6db74">[0m</span><span style="color:#ae81ff">\t</span><span style="color:#e6db74">&#34;</span>, cnt);
+</span></span><span style="display:flex;"><span>			fl <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>		fwritef(<span style="color:#ae81ff">1</span>, <span style="color:#e6db74">&#34;%c&#34;</span>, ch);
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">if</span> (ch <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;\n&#39;</span>)
+</span></span><span style="display:flex;"><span>		{
+</span></span><span style="display:flex;"><span>			cnt<span style="color:#f92672">++</span>;
+</span></span><span style="display:flex;"><span>			fl <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div></li>
+<li>
+<p><strong>按键识别，键入上下键时，切换历史命令</strong></p>
+</li>
+</ol>
+<ul>
+<li>
+<p><strong>经查阅资料，光标键对应的字符如下：</strong></p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">按键</th>
+<th style="text-align:center">常规模式</th>
+<th style="text-align:center">应用程序模式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">↑</td>
+<td style="text-align:center">ESC [ A</td>
+<td style="text-align:center">ESC O A</td>
+</tr>
+<tr>
+<td style="text-align:center">↓</td>
+<td style="text-align:center">ESC [ B</td>
+<td style="text-align:center">ESC O B</td>
+</tr>
+</tbody>
+</table>
+</li>
+<li>
+<p><strong>步骤</strong></p>
+<ul>
+<li>获取缓冲区buf[]后三个字符</li>
+<li>捕获到后，抵消光标移动操作</li>
+<li>清空缓冲区，将光标移到左侧</li>
+<li>打印出相应顺序的指令</li>
+</ul>
+</li>
+<li>
+<p><strong>代码分析</strong></p>
+</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#66d9ef">if</span> (i <span style="color:#f92672">&gt;=</span> <span style="color:#ae81ff">2</span> <span style="color:#f92672">&amp;&amp;</span> buf[i <span style="color:#f92672">-</span> <span style="color:#ae81ff">2</span>] <span style="color:#f92672">==</span> <span style="color:#ae81ff">27</span> <span style="color:#f92672">&amp;&amp;</span> buf[i <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>] <span style="color:#f92672">==</span> <span style="color:#ae81ff">91</span> <span style="color:#f92672">&amp;&amp;</span> buf[i] <span style="color:#f92672">==</span> <span style="color:#ae81ff">65</span>)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    writef(<span style="color:#e6db74">&#34;%c%c%c&#34;</span>, <span style="color:#ae81ff">27</span>, <span style="color:#ae81ff">91</span>, <span style="color:#ae81ff">65</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> (i <span style="color:#f92672">-=</span> <span style="color:#ae81ff">2</span>; i; <span style="color:#f92672">--</span>i)
+</span></span><span style="display:flex;"><span>        writef(<span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\b</span><span style="color:#e6db74"> </span><span style="color:#ae81ff">\b</span><span style="color:#e6db74">&#34;</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (cmdi)
+</span></span><span style="display:flex;"><span>        strcpy(buf, cmds[<span style="color:#f92672">--</span>cmdi]);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">else</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">strcpy</span>(buf, cmds[cmdi]);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    writef(<span style="color:#e6db74">&#34;%s&#34;</span>, buf);
+</span></span><span style="display:flex;"><span>    i <span style="color:#f92672">=</span> strlen(buf) <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> (i <span style="color:#f92672">&gt;=</span> <span style="color:#ae81ff">2</span> <span style="color:#f92672">&amp;&amp;</span> buf[i <span style="color:#f92672">-</span> <span style="color:#ae81ff">2</span>] <span style="color:#f92672">==</span> <span style="color:#ae81ff">27</span> <span style="color:#f92672">&amp;&amp;</span> buf[i <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>] <span style="color:#f92672">==</span> <span style="color:#ae81ff">91</span> <span style="color:#f92672">&amp;&amp;</span> buf[i] <span style="color:#f92672">==</span> <span style="color:#ae81ff">66</span>)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (cmdi <span style="color:#f92672">&lt;</span> nn <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> (i <span style="color:#f92672">-=</span> <span style="color:#ae81ff">2</span>; i; <span style="color:#f92672">--</span>i)
+</span></span><span style="display:flex;"><span>            writef(<span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\b</span><span style="color:#e6db74"> </span><span style="color:#ae81ff">\b</span><span style="color:#e6db74">&#34;</span>);
+</span></span><span style="display:flex;"><span>        strcpy(buf, cmds[<span style="color:#f92672">++</span>cmdi]);
+</span></span><span style="display:flex;"><span>        writef(<span style="color:#e6db74">&#34;%s&#34;</span>, buf);
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">else</span>
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        buf[i <span style="color:#f92672">-</span> <span style="color:#ae81ff">2</span>] <span style="color:#f92672">=</span> buf[i <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>] <span style="color:#f92672">=</span> buf[i] <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;\0&#39;</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    i <span style="color:#f92672">=</span> strlen(buf) <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h3 id="challenge部分">Challenge部分<a hidden class="anchor" aria-hidden="true" href="#challenge部分">#</a></h3>
+<h4 id="环境变量">环境变量<a hidden class="anchor" aria-hidden="true" href="#环境变量">#</a></h4>
+<p>在本部分，我与部分同学进行了进行了交流与探讨，最终结合助教的提示以及问题描述，得到了下面一种较为有效的解决方案。</p>
+<ol>
+<li>
+<p><strong>首先我们需要自定一个新的结构体，来表示环境变量，其中需要有这些属性：环境变量拥有者的id、环境变量的名字 、环境变量的值、只读性、局部性、有效性，然后建立一个环境变量表，以达到多个程序使用的目的</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#66d9ef">struct</span> Var {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">int</span> envid;  <span style="color:#75715e">//环境变量拥有者的id
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>   	<span style="color:#66d9ef">char</span> name[<span style="color:#ae81ff">64</span>]; <span style="color:#75715e">//环境变量的名字 
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#66d9ef">char</span> val[<span style="color:#ae81ff">128</span>]; <span style="color:#75715e">//环境变量的值
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#66d9ef">int</span> readonly; <span style="color:#75715e">//只读性
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#66d9ef">int</span> local; <span style="color:#75715e">//局部性
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#66d9ef">int</span> ava; <span style="color:#75715e">//有效性,为0代表还未生效，即不存在（狭义理解）
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>}; 
+</span></span></code></pre></div></li>
+<li>
+<p><strong>新增系统调用</strong>,以实现对环境变量的<strong>增删改查</strong></p>
+<ul>
+<li>
+<p>在<code>lib/syscall.S</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-fallback" data-lang="fallback"><span style="display:flex;"><span>.word sys_get_var
+</span></span><span style="display:flex;"><span>.word sys_set_var
+</span></span></code></pre></div></li>
+<li>
+<p>user/syscall_lib.c</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">syscall_get_var</span>(u_int envid, <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>name, <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>val, <span style="color:#66d9ef">int</span> op) 
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> msyscall(SYS_get_var, envid, name, val, op, <span style="color:#ae81ff">0</span>); 
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">syscall_set_var</span>(u_int envid, <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>name, <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>val, <span style="color:#66d9ef">int</span> op, <span style="color:#66d9ef">int</span> perm) 
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> msyscall(SYS_set_var, envid, name, val, op, perm);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div></li>
+<li>
+<p><strong>增：</strong><code>syscall_set_var(op=0)</code>——遍历环境变量表，找到第一个ava=0的Var，写入这个Var</p>
+<p><strong>删</strong>：<code>syscall_set_var(op=1)</code>——遍历环境变量表，找到name对应的要删除的var，设置其ava=0</p>
+<p><strong>改</strong>：<code>syscall_set_var(op=0)</code>——遍历环境变量表，找到name对应的要修改的var，改为参数中的这个var</p>
+<p><strong>查</strong>：查询特定的有效的环境变量/全部有效的环境变量</p>
+<ul>
+<li>特定的：<code>syscall_get_var(op=0)</code>——遍历环境变量表，找到所有ava=1的，且名字与查询条件相同的var</li>
+<li>全部的：<code>syscall_get_var(op=1)</code>——遍历环境变量表，找到所有ava=1的var</li>
+</ul>
+</li>
+<li>
+<p>具体代码实现，受限于篇幅，不完整贴上，需要注意的几点</p>
+<ul>
+<li>
+<p>设置set时的权限位 VAR_LOCAL ， VAR_RDONLY 来控制访问权限,设置对应Var的local，readonly变量</p>
+</li>
+<li>
+<p>新增了错误类型 E_VAR_NOT_FOUND , E_VAR_FULL , E_VAR_RDONLY</p>
+</li>
+<li>
+<p>在进行后三者时，要注意额外判断当前维护变量是否为局部的以及其与当前shellid的关系，写一个简单的函数进行判断。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#75715e">//shellid通过系统调用传入
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">judge</span>(u_int shellid, <span style="color:#66d9ef">struct</span> Var <span style="color:#f92672">*</span>var) {
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> (var<span style="color:#f92672">-&gt;</span>local <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>) {
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">return</span> <span style="color:#ae81ff">1</span>; 
+</span></span><span style="display:flex;"><span>	} <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">if</span> (shellid <span style="color:#f92672">==</span> var<span style="color:#f92672">-&gt;</span>envid) {
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">return</span> <span style="color:#ae81ff">1</span>; 	
+</span></span><span style="display:flex;"><span>		} <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>			<span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>; 
+</span></span><span style="display:flex;"><span>		}
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div></li>
+<li>
+<p>主要使用strcat，strcmp，strcpy进行字符串处理，比较。利用了比较傻的for循环。</p>
+</li>
+<li>
+<p>然后比如说判断是否有对应name，构建了一个小函数，方便判断</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">contain_name</span>(<span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>name) {
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">for</span> (i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> NVARS; i<span style="color:#f92672">++</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">struct</span> Var <span style="color:#f92672">*</span>v <span style="color:#f92672">=</span> <span style="color:#f92672">&amp;</span>vars[i];
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (v<span style="color:#f92672">-&gt;</span>ava <span style="color:#f92672">&amp;&amp;</span> strcmp(v<span style="color:#f92672">-&gt;</span>name, <span style="color:#f92672">*</span>name<span style="color:#f92672">*</span>) <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">1</span>; 
+</span></span><span style="display:flex;"><span>    }  
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>; 
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div></li>
+<li>
+<p>注意权限位的设置</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p><strong>declare</strong></p>
+<ul>
+<li>
+<p>在<code>umain</code>中，设置flag,以及perm</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#66d9ef">void</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">umain</span>(<span style="color:#66d9ef">int</span> argc, <span style="color:#66d9ef">char</span> <span style="color:#f92672">**</span>argv) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int</span> i;
+</span></span><span style="display:flex;"><span>    ARGBEGIN
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">default</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>            usage();
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#39;r&#39;</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>            flag[(u_char) ARGC()]<span style="color:#f92672">++</span>;
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#39;x&#39;</span><span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>			flag[(u_char) ARGC()]<span style="color:#f92672">++</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">break</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    ARGEND
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">int</span> perm <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; 
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> (flag[<span style="color:#e6db74">&#39;r&#39;</span>]) {
+</span></span><span style="display:flex;"><span>		perm <span style="color:#f92672">|=</span> VAR_RDONLY; 
+</span></span><span style="display:flex;"><span>	} 
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> (flag[<span style="color:#e6db74">&#39;x&#39;</span>]) {
+</span></span><span style="display:flex;"><span>		perm <span style="color:#f92672">|=</span> VAR_LOCAL; 
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>arg2 <span style="color:#f92672">=</span> argv[<span style="color:#ae81ff">1</span>]; 
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">while</span>(<span style="color:#f92672">*</span>arg2 <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;=&#39;</span>) {
+</span></span><span style="display:flex;"><span>		arg2<span style="color:#f92672">++</span>; 
+</span></span><span style="display:flex;"><span>	}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (argc <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>) declare_nothing(); 
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> (argc <span style="color:#f92672">==</span> <span style="color:#ae81ff">1</span>) set(argv[<span style="color:#ae81ff">0</span>], <span style="color:#e6db74">&#34;&#34;</span>, perm);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> (argc <span style="color:#f92672">==</span> <span style="color:#ae81ff">2</span>) set(argv[<span style="color:#ae81ff">0</span>], arg2, perm);
+</span></span><span style="display:flex;"><span>  	<span style="color:#66d9ef">else</span> writef(<span style="color:#ae81ff">1</span>, <span style="color:#e6db74">&#34;too many args&#34;</span>);
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">//writef(&#34;declare ok**&#34;); 
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>}
+</span></span></code></pre></div></li>
+<li>
+<p>在set函数中调用前述所写系统调用，实现declare，需要注意的是权限位的设定，以及传入参数</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#66d9ef">void</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">set</span>(<span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>name, <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>value, <span style="color:#66d9ef">int</span> perm) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int</span> r;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int</span> shellid <span style="color:#f92672">=</span> syscall_get_ShellId(syscall_get_ShellId(syscall_getenvid())); 
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">if</span> ((r <span style="color:#f92672">=</span> syscall_set_var(shellid, name, value, <span style="color:#ae81ff">0</span>, perm)) <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">0</span>) {
+</span></span><span style="display:flex;"><span>       	<span style="color:#66d9ef">if</span> (r <span style="color:#f92672">==</span> <span style="color:#f92672">-</span>E_VAR_FULL) fwritef(<span style="color:#ae81ff">1</span>, <span style="color:#e6db74">&#34;declare: vars are full</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, name);
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (r <span style="color:#f92672">==</span> <span style="color:#f92672">-</span>E_VAR_RDONLY) fwritef(<span style="color:#ae81ff">1</span>, <span style="color:#e6db74">&#34;declare: [%s] is readonly</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, name);
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div></li>
+</ul>
+</li>
+<li>
+<p><strong>echo</strong></p>
+<p>在实现echo的时候，在umain解析的时候，需要对其进行修改</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#66d9ef">void</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">umain</span>(<span style="color:#66d9ef">int</span> argc, <span style="color:#66d9ef">char</span> <span style="color:#f92672">**</span>argv) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int</span> i, nflag;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    nflag <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (argc <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">1</span> <span style="color:#f92672">&amp;&amp;</span> strcmp(argv[<span style="color:#ae81ff">1</span>], <span style="color:#e6db74">&#34;-n&#34;</span>) <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>) {
+</span></span><span style="display:flex;"><span>        nflag <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>        argc<span style="color:#f92672">--</span>;
+</span></span><span style="display:flex;"><span>        argv<span style="color:#f92672">++</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> (i <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>; i <span style="color:#f92672">&lt;</span> argc; i<span style="color:#f92672">++</span>) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (i <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>            write(<span style="color:#ae81ff">1</span>, <span style="color:#e6db74">&#34; &#34;</span>, <span style="color:#ae81ff">1</span>);
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (argv[i][<span style="color:#ae81ff">0</span>] <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;$&#39;</span>) {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">char</span> value[<span style="color:#ae81ff">128</span>];
+</span></span><span style="display:flex;"><span>            syscall_env_var(<span style="color:#f92672">&amp;</span>argv[i][<span style="color:#ae81ff">1</span>], value, <span style="color:#ae81ff">1</span>);
+</span></span><span style="display:flex;"><span>            write(<span style="color:#ae81ff">1</span>, value, strlen(value));
+</span></span><span style="display:flex;"><span>        } <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>            write(<span style="color:#ae81ff">1</span>, argv[i], strlen(argv[i]));
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>nflag)
+</span></span><span style="display:flex;"><span>        write(<span style="color:#ae81ff">1</span>, <span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, <span style="color:#ae81ff">1</span>);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div></li>
+<li>
+<p><strong>unset</strong></p>
+<p>在<code>unset.c </code>中， 直接调用syscall_set_var 即可.</p>
+</li>
+</ol>
+<h3 id="其他支持或者前置条件">其他支持或者前置条件<a hidden class="anchor" aria-hidden="true" href="#其他支持或者前置条件">#</a></h3>
+<h4 id="1clear清屏">（1）clear清屏<a hidden class="anchor" aria-hidden="true" href="#1clear清屏">#</a></h4>
+<p><code>#define CLEAR() printf(&quot;\033[2J&quot;) </code></p>
+<h4 id="2彩色输出">（2）彩色输出<a hidden class="anchor" aria-hidden="true" href="#2彩色输出">#</a></h4>
+<p>定义在<code>sh.h</code>中</p>
+<p>用类似于\033[32m 实现绿色输出，类似可以实现其他颜色的输出。</p>
+<p>用 \033[1m 可以实现加粗效果。</p>
+<p>用 \033[m 表示颜色输出结束。</p>
+<h4 id="3cd命令">（3）cd命令<a hidden class="anchor" aria-hidden="true" href="#3cd命令">#</a></h4>
+<p>利用环境变量维护curpath(当前路径)，利用系统调用可以获取和设置当前路径，并封装一套 API；</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">curpath_init</span>(<span style="color:#66d9ef">int</span> envid,<span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>path);
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">curpath_get</span>(<span style="color:#66d9ef">int</span> envid,<span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>path);
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">curpath_set</span>(<span style="color:#66d9ef">int</span> envid,<span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>path);
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">curpath_get_parent</span>(<span style="color:#66d9ef">int</span> envid,<span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>path);
+</span></span></code></pre></div><p>当使用∶</p>
+<ul>
+<li>
+<p>cd.∶不改变路径</p>
+</li>
+<li>
+<p>cd ..∶返回上一级目录（若为根目录，则不再返回）</p>
+</li>
+<li>
+<p>cd folder ∶进入目录时</p>
+</li>
+</ul>
+<p>对所有的命令都重写，加入 curpath 的获取。如果传入的命令是一个以 /开头的路径，则为绝对路径;否则为相对路径。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#66d9ef">int</span> i, r;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">int</span> path[<span style="color:#ae81ff">256</span>];
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">int</span> faid <span style="color:#f92672">=</span> syscall_get_ShellId(syscall_get_ShellId(syscall_getenvid()));
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> (argc <span style="color:#f92672">==</span> <span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    fwritef(<span style="color:#ae81ff">1</span>, <span style="color:#e6db74">&#34;cd: too few args</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">else</span>
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> (i <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>; i <span style="color:#f92672">&lt;</span> argc; i<span style="color:#f92672">++</span>)
+</span></span><span style="display:flex;"><span>    {
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">//显示当前目录
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        <span style="color:#66d9ef">if</span> (strcmp(argv[i], <span style="color:#e6db74">&#34;.&#34;</span>) <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span>;
+</span></span><span style="display:flex;"><span>		<span style="color:#75715e">//上一级目录
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        <span style="color:#66d9ef">if</span> (strcmp(argv[i], <span style="color:#e6db74">&#34;..&#34;</span>) <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span>        {
+</span></span><span style="display:flex;"><span>            curpath_get_parent(faid, path);
+</span></span><span style="display:flex;"><span>            curpath_set(faid, path);
+</span></span><span style="display:flex;"><span>            fwritef(<span style="color:#ae81ff">1</span>, <span style="color:#e6db74">&#34;cd(now_path): %s&#34;</span>, path);
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">else</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e">//进入某一个目录
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        {
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> ((r <span style="color:#f92672">=</span> curpath_get(faid, path)) <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span>            {
+</span></span><span style="display:flex;"><span>                fwritef(<span style="color:#ae81ff">1</span>, <span style="color:#e6db74">&#34;cd: get environment var failed&#34;</span>);
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">return</span>;
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>            strcat(path, argv[i]);
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">int</span> len <span style="color:#f92672">=</span> strlen(path);
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> (path[len <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>] <span style="color:#f92672">!=</span> <span style="color:#e6db74">&#39;/&#39;</span>)
+</span></span><span style="display:flex;"><span>                strcat(path, <span style="color:#e6db74">&#34;/&#34;</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">struct</span> Stat st;
+</span></span><span style="display:flex;"><span>            r <span style="color:#f92672">=</span> stat(path, <span style="color:#f92672">&amp;</span>st);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> (r <span style="color:#f92672">==</span> <span style="color:#f92672">-</span>E_VAR_NOT_FOUND)
+</span></span><span style="display:flex;"><span>                fwritef(<span style="color:#ae81ff">1</span>, <span style="color:#e6db74">&#34;cd: %s not found</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, path);
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">else</span> <span style="color:#a6e22e">if</span> (r <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span>                fwritef(<span style="color:#ae81ff">1</span>, <span style="color:#e6db74">&#34;cd: cannot cd %s</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, path);
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">else</span> <span style="color:#a6e22e">if</span> (<span style="color:#f92672">!</span>st.st_isdir)
+</span></span><span style="display:flex;"><span>                fwritef(<span style="color:#ae81ff">1</span>, <span style="color:#e6db74">&#34;cd: %s is not directory</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, path);
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">else</span>
+</span></span><span style="display:flex;"><span>            {
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">if</span> ((r <span style="color:#f92672">=</span> curpath_set(faid, path)) <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span>                    fwritef(<span style="color:#ae81ff">1</span>, <span style="color:#e6db74">&#34;Environment var not found&#34;</span>);
+</span></span><span style="display:flex;"><span>                fwritef(<span style="color:#ae81ff">1</span>, <span style="color:#e6db74">&#34;curpath: %s&#34;</span>, path);
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h4 id="4rm命令">（4）rm命令<a hidden class="anchor" aria-hidden="true" href="#4rm命令">#</a></h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#75715e">//类似于创建文件，有小改动
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">if</span> ((r <span style="color:#f92672">=</span> remove(curpath)) <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>    fwritef(<span style="color:#ae81ff">1</span>, <span style="color:#e6db74">&#34;File %s Not Exists!</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">&#34;</span>, curpath);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h4 id="5open修改">（5）open修改<a hidden class="anchor" aria-hidden="true" href="#5open修改">#</a></h4>
+<p>在open()中，首先需要加入APPEND,MKDIR,CREAT代码。</p>
+<p><code>#define O_APPEND 0x1000</code></p>
+<p><code>user/file.c</code>中的<code>open()</code> 中加入O_APPEND打开方式扩充代码</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#66d9ef">if</span> ((mode <span style="color:#f92672">&amp;</span> O_APPEND) <span style="color:#f92672">!=</span> <span style="color:#ae81ff">0</span>) { 
+</span></span><span style="display:flex;"><span>	ffd<span style="color:#f92672">-&gt;</span>f_fd.fd_offset <span style="color:#f92672">=</span> size; 
+</span></span><span style="display:flex;"><span>} 
+</span></span></code></pre></div><p><code>fs/serv.c</code>中的<code>serve_open()</code>中加入CREAT, MKDIR打开方式扩充.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span> <span style="color:#66d9ef">if</span> ((r <span style="color:#f92672">=</span> file_open((<span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>) path, <span style="color:#f92672">&amp;</span>f)) <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">0</span>) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (r <span style="color:#f92672">==</span> <span style="color:#f92672">-</span>E_NOT_FOUND <span style="color:#f92672">&amp;&amp;</span> (rq<span style="color:#f92672">-&gt;</span>req_omode <span style="color:#f92672">&amp;</span> O_CREAT)) {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> ((r <span style="color:#f92672">=</span> file_create((<span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>)path, <span style="color:#f92672">&amp;</span>f)) <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">0</span>) {
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">return</span>;
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>            f<span style="color:#f92672">-&gt;</span>f_type <span style="color:#f92672">=</span> FTYPE_REG;
+</span></span><span style="display:flex;"><span>        } <span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> (r <span style="color:#f92672">==</span> <span style="color:#f92672">-</span>E_NOT_FOUND <span style="color:#f92672">&amp;&amp;</span> (rq<span style="color:#f92672">-&gt;</span>req_omode <span style="color:#f92672">&amp;</span> O_MKDIR)) {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> ((r <span style="color:#f92672">=</span> file_create((<span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>)path, <span style="color:#f92672">&amp;</span>f)) <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">0</span>) {
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">return</span>;
+</span></span><span style="display:flex;"><span>            }
+</span></span><span style="display:flex;"><span>            f<span style="color:#f92672">-&gt;</span>f_type <span style="color:#f92672">=</span> FTYPE_DIR;
+</span></span><span style="display:flex;"><span>        } <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>            ipc_send(envid, r, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>);
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span>;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span></code></pre></div><h4 id="6环境变量的获取当前地址的操作">（6）环境变量的获取，当前地址的操作<a hidden class="anchor" aria-hidden="true" href="#6环境变量的获取当前地址的操作">#</a></h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">curpath_init</span>(<span style="color:#66d9ef">int</span> envid, <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>path) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int</span> r;
+</span></span><span style="display:flex;"><span>	 
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// set op 0 declare with perm
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#66d9ef">if</span> ((r <span style="color:#f92672">=</span> syscall_set_var(envid, CURPATH_KEY, path, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>)) <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">0</span>) user_panic(<span style="color:#e6db74">&#34;Init curpath failed: %u.&#34;</span>, r);
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> ; 
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">curpath_get</span>(<span style="color:#66d9ef">int</span> envid, <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>path) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int</span> r;
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">//op1 get one
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#75715e">//writef(&#34;get from env : %d&#34;, envid); 
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">if</span> ((r <span style="color:#f92672">=</span> syscall_get_var(envid, CURPATH_KEY, path, <span style="color:#ae81ff">1</span>)) <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">0</span>) <span style="color:#66d9ef">return</span> r;
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>; 
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">curpath_set</span>(<span style="color:#66d9ef">int</span> envid, <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>path) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int</span> r;
+</span></span><span style="display:flex;"><span>	<span style="color:#75715e">// op0 declare with perm
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">if</span> ((r <span style="color:#f92672">=</span> syscall_set_var(envid, CURPATH_KEY, path, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>)) <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">0</span>) <span style="color:#66d9ef">return</span> r;
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> r; 
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">curpath_get_parent</span>(<span style="color:#66d9ef">int</span> envid, <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span>path) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">int</span> r, i;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> ((r <span style="color:#f92672">=</span> curpath_get(envid, path)) <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">0</span>) <span style="color:#66d9ef">return</span> r;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (strlen(path) <span style="color:#f92672">==</span> <span style="color:#ae81ff">1</span>) <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> (i <span style="color:#f92672">=</span> strlen(path) <span style="color:#f92672">-</span> <span style="color:#ae81ff">2</span>; path[i <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>] <span style="color:#f92672">!=</span> <span style="color:#e6db74">&#39;/&#39;</span>; i<span style="color:#f92672">--</span>);
+</span></span><span style="display:flex;"><span>    path[i] <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">return</span> r; 
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h2 id="实验难点及总结">实验难点及总结<a hidden class="anchor" aria-hidden="true" href="#实验难点及总结">#</a></h2>
+<p>在本实验中，我通过编写新函数，新的方法实现一些小组件以及附加功能，丰富了我们的 shell的功能，包括&quot;后台运行&rdquo;，&ldquo;一行多命令&rdquo;，&ldquo;简单引号支持&rdquo;，&ldquo;tree /mkdir /touch 命令&rdquo;，&ldquo;清屏&rdquo;，&ldquo;彩色输出&rdquo;，&ldquo;历史命令&rdquo;，&ldquo;环境变量&rdquo;，&ldquo;cd 命令&quot;等任务。</p>
+<p>我认为实验的主要难点在于</p>
+<ul>
+<li>修改若干的指令，使之成为内置的指令</li>
+<li>在历史命令中，如何实现识别键位（通过查阅资料得知），如何实现历史命令保存，输出</li>
+<li>以及在challenge部分的环境变量的实现（新定义结构体，并且书写相应的系统调用，以及增加相应的open（）参数，错误码，并加以合理运用）</li>
+<li>一些字符串处理方法的使用，以及各个细节的注意以及逐个击破。</li>
+</ul>
+<p>终于度过了难捱的一学期学习，在做完了lab6挑战性任务以后，我对os的学习体会有了进一步的升华，也对课程内容有了更深入的理解，感谢os课程组对我们的磨练以及提升！</p>
+
+
+        </div>
+        <div class="post-reward">
+            <div style="padding: 0 0 0 0; margin: 0 0 0 0; width: 100%; font-size:16px; text-align: center;">
+                <div id="QR" style="opacity: 0;">
+                    <div id="wechat" style="display: inline-block">
+                        <a class="fancybox" rel="group">
+                            <img id="wechat_qr" src="/img/wechat_pay.jpg" alt="wechat_pay"></a>
+                        <p>微信</p>
+                    </div>
+                    <div id="alipay" style="display: inline-block">
+                        <a class="fancybox" rel="group">
+                            <img id="alipay_qr" src="/img/alipay.jpg" alt="alipay"></a>
+                        <p>支付宝</p>
+                    </div>
+                </div>
+                <button id="rewardButton"
+                        onclick="
+                    var qr = document.getElementById('QR');
+                    if (qr.style.opacity === '0') {
+                        qr.style.opacity='1';
+                    } else {
+                        qr.style.opacity='0'
+                    }"
+                >
+                    <span>🧧 鼓励</span>
+                </button>
+            </div>
+        </div>
+
+        <footer class="post-footer">
+            
+<nav class="paginav">
+  <a class="prev" href="https://mksasx.github.io/posts/sport/%E7%AF%AE%E7%90%83%E5%9F%BA%E6%9C%AC%E6%88%98%E6%9C%AF%E5%8F%8A%E5%9B%BE%E8%A7%A3/">
+    <span class="title">« 上一页</span>
+    <br>
+    <span>篮球基本战术及图解</span>
+  </a>
+  <a class="next" href="https://mksasx.github.io/posts/tech/algorithm/%E6%8E%92%E5%BA%8F%E7%AE%97%E6%B3%95/">
+    <span class="title">下一页 »</span>
+    <br>
+    <span>排序算法</span>
+  </a>
+</nav>
+
+        </footer>
+    </div>
+
+
+
+<div>
+    <div class="pagination__title">
+        <span class="pagination__title-h" style="font-size: 20px;">💬评论</span>
+        <hr />
+    </div>
+
+    <div id="tcomment"></div>
+
+    <script src="https://cdn.staticfile.org/twikoo/1.6.7/twikoo.all.min.js">
+    </script>
+    
+
+    
+
+    <script>
+        twikoo.init({
+            envId: "https://vercal-mogodb-comment.vercel.app/", 
+            el: "#tcomment",
+            lang: 'zh-CN',
+            region: 'ap-guangzhou',
+            path: window.TWIKOO_MAGIC_PATH||window.location.pathname,
+            
+            
+            
+            
+            
+            
+            
+        });
+    </script>
+
+</div>
+</article>
+</main>
+
+
+<script async src="https://unpkg.com/mermaid@8.8.1/dist/mermaid.min.js"></script>
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<footer class="footer">
+    <span>
+        Copyright
+        &copy;
+        2020-2022 
+        <a href="https://mksasx.github.io/" style="color:#939393;">AustinMa&#39;s Blog</a>
+         All Rights Reserved
+    </span>
+
+    
+
+     
+    
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <span class="topInner">
+        <svg class="topSvg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+            <path d="M12 6H0l6-6z"/>
+        </svg>
+        <span id="read_progress"></span>
+    </span>
+</a>
+
+<script>
+    document.addEventListener('scroll', function (e) {
+        const readProgress = document.getElementById("read_progress");
+        const scrollHeight = document.documentElement.scrollHeight;
+        const clientHeight = document.documentElement.clientHeight;
+        const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+        
+        readProgress.innerText = ((scrollTop / (scrollHeight - clientHeight)).toFixed(2) * 100).toFixed(0);
+    })
+</script>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 400 || document.documentElement.scrollTop > 400) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+
+<script>
+    document.body.addEventListener('copy', function (e) {
+        if (window.getSelection().toString() && window.getSelection().toString().length > 50) {
+            let clipboardData = e.clipboardData || window.clipboardData;
+            if (clipboardData) {
+                e.preventDefault();
+                let htmlData = window.getSelection().toString() +
+                    '\r\n\n————————————————\r\n' +
+                    '版权声明：本文为「'+"AustinMa's Blog"+'」的原创文章，遵循CC 4.0 BY-SA版权协议，转载请附上原文出处链接及本声明。' +
+                    '\r\n原文链接：' + location.href;
+                let textData = window.getSelection().toString() +
+                    '\r\n\n————————————————\r\n' +
+                    '版权声明：本文为「'+"AustinMa's Blog"+'」的原创文章，遵循CC 4.0 BY-SA版权协议，转载请附上原文出处链接及本声明。' +
+                    '\r\n原文链接：' + location.href;
+                clipboardData.setData('text/html', htmlData);
+                clipboardData.setData('text/plain', textData);
+            }
+        }
+    });
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerText = '📄复制';
+
+        function copyingDone() {
+            copybutton.innerText = '👌🏻已复制!';
+            setTimeout(() => {
+                copybutton.innerText = '📄复制';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                let text = codeblock.textContent +
+                    '\r\n————————————————\r\n' +
+                    '版权声明：本文为「'+"AustinMa's Blog"+'」的原创文章，遵循CC 4.0 BY-SA版权协议，转载请附上原文出处链接及本声明。' +
+                    '\r\n原文链接：' + location.href;
+                navigator.clipboard.writeText(text);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) {
+            }
+            ;
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>
