@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>📶 计算机网络 on AustinMa&#39;s Blog</title>
+    <link>https://mksasx.github.io/posts/tech/net/</link>
+    <description>Recent content in 📶 计算机网络 on AustinMa&#39;s Blog</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-cn</language>
+    <lastBuildDate>Sat, 31 Dec 2022 09:35:01 +0800</lastBuildDate><atom:link href="https://mksasx.github.io/posts/tech/net/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>计算机网络体系结构</title>
+      <link>https://mksasx.github.io/posts/tech/net/computer_network_architecture/</link>
+      <pubDate>Sat, 31 Dec 2022 09:35:01 +0800</pubDate>
+      
+      <guid>https://mksasx.github.io/posts/tech/net/computer_network_architecture/</guid>
+      <description>计算机网络体系结构笔记</description>
+    </item>
+    
+  </channel>
+</rss>
