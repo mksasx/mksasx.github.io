@@ -5,8 +5,8 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta name="robots" content="index, follow">
-<title>计算机网络体系结构 | AustinMa&#39;s Blog</title>
-<meta name="keywords" content="Computer-network-architecture">
+<title>计算机网络体系结构笔记 | AustinMa&#39;s Blog</title>
+<meta name="keywords" content="Computer-network-architecture, Computer-network-notes">
 <meta name="description" content="计算机网络体系结构笔记">
 <meta name="author" content="
 作者:&nbsp;AustinMa">
@@ -58,6 +58,27 @@
 
     </style>
 </noscript>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.2/dist/katex.min.css" integrity="sha384-bYdxxUwYipFNohQlHt0bjN/LCpueqWz13HufFEV1SUatKs1cm4L6fFgCi1jT643X" crossorigin="anonymous">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.2/dist/katex.min.js" integrity="sha384-Qsn9KnoKISj6dI8g7p1HBlNpVx0I8p1SvlwOldgi3IorMle61nQy4zEahWYtljaz" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.2/dist/contrib/auto-render.min.js" integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement(document.body, {
+          
+          
+          delimiters: [
+              {left: '$$', right: '$$', display: true},
+              {left: '$', right: '$', display: false},
+              {left: '\\(', right: '\\)', display: false},
+              {left: '\\[', right: '\\]', display: true}
+          ],
+          
+          throwOnError : false
+        });
+    });
+</script>
+
+
 <script>
 var _hmt = _hmt || [];
 (function() {
@@ -67,15 +88,17 @@ var _hmt = _hmt || [];
   s.parentNode.insertBefore(hm, s);
 })();
 </script>
-<meta property="og:title" content="计算机网络体系结构" />
+<meta property="og:title" content="计算机网络体系结构笔记" />
 <meta property="og:description" content="计算机网络体系结构笔记" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://mksasx.github.io/posts/tech/net/computer_network_architecture/" /><meta property="article:section" content="posts" />
+<meta property="og:url" content="https://mksasx.github.io/posts/tech/net/computer_network_architecture/" />
+<meta property="og:image" content="https://markdown-blog1.oss-cn-hangzhou.aliyuncs.com/img/202212310948885.png" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2022-12-31T09:35:01&#43;08:00" />
 <meta property="article:modified_time" content="2022-12-31T09:35:01&#43;08:00" />
 
-<meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="计算机网络体系结构"/>
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://markdown-blog1.oss-cn-hangzhou.aliyuncs.com/img/202212310948885.png" />
+<meta name="twitter:title" content="计算机网络体系结构笔记"/>
 <meta name="twitter:description" content="计算机网络体系结构笔记"/>
 
 
@@ -105,7 +128,7 @@ var _hmt = _hmt || [];
     {
       "@type": "ListItem",
       "position":  4 ,
-      "name": "计算机网络体系结构",
+      "name": "计算机网络体系结构笔记",
       "item": "https://mksasx.github.io/posts/tech/net/computer_network_architecture/"
     }
   ]
@@ -115,16 +138,16 @@ var _hmt = _hmt || [];
 {
   "@context": "https://schema.org",
   "@type": "BlogPosting",
-  "headline": "计算机网络体系结构",
-  "name": "计算机网络体系结构",
+  "headline": "计算机网络体系结构笔记",
+  "name": "计算机网络体系结构笔记",
   "description": "计算机网络体系结构笔记",
   "keywords": [
-    "Computer-network-architecture"
+    "Computer-network-architecture", "Computer-network-notes"
   ],
   "articleBody": "计算机网络体系结构 1. 计算机网络综述 * 1.1. 计算机网络概念 * 计算机网络就是一些互联的，自治的计算机的集合，它们通过通信设备和线路互相连接，由功能完善的软件实现资源共享和信息传递。\n广义观点：能实现远程信息处理的系统或能进一步达到资源共享的系统\n资源共享观点：目的——资源共享，组成单元——分布在不同地理位置的多台独立的“自治计算机”，网络中计算机必须遵循的统一规则——网络协议\n用户透明性观点：网络对用户透明，其描述了一个分布式系统\n1.2. 计算机网络组成 * 组成：硬件，软件，协议\n工作方式：边缘部分——通信+资源共享（由所有连接到因特网上，供用户直接使用的主机组成），核心部分——为边缘部分提供连通性和交换服务（网络、连接这些网络的路由器）\n功能：通信子网——传输介质、通信设备和相应网络协议，资源子网——实现资源共享的设备及其软件的集合\n1.3. 计算机网络的功能 * 数据通信：计算机网络最基本和最重要的功能 资源共享：提高硬件资源，软件资源和数据资源的利用率 分布式处理：利用空闲计算机资源提高整个系统利用率 提高可靠性：计算机网络中各台计算机可以通过网络互为替代机 负载均衡：工作任务均匀分配给网络中各台计算机 1.4. 计算机网络分类 * 1.4.1. 分布范围 * 广域网WAN：长距离通信（几十千米到几千千米），交换技术 城域网MAN：5-50km，以太网技术 局域网LAN：几十米到几千米，广播技术 个人区域网PAN：10m左右 1.4.2. 传输技术 * 广播式网络：所有联网计算机共享一个公共通信信道。局域网，广域网中的无线、通信卫星网络采用广播式通信。 点对点网络：每条物理线路连接一对计算机。广域网基本属于点对点网络。 是否采用分组存储转发与路由选择机制是点对点式网络与广播式网络的重要区别。\n1.4.3. 拓扑结构 * 总线形：单根传输线，建网容易，增/减结点方便、节省线路。重负载时通信效率不高，对任意一处故障敏感。（局域网） 星形：中央设备为交换机或路由器，便于集中控制和管理。成本高，中央设备对故障敏感。（局域网） 环形：所有计算机接口设备连成环，环中信号单向传输。（令牌环局域网） 网状网络：每个结点至少有两条路径与其他结点相连，可靠性高。控制复杂，线路成本高。（广域网） 1.4.4. 使用者 公用网/专用网\n1.4.5. 交换技术 * 电路交换网络：建立连接，传输数据，断开连接。 数据直接传送，时延小。 线路利用率低、不能充分利用线路容量、不便于进行差错控制。 报文交换网络(存储-转发网络）：用户数据+源地址、目的地址、校验码等，封装成报文，传送至相邻结点。 充分利用线路容量，实现不同链路之间不同数据传输速率的转换，格式转换，一对多/多对一访问，差错控制。 增大资源开销，缓冲时延，需要额外控制机制保证多个报文数据不乱序，缓冲区难以管理。 分组交换网络：数据分成较短的固定长度数据块，在每个数据块中加上源地址、目的地址等辅助信息组成分组（包）已存储-转发方式传输，封装成报文单个分组发送到相邻结点。 除具有报文交换网络的优点外，缓冲易于管理，包的平均时延更校，网络占用平均缓冲区更少，更易于标准化，更适合应用 1.4.6. 传输介质 有线网络：双绞线网络，同轴电缆网络等。 无线网络：蓝牙，微波，无线电等。 1.5. 计算机网络性能指标 * 带宽：网络通信线路传送数据的能力（比特/秒） 时延：数据（一个报文或分组）从网络（或链路）一端发送到另一端的总时间。总时延=发送时延+传播时延+处理时延+排队时延（通常忽略后两者） 发送时延：发送时延=分组长度/信道宽度 传播时延：传播时延=信道长度/电磁波在信道上传播速率 处理时延：数据在交换结点为存储转发进行的一些必要的处理花费的时间。 排队时延：分组在进入路由器后先在输入队列中排队等待处理，在输出队列中排队等待转发的时间。 时延带宽积：传播时延 × 信道带宽 往返时延：发送端发出一个短分组，到发送端收到来自接收端的确认总共经历的时延。 吞吐量：单位时间内通过某个网络（或者信道/接口）的数据量。 速率：数据传输速率，最高数据传输速率称为带宽 信道利用率：有数据通过时间/（有+无）数据通过时间 电路交换：s+$\\frac{x}{b}$+kd 分组交换：kd+(k-1)*$\\frac{p}{b}$+$\\lceil \\frac{x}{p} \\rceil \\times \\frac{p}{b}$ 2.计算机网络体系结构与参考模型 * 2.1. 计算机网络分层结构 分层基本原则：\n每层实现独立功能，降低大系统复杂度 各层之间界面自然清晰，易于理解，相互交流尽可能少 各层功能精确定义独立于具体实现方法 保持下层对上层的独立性，上层单向使用下层服务 整个分层结构应能促进标准化工作 层数过多，功能在不同层中重复出现，产生额外开销，导致运行效率降低\n层数过少，会使每层协议太复杂\n报文=服务数据单元(SDU)+协议控制信息(PCI)=协议数据单元(PDU) n-SDU+n-PCI=n-PDU=(n-1)-SDU 如物理层的PDU称为比特，链路层的PDU称为帧，网络层的PDU称为分组，传输层的PDU称为报文。 具体地，层次结构的含义包括以下几方面：\n1)第n层的实体不仅要使用第n-1层的服务来实现自身定义的功能，还要向第n+1层提\n供本层的服务，该服务是第n层及其下面各层提供的服务总和。\n2)最低层只提供服务，是整个层次结构的基础；中间各层既是下一层的服务使用者，又是\n上一层的服务提供者；最高层面向用户提供服务。\n3)上一层只能通过相邻层间的接口使用下一层的服务，而不能调用其他层的服务；下一层\n所提供服务的实现细节对上一层透明。\n4)两台主机通信时，对等层在逻辑上有一条直接信道，表现为不经过下层就把信息传送到\n对方。\n2.计算机网络协议/接口/服务 2.2.1.协议 定义：是控制两个(或多个)对等实体进行通信的规则的集合，由语法，语义，同步三部分组成。\n语法：规定传输数据的格式 语义：规定索要完成的功能 同步：规定了执行各种操作的条件，时序关系等 完整的协议通常应该具有线路管理，差错控制，数据转换等功能。\n2.2.2.接口 定义：是同一结点内相邻两层间交换信息的连接点，是一个系统内部的规定。每层只能为紧邻的层次之间定义接口，不能跨层定义接口。\n同一结点相邻两层实体通过服务访问点(SAP)交互——————服务是通过SAP提供给上层使用的，第n层的\nSAP就是第n+1层可以访问第n层服务的地方。\n2.2.3.服务 定义：下层为紧邻的上层提供的功能调用。\nOSI参考模型的原语分类：\n请求：服务用户发往服务提供者，请求完成某项工作 指示：服务提供者发往服务用户，指示用户做某件事 响应：服务用户发往服务提供者，作为对指示的响应 证实：服务提供者发往服务用户，作为对请求的证实 协议，接口，服务相互关系\n只有本层协议的实现才能保证向上层提供服务 本层的服务用户只能看到服务而无法看到下面的协议 协议是\"水平的\"，协议是控制对等实体之间通信的规则 服务是\"垂直的\"，服务是由下层通过层间接口向上层提供的 面向连接服务：通信前需要建立连接，分配资源，释放连接和占用的资源。可以分为连接建立、数据传输和连接释放三个阶段 无连接服务（尽最大努力交付）：通信前不需要建立连接，需要发送数据可直接发送，属于不可靠服务 可靠服务：网络具有纠错，检错，应答机制，保证数据正确，可靠地传送到目的地 不可靠服务：网络只是尽量正确、可靠地传送，而不能保证数据正确、可靠地传送到目的地，是一种尽力而为的服务。不可靠服务的网络的可靠性由应用和用户来保障。 有应答服务：接收方收到数据后向发送方给出相应应答，该应答由传输系统内部自动实现，而不由用户实现。例如文件传输服务 无应答服务：接收方收到数据后不自动给出应答。若需要应答，则由高层实现（www服务） 2.3. ISO/OSI参考模型与TCP/IP模型 * 2.3.1. OSI参考模型（开放系统互连参考模型） * 名称 层数 传输单位 任务 功能 协议/规程/接口标准 属于 物理媒体 0 物理层 1 比特 透明的传输比特流 在物理媒体上传输原始比特流 EIA-232C/CCITT的X.21等 通信子网 数据链路层 2 帧 将网络层传来的IP数据报组装成帧 成帧，差错控制，流量控制和传输管理 SDLC。HDLC，PPP，STP等 通信子网 网络层 3 数据报 把网络层PDU（协议数据单元）（分组)从源端传到目的端，为分组交换网上不同主机提供通信服务 对分组进行路由选择，实现流量控制，拥塞控制，差错控制，网际互连 IP，IPX，ICMP，IGMP，ARP，RARP，OSPF 通信子网 传输层 4 报文段(TCP)或用户数据报(UDP) 负责主机中两个进程间的通信 为端到端连接提供可靠的服务，流量控制，差错控制，服务质量，数据传输管理等服务 TCP，UDP 承上启下 会话层 5 向表示层提供它的增值服务 管理主机间会话进程，实现数据同步 资源子网 表示层 6 处理两个通信系统中交换信息的表示方式 采用抽象的标准方法定义数据结构，采用标准的编码形式 资源子网 应用层 7 为特定类型的网络应用提供访问OSI参考模型环境的手段 采用不同应用协议解决不同类型应用要求 文件传送FTP，电子邮件SMTP，万维网HTTP 资源子网 2.3.2. TCP/IP模型 * 名称 对象 功能 协议 网络接口层 主机-网络 从主机或结点接受IP分组，并把它们发送到指定物理网络上 主机必须使用某种协议与网络连接 网际层 主机-主机 将分组发往任何网络，并为之独立选择合适路由 定义标准分组格式和协议IP(IPv4/IPv6) 传输层 应用-应用\n进程-进程 使得发送端和目的端主机上的对等实体进行会话 传输控制协议(TCP)：面向连接，单位为报文段,提供可靠交付\n用户数据报协议(UDP)：无连接，单位为用户数据报，尽最大努力交付 应用层 用户-用户 包含所有高层协议 虚拟终端协议Telnet，文本传输协议FTP，域名解析服务DNS，电子邮件协议SMTP，超文本传输协议HTTP 2.3.3. OSI模型与TCP/IP模型的比较 * 相似点：\n均采用分层的体系结构，分层功能大体相似 均基于独立的协议栈的概念 均可解决异构网络互联，实现不同计算机之间通信 不同点：\nOSI精确定义服务，协议，接口；TCP/IP没有明确区分 OSI没有偏向于任何特定的协议，通用性良好；TCP/IP则是对已有的协议的描述 TCP/IP考虑到了异构网络互联问题，将网际协议(IP)作为一个单独重要层次；OSI在后来只能在网络层中划分子层完成类似的功能 OSI网络层支持无连接和面向连接通信，在传输层仅有面向连接通信；TCP/IP在网际层仅有无连接通信，而在传输层支持无连接和面向连接通信 ",
   "wordCount" : "4166",
   "inLanguage": "en",
-  "datePublished": "2022-12-31T09:35:01+08:00",
+  "image":"https://markdown-blog1.oss-cn-hangzhou.aliyuncs.com/img/202212310948885.png","datePublished": "2022-12-31T09:35:01+08:00",
   "dateModified": "2022-12-31T09:35:01+08:00",
   "author":[{
     "@type": "Person",
@@ -237,7 +260,7 @@ var _hmt = _hmt || [];
         <header class="post-header">
             <div class="breadcrumbs" style="margin-bottom: 5px;"><a href="https://mksasx.github.io/">🏠主页</a>&nbsp;»&nbsp;<a href="https://mksasx.github.io/posts/">📚文章</a>&nbsp;»&nbsp;<a href="https://mksasx.github.io/posts/tech/">👨🏻‍💻 技术</a>&nbsp;»&nbsp;<a href="https://mksasx.github.io/posts/tech/net/">📶 计算机网络</a></div>
             <h1 class="post-title">
-                计算机网络体系结构
+                计算机网络体系结构笔记
             </h1>
             <div class="post-description">
                 计算机网络体系结构笔记
@@ -249,8 +272,7 @@ var _hmt = _hmt || [];
 
                 &nbsp;|&nbsp;标签: &nbsp;
                 <ul class="post-tags-meta">
-                    <a href="https://mksasx.github.io/tags/computer-network/">Computer-network</a>
-                    <a href="https://mksasx.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C/">、计算机网络</a>
+                    <a href="https://mksasx.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%AC%94%E8%AE%B0/">计算机网络笔记</a>
                 </ul>
 
                 
@@ -260,6 +282,9 @@ var _hmt = _hmt || [];
 
 </div>
         </header> 
+<figure class="entry-cover1"><img loading="lazy" src="https://markdown-blog1.oss-cn-hangzhou.aliyuncs.com/img/202212310948885.png" alt="">
+        
+</figure>
         <aside id="toc-container" class="toc-container wide">
     <div class="toc">
         <details  open>
@@ -740,15 +765,10 @@ var _hmt = _hmt || [];
         <footer class="post-footer">
             
 <nav class="paginav">
-  <a class="prev" href="https://mksasx.github.io/posts/sport/%E7%AF%AE%E7%90%83%E5%9F%BA%E6%9C%AC%E6%88%98%E6%9C%AF%E5%8F%8A%E5%9B%BE%E8%A7%A3/">
-    <span class="title">« 上一页</span>
-    <br>
-    <span>篮球基本战术及图解</span>
-  </a>
-  <a class="next" href="https://mksasx.github.io/posts/tech/compile/summary/">
+  <a class="next" href="https://mksasx.github.io/posts/sport/bas_wallpaper/">
     <span class="title">下一页 »</span>
     <br>
-    <span>编译期末总结文档</span>
+    <span>篮球壁纸</span>
   </a>
 </nav>
 

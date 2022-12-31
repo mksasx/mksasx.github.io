@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>物理层笔记 | AustinMa&#39;s Blog</title>
+<meta name="keywords" content="Computer-network, Computer-network-notes, Physical_layer">
+<meta name="description" content="物理层的笔记">
+<meta name="author" content="
+作者:&nbsp;AustinMa">
+<link rel="canonical" href="https://mksasx.github.io/posts/tech/net/physical_layer/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.967acbf0c339064569ca5565c0b609a98c167b48a8e6b7d8ab3730ae3447a1bf.css" integrity="" rel="preload stylesheet" as="style">
+<script defer crossorigin="anonymous" src="/assets/js/highlight.acb54fd32bbc1982428b8850317e45d076b95012730a5936667e6bc21777692a.js" integrity="sha256-rLVP0yu8GYJCi4hQMX5F0Ha5UBJzClk2Zn5rwhd3aSo="
+        onload="hljs.initHighlightingOnLoad();"></script>
+<link rel="icon" href="https://mksasx.github.io/img/1.jpg">
+<link rel="icon" type="image/png" sizes="16x16" href="https://mksasx.github.io/img/1.jpg">
+<link rel="icon" type="image/png" sizes="32x32" href="https://mksasx.github.io/img/1.jpg">
+<link rel="apple-touch-icon" href="https://mksasx.github.io/img/1.jpg">
+<link rel="mask-icon" href="https://mksasx.github.io/img/1.jpg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --hljs-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript>
+
+<script>
+var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = ""; 
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script>
+<meta property="og:title" content="物理层笔记" />
+<meta property="og:description" content="物理层的笔记" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://mksasx.github.io/posts/tech/net/physical_layer/" />
+<meta property="og:image" content="https://markdown-blog1.oss-cn-hangzhou.aliyuncs.com/img/202212311011087.png" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-12-31T10:08:10&#43;08:00" />
+<meta property="article:modified_time" content="2022-12-31T10:08:10&#43;08:00" />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:image" content="https://markdown-blog1.oss-cn-hangzhou.aliyuncs.com/img/202212311011087.png" />
+<meta name="twitter:title" content="物理层笔记"/>
+<meta name="twitter:description" content="物理层的笔记"/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "📚文章",
+      "item": "https://mksasx.github.io/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "👨🏻‍💻 技术",
+      "item": "https://mksasx.github.io/posts/tech/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  3 ,
+      "name": "📶 计算机网络",
+      "item": "https://mksasx.github.io/posts/tech/net/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  4 ,
+      "name": "物理层笔记",
+      "item": "https://mksasx.github.io/posts/tech/net/physical_layer/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "物理层笔记",
+  "name": "物理层笔记",
+  "description": "物理层的笔记",
+  "keywords": [
+    "Computer-network", "Computer-network-notes", "Physical_layer"
+  ],
+  "articleBody": "物理层 1. 通信基础 * 1.1. 基本概念 * 1.1.1. 数据，信号与码元 * 通信的目的是传送信息\n数据：传送信息的实体\n信号：数据在传输过程中的存在形式\n模拟信号/数据：连续变化的信号/数据 数字信号/数据：取值仅允许为几个有限的几个离散数值的信号/数据 码元：数字通信中数字信号的计量单位，用一个固定时长的信号波形表示一位k进制数字。时长内的信号称之为k进制码元，时长称之为码元宽度\n1.1.2. 信源，信道与信宿 * 数字通信系统主要划分为信源、信道和信宿。\n信源是产生和发送数据的源头 信宿是接受数据的终点 信道是信号的传输媒介 信道分类\n传输信号形式：模拟信道/数字信道 传输介质：无线信道/有线信道 信号分类\n基带信号（基带传输）/宽带信号（宽带传输） 基带信号将数字信号1和0直接用两种不同的电压表示，然后送到数字信道上传输(称为基带传输); 宽带信号将基带信号进行调制后形成频分复用模拟信号，然后传送到模拟信道上去传输(称为宽带传输)。 通信交互方式\n单向通信：一条信道，无线电广播，电视广播 半双工通信：两条信道，通信的双方都可以发送或接收信息，任何一方不能同时发送和接收 全双工通信：两条信道，两个方向的数据传输可以同时进行，通信双方可以同时发送和接收信息 1.1.3. 速率，波特与带宽 * 速率：数据率，数据传输速率\n码元传输速率（波特率）：单位时间内传输的码元数，单位波特,可以是多进制。码元速率与进制数无关。（比如说2个二进制数组成一个码元，那他就是四进制的） 信息传输速率：单位时间内传输的二进制码元个数（比特数），单位比特/秒 注意：波特和比特是两个不同的概念，码元传输速率也称调制速率、波形速率或符号速率。但码元传输速率与信息传输速率在数量上却又有一定的关系。若一个码元携带n比特的信息量，则M波特率的码元传输速率所对应的信息传输速率为Mn比特/秒。\n带宽：网络的通信线路所能传输数据的能力，表示单位时间内从网络中一点到另一点所能通过的\"最高数据率\"，单位b/s（Hz）\n1.2. 奈奎斯特定理/香农定理 * 1.2.1. 奈氏准则 * 理想低通信道下极限数据传输速率= $2W\\log_2{V}$ ，其中W为理想低通信道带宽，V为每个码元离散电平数目。\n任何信道码元传输速率有上限，超过上限会产生码间串扰 信道频带越宽，信道传输速率越高 奈氏准则规定码原传输速率，却并未限制码元可以有多少个二进制位。 1.2.2. 香农定理 * 香农定理是奈氏准则的推广，它规定了信息传输速率的上限，即信道的最大信息传输速率= $W\\log_{2}{(1+S/N)}$ ，其中W为信道带宽，S/N为信噪比。\n信噪比= $10log_{10}(S/N)$ ，单位dB\n信道带宽或信道中信噪比越大，信息极限传输速率越高 传输带宽和信噪比确定，信息传输速率上限确定 信息传输速率低于信道极限传输速率，就能找到某种方法实现无差错传输。 奈氏准则只考虑了带宽与极限码元与传输速率的关系，而香农定理不仅考虑了带宽，也考虑了信噪比。从侧面表明，一个码元对应的二进制位数是有限的\n1.3. 编码与调制 把数据变换为模拟信号的过程称为调制，把数据变换为数字信号的过程称为编码。\n1.3.1. 数字数据编码为数字信号 归零编码(RZ) 非归零编码(NRZ) 反向非归零编码(NRZI) 曼彻斯特编码(以太网) 差分曼彻斯特编码(局域网) 4B/5B编码 1.3.2. 数字数据编码为模拟信号 ASK幅移键控 FSK频移键控 PSK相移键控 QAM正交振幅调制 1.3.3. 模拟数据编码为数字信号 采样：时间上连续的信号变为离散的信号 量化：连续信号的幅度变为离散的数字量 编码：量化的结果转换为与之对应的二进制编码 1.3.4. 模拟数据编码为模拟信号 1.4.电路交换/报文交换/分组交换 * 1.4.1.电路交换 * 连接建立，数据传输，连接释放 用户始终占用端到端的固定传输宽带 优点：\n通信时延小 有序传输 没有冲突 适用范围广 实时性强 控制简单 缺点：\n建立连接时间长 线路独占 灵活性差 难以规格化 1.4.2.报文交换 * 报文携带目标地址，源地址等信息，在交换节点采用存储转发的传输方式。 优点：\n无需建立连接 动态分配线路 提高线路可靠性 提高线路利用率 提供多目标服务 缺点：\n引起转发时延 报文大小没有限制，要求网络结点有较大缓存空间。 1.4.3. 分组交换 * 限制每次传送数据块大小的上限，把大数据块划分为合理的小数据块，加上控制信息，构成分组。 优点：\n无建立时延 线路利用率高 简化存储管理 加速传输 减少出错概率和重发数据量。 缺点：\n存在传输时延 需要传输额外信息量 分组采用数据报形式的时候，可能出现失序、丢失或者重复分组。 1.5.数据报与虚电路 1.5.1.数据报 无连接的，不可靠的，尽最大努力交付的服务。 发送的分组包括发送端和接收端的完整地址。 分组在交换节点中采用存储转发的方式传输，需要排队等候处理，造成时延。 网络具有冗余路径。 存储转发延时一般较小，提高网络吞吐量。 收发双方不独占某条链路，资源利用率高。 1.5.2.虚电路 发送方和接收方建立一条逻辑上相连的虚电路。与电路交换类似，整个通信过程分为三个阶段：虚电路建立、数据传输与虚电路释放。 每个数据分组不仅要有分组号、校验和等控制信息，还要有它要通过的虚电路号。 虚电路通信链路建立和拆除需要时间开销，对交互式应用和小量的短分组情况显得很浪费，但对长时间、频繁的数据交换效率较高。 虚电路的路由选择体现在连接建立阶段，连接建立后，就确定了传输路径 虚电路提供了可靠的通信功能，能保证每个分组正确且有序到达。此外，还可以对两个数据端点的流量进行控制。 网络中某个结点或某条链路出现故障而彻底失效时，所有经过该结点或链路的虚电路将遭到破坏。 分组首部不包含目的地址，包含的是虚电路标识符，相对于数据报方式，其开销小。 数据报服务 虚电路服务 连接的建立 不需要 必须有 目的地址 每个分组都有完整的目的地址 仅在建立连接阶段使用，之后每个分组使用长度较短的虚电路号 路由选择 每个分组独立地进行路由选择和转发 属于同一条虚电路的分组按照同一路由转发 分组顺序 不保证分组有序到达 保证分组有序到达 可靠性 不保证可靠通信，可靠性由用户主机保证 可靠性由网络保证 对网络故障的适应性 出故障的结点丢失分组，其他分组路径选择发生变化时可以正常传输 所有经过故障结点的虚电路不能正常工作 差错处理和流量控制 由用户主机进行流量控制，不保证数据报的可靠性 可由分组交换网负责，也可由用户主机负责 2. 传输介质 * 2.1. 双绞线，同轴电缆，光纤与无线传输介质 * 双绞线:绞合减少相邻导线的电磁干扰，局域网/传统电话线 无屏蔽双绞线 屏蔽双绞线（金属丝编织成的屏蔽层） 同轴电缆:内导体，绝缘层，网状编织屏蔽层和塑料外层，用于传输较高速率的数据 光纤:光脉冲 通信容量非常大 传输损耗小，中继距离长，对远距离传输特别经济 抗雷电和电磁干扰性能好 无串音干扰，保密性好，不易被窃听或截取数据 体积小，重量轻 无线传输介质 无线电波 微波，红外线和激光 2.2. 物理接口的特性 机械特性 电气特性 功能特性 过程特性 3. 物理层设备 * 3.1. 中继器 * 将信号整形并放大转发，以扩大网络传输距离（信号再生）\n中继器两端的网络部分是网段，而不是子网，使用中继器连接的几个网段仍然是一个局域网。\n不能连接两个不同速率的局域网\n注意：如果某个网络设备具有存储转发的功能，那么可以认为它能连接两个不同的协议；如果该网络设备没有存储转发功能，那么认为它不能连接两个不同的协议，中继器没有存储转发功能，因此它不能连接两个选率不同的网段，中继器两端的网段一定要使用同一个协议。\n5-4-3规则:4个中继器串联的5段通信介质只有3段可以挂接计算机。\n放大器和中继器都起放大作用，只不过放大器放大的是模拟信号，原理是将衰减的信号放大，而中继器放大的是数字信号，原理是将衰减的信号整形再生。\n3.2. 集线器 * 多端口中继器，作信号放大和转发作用，扩大网络传输范围\n至多有一个端口接收输入，整形放大后转发到所有处于工作状态的端口。（若有两个或以上端口输入，输出时会有冲突，导致数据都无效）\n在网络中只起信号放大和转发作用，目的是扩大网络的传输范围，而不具备信号的定向传送能力，即信号传输的方向是固定的，是一个标准的共享式设备。\n主要使用双绞线组件共享网络\n不能分割冲突域\n比如，一个带宽为10Mb/s的条线器上连接了8台计算机，当这8台计算机同时工作时，每台计算机真正所拥有的带宽为10/8Mb/s=1.25Mb/s.\n",
+  "wordCount" : "3283",
+  "inLanguage": "en",
+  "image":"https://markdown-blog1.oss-cn-hangzhou.aliyuncs.com/img/202212311011087.png","datePublished": "2022-12-31T10:08:10+08:00",
+  "dateModified": "2022-12-31T10:08:10+08:00",
+  "author":[{
+    "@type": "Person",
+    "name": "AustinMa"
+  }],
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://mksasx.github.io/posts/tech/net/physical_layer/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "AustinMa's Blog",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://mksasx.github.io/img/1.jpg"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+
+
+<script async src="https://cdn.jsdelivr.net/npm/mermaid/dist/mermaid.min.js"></script>
+
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="https://mksasx.github.io/" accesskey="h" title="AustinMa&#39;s Blog (Alt + H)">
+            <img src="https://mksasx.github.io/img/Avator.jpg" alt="logo" aria-label="logo"
+                 height="35">AustinMa&#39;s Blog</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                         fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                         stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                         fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                         stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="https://mksasx.github.io/search" title="🔍 搜索 (Alt &#43; /)" accesskey=/>
+                <span>🔍 搜索</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://mksasx.github.io/" title="🏠 主页">
+                <span>🏠 主页</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://mksasx.github.io/posts" title="📚 文章">
+                <span>📚 文章</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://mksasx.github.io/tags" title="🧩 标签">
+                <span>🧩 标签</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://mksasx.github.io/archives/" title="⏱ 时间轴">
+                <span>⏱ 时间轴</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://mksasx.github.io/about" title="🙋🏻‍♂️ 关于">
+                <span>🙋🏻‍♂️ 关于</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://mksasx.github.io/links" title="🤝 友链">
+                <span>🤝 友链</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main page">
+<article class="post-single">
+    <div id="single-content">
+        <header class="post-header">
+            <div class="breadcrumbs" style="margin-bottom: 5px;"><a href="https://mksasx.github.io/">🏠主页</a>&nbsp;»&nbsp;<a href="https://mksasx.github.io/posts/">📚文章</a>&nbsp;»&nbsp;<a href="https://mksasx.github.io/posts/tech/">👨🏻‍💻 技术</a>&nbsp;»&nbsp;<a href="https://mksasx.github.io/posts/tech/net/">📶 计算机网络</a></div>
+            <h1 class="post-title">
+                物理层笔记
+            </h1>
+            <div class="post-description">
+                物理层的笔记
+            </div>
+            <div class="post-meta">创建:&nbsp;<span title='2022-12-31 10:08:10 +0800 CST'>2022-12-31</span>&nbsp;|&nbsp;更新:&nbsp;2022-12-31&nbsp;|&nbsp;字数:&nbsp;3283字&nbsp;|&nbsp;时长:&nbsp;7分钟&nbsp;|&nbsp;
+作者:&nbsp;AustinMa
+
+
+
+                &nbsp;|&nbsp;标签: &nbsp;
+                <ul class="post-tags-meta">
+                    <a href="https://mksasx.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%BD%91%E7%BB%9C%E7%AC%94%E8%AE%B0/">计算机网络笔记</a>
+                </ul>
+
+                
+                <span id="busuanzi_container_page_pv">
+                &nbsp;| 访问: <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+</div>
+        </header> 
+<figure class="entry-cover1"><img loading="lazy" src="https://markdown-blog1.oss-cn-hangzhou.aliyuncs.com/img/202212311011087.png" alt="">
+        
+</figure>
+        <aside id="toc-container" class="toc-container wide">
+    <div class="toc">
+        <details  open>
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">文章目录</span>
+        </summary>
+
+        <div class="inner"><ul>
+                <li>
+                    <a href="#%e7%89%a9%e7%90%86%e5%b1%82" aria-label="物理层">物理层</a><ul>
+                        
+                <li>
+                    <a href="#1-%e9%80%9a%e4%bf%a1%e5%9f%ba%e7%a1%80-" aria-label="1. 通信基础 *">1. 通信基础 *</a><ul>
+                        
+                <li>
+                    <a href="#11-%e5%9f%ba%e6%9c%ac%e6%a6%82%e5%bf%b5-" aria-label="1.1. 基本概念 *">1.1. 基本概念 *</a><ul>
+                        
+                <li>
+                    <a href="#111-%e6%95%b0%e6%8d%ae%e4%bf%a1%e5%8f%b7%e4%b8%8e%e7%a0%81%e5%85%83-" aria-label="1.1.1. 数据，信号与码元 *">1.1.1. 数据，信号与码元 *</a></li>
+                <li>
+                    <a href="#112-%e4%bf%a1%e6%ba%90%e4%bf%a1%e9%81%93%e4%b8%8e%e4%bf%a1%e5%ae%bf-" aria-label="1.1.2. 信源，信道与信宿 *">1.1.2. 信源，信道与信宿 *</a></li>
+                <li>
+                    <a href="#113-%e9%80%9f%e7%8e%87%e6%b3%a2%e7%89%b9%e4%b8%8e%e5%b8%a6%e5%ae%bd-" aria-label="1.1.3. 速率，波特与带宽 *">1.1.3. 速率，波特与带宽 *</a></li></ul>
+                </li>
+                <li>
+                    <a href="#12-%e5%a5%88%e5%a5%8e%e6%96%af%e7%89%b9%e5%ae%9a%e7%90%86%e9%a6%99%e5%86%9c%e5%ae%9a%e7%90%86-" aria-label="1.2. 奈奎斯特定理/香农定理 *">1.2. 奈奎斯特定理/香农定理 *</a><ul>
+                        
+                <li>
+                    <a href="#121-%e5%a5%88%e6%b0%8f%e5%87%86%e5%88%99-" aria-label="1.2.1. 奈氏准则 *">1.2.1. 奈氏准则 *</a></li>
+                <li>
+                    <a href="#122-%e9%a6%99%e5%86%9c%e5%ae%9a%e7%90%86-" aria-label="1.2.2. 香农定理 *">1.2.2. 香农定理 *</a></li></ul>
+                </li>
+                <li>
+                    <a href="#13-%e7%bc%96%e7%a0%81%e4%b8%8e%e8%b0%83%e5%88%b6" aria-label="1.3. 编码与调制">1.3. 编码与调制</a><ul>
+                        
+                <li>
+                    <a href="#131-%e6%95%b0%e5%ad%97%e6%95%b0%e6%8d%ae%e7%bc%96%e7%a0%81%e4%b8%ba%e6%95%b0%e5%ad%97%e4%bf%a1%e5%8f%b7" aria-label="1.3.1. 数字数据编码为数字信号">1.3.1. 数字数据编码为数字信号</a></li>
+                <li>
+                    <a href="#132-%e6%95%b0%e5%ad%97%e6%95%b0%e6%8d%ae%e7%bc%96%e7%a0%81%e4%b8%ba%e6%a8%a1%e6%8b%9f%e4%bf%a1%e5%8f%b7" aria-label="1.3.2. 数字数据编码为模拟信号">1.3.2. 数字数据编码为模拟信号</a></li>
+                <li>
+                    <a href="#133-%e6%a8%a1%e6%8b%9f%e6%95%b0%e6%8d%ae%e7%bc%96%e7%a0%81%e4%b8%ba%e6%95%b0%e5%ad%97%e4%bf%a1%e5%8f%b7" aria-label="1.3.3. 模拟数据编码为数字信号">1.3.3. 模拟数据编码为数字信号</a></li>
+                <li>
+                    <a href="#134-%e6%a8%a1%e6%8b%9f%e6%95%b0%e6%8d%ae%e7%bc%96%e7%a0%81%e4%b8%ba%e6%a8%a1%e6%8b%9f%e4%bf%a1%e5%8f%b7" aria-label="1.3.4. 模拟数据编码为模拟信号">1.3.4. 模拟数据编码为模拟信号</a></li></ul>
+                </li>
+                <li>
+                    <a href="#14%e7%94%b5%e8%b7%af%e4%ba%a4%e6%8d%a2%e6%8a%a5%e6%96%87%e4%ba%a4%e6%8d%a2%e5%88%86%e7%bb%84%e4%ba%a4%e6%8d%a2-" aria-label="1.4.电路交换/报文交换/分组交换 *">1.4.电路交换/报文交换/分组交换 *</a><ul>
+                        
+                <li>
+                    <a href="#141%e7%94%b5%e8%b7%af%e4%ba%a4%e6%8d%a2-" aria-label="1.4.1.电路交换 *">1.4.1.电路交换 *</a></li>
+                <li>
+                    <a href="#142%e6%8a%a5%e6%96%87%e4%ba%a4%e6%8d%a2-" aria-label="1.4.2.报文交换 *">1.4.2.报文交换 *</a></li>
+                <li>
+                    <a href="#143-%e5%88%86%e7%bb%84%e4%ba%a4%e6%8d%a2-" aria-label="1.4.3. 分组交换 *">1.4.3. 分组交换 *</a></li></ul>
+                </li>
+                <li>
+                    <a href="#15%e6%95%b0%e6%8d%ae%e6%8a%a5%e4%b8%8e%e8%99%9a%e7%94%b5%e8%b7%af" aria-label="1.5.数据报与虚电路">1.5.数据报与虚电路</a><ul>
+                        
+                <li>
+                    <a href="#151%e6%95%b0%e6%8d%ae%e6%8a%a5" aria-label="1.5.1.数据报">1.5.1.数据报</a></li>
+                <li>
+                    <a href="#152%e8%99%9a%e7%94%b5%e8%b7%af" aria-label="1.5.2.虚电路">1.5.2.虚电路</a></li></ul>
+                </li></ul>
+                </li>
+                <li>
+                    <a href="#2-%e4%bc%a0%e8%be%93%e4%bb%8b%e8%b4%a8-" aria-label="2. 传输介质 *">2. 传输介质 *</a><ul>
+                        
+                <li>
+                    <a href="#21-%e5%8f%8c%e7%bb%9e%e7%ba%bf%e5%90%8c%e8%bd%b4%e7%94%b5%e7%bc%86%e5%85%89%e7%ba%a4%e4%b8%8e%e6%97%a0%e7%ba%bf%e4%bc%a0%e8%be%93%e4%bb%8b%e8%b4%a8-" aria-label="2.1. 双绞线，同轴电缆，光纤与无线传输介质 *">2.1. 双绞线，同轴电缆，光纤与无线传输介质 *</a></li>
+                <li>
+                    <a href="#22-%e7%89%a9%e7%90%86%e6%8e%a5%e5%8f%a3%e7%9a%84%e7%89%b9%e6%80%a7" aria-label="2.2. 物理接口的特性">2.2. 物理接口的特性</a></li></ul>
+                </li>
+                <li>
+                    <a href="#3-%e7%89%a9%e7%90%86%e5%b1%82%e8%ae%be%e5%a4%87-" aria-label="3. 物理层设备 *">3. 物理层设备 *</a><ul>
+                        
+                <li>
+                    <a href="#31-%e4%b8%ad%e7%bb%a7%e5%99%a8--" aria-label="3.1. 中继器  *">3.1. 中继器  *</a></li>
+                <li>
+                    <a href="#32-%e9%9b%86%e7%ba%bf%e5%99%a8-" aria-label="3.2. 集线器 *">3.2. 集线器 *</a>
+                </li>
+            </ul>
+            </li>
+            </ul>
+            </li>
+            </ul>
+        </div>
+        </details>
+    </div>
+</aside>
+<script>
+    let activeElement;
+    let elements;
+    window.addEventListener('DOMContentLoaded', function (event) {
+        checkTocPosition();
+
+        elements = document.querySelectorAll('h1[id],h2[id],h3[id],h4[id],h5[id],h6[id]');
+        
+        activeElement = elements[0];
+        const id = encodeURI(activeElement.getAttribute('id')).toLowerCase();
+        document.querySelector(`.inner ul li a[href="#${id}"]`).classList.add('active');
+    }, false);
+
+    window.addEventListener('resize', function(event) {
+        checkTocPosition();
+    }, false);
+
+    window.addEventListener('scroll', () => {
+        
+        activeElement = Array.from(elements).find((element) => {
+            if ((getOffsetTop(element) - window.pageYOffset) > 0 &&
+                (getOffsetTop(element) - window.pageYOffset) < window.innerHeight/2) {
+                return element;
+            }
+        }) || activeElement
+
+        elements.forEach(element => {
+            const id = encodeURI(element.getAttribute('id')).toLowerCase();
+            if (element === activeElement){
+                document.querySelector(`.inner ul li a[href="#${id}"]`).classList.add('active');
+            } else {
+                document.querySelector(`.inner ul li a[href="#${id}"]`).classList.remove('active');
+            }
+        })
+    }, false);
+
+    const main = parseInt(getComputedStyle(document.body).getPropertyValue('--article-width'), 10);
+    const toc = parseInt(getComputedStyle(document.body).getPropertyValue('--toc-width'), 10);
+    const gap = parseInt(getComputedStyle(document.body).getPropertyValue('--gap'), 10);
+
+    function checkTocPosition() {
+        const width = document.body.scrollWidth;
+
+        if (width - main - (toc * 2) - (gap * 4) > 0) {
+            document.getElementById("toc-container").classList.add("wide");
+        } else {
+            document.getElementById("toc-container").classList.remove("wide");
+        }
+    }
+
+    function getOffsetTop(element) {
+        if (!element.getClientRects().length) {
+            return 0;
+        }
+        let rect = element.getBoundingClientRect();
+        let win = element.ownerDocument.defaultView;
+        return rect.top + win.pageYOffset;
+    }
+</script>
+        
+        <div class="post-content"><h1 id="物理层">物理层<a hidden class="anchor" aria-hidden="true" href="#物理层">#</a></h1>
+<h2 id="1-通信基础-">1. 通信基础 *<a hidden class="anchor" aria-hidden="true" href="#1-通信基础-">#</a></h2>
+<h3 id="11-基本概念-">1.1. 基本概念 *<a hidden class="anchor" aria-hidden="true" href="#11-基本概念-">#</a></h3>
+<h4 id="111-数据信号与码元-">1.1.1. 数据，信号与码元 *<a hidden class="anchor" aria-hidden="true" href="#111-数据信号与码元-">#</a></h4>
+<p><strong>通信的目的是<code>传送信息</code></strong></p>
+<ul>
+<li>
+<p>数据：传送信息的<code>实体</code></p>
+</li>
+<li>
+<p>信号：数据在传输过程中的<code>存在形式</code></p>
+<ul>
+<li>模拟信号/数据：<code>连续变化</code>的信号/数据</li>
+<li>数字信号/数据：取值仅允许为几个有限的几个离散数值的信号/数据</li>
+</ul>
+</li>
+<li>
+<p>码元：数字通信中数字信号的计量单位，用一个<code>固定时长</code>的信号波形表示一位k进制数字。时长内的信号称之为<code>k进制码元</code>，时长称之为<code>码元宽度</code></p>
+</li>
+</ul>
+<h4 id="112-信源信道与信宿-">1.1.2. 信源，信道与信宿 *<a hidden class="anchor" aria-hidden="true" href="#112-信源信道与信宿-">#</a></h4>
+<p><strong>数字通信系统主要划分为<code>信源</code>、<code>信道</code>和<code>信宿</code>。</strong></p>
+<ul>
+<li>信源是产生和<code>发送</code>数据的<code>源头</code></li>
+<li>信宿是<code>接受</code>数据的<code>终点</code></li>
+<li>信道是信号的<code>传输媒介</code></li>
+</ul>
+<p><strong>信道分类</strong></p>
+<ul>
+<li>传输信号形式：模拟信道/数字信道</li>
+<li>传输介质：无线信道/有线信道</li>
+</ul>
+<p><strong>信号分类</strong></p>
+<ul>
+<li>基带信号（基带传输）/宽带信号（宽带传输）
+<ul>
+<li>基带信号将<strong>数字信号1和0</strong>直接用<strong>两种不同的电压</strong>表示，然后送到<strong>数字信道</strong>上传输(称为基带传输);</li>
+<li>宽带信号将<strong>基带信号</strong>进行<strong>调制</strong>后形成<strong>频分复用模拟信号</strong>，然后传送到<strong>模拟信道</strong>上去传输(称为宽带传输)。</li>
+</ul>
+</li>
+</ul>
+<p><strong>通信交互方式</strong></p>
+<ul>
+<li>单向通信：<code>一条信道</code>，无线电广播，电视广播</li>
+<li>半双工通信：<code>两条信道</code>，通信的双方都可以发送或接收信息，任何一方不能同时发送和接收</li>
+<li>全双工通信：<code>两条信道</code>，<code>两个方向</code>的数据传输可以同时进行，通信双方可以同时发送和接收信息</li>
+</ul>
+<h4 id="113-速率波特与带宽-">1.1.3. 速率，波特与带宽 *<a hidden class="anchor" aria-hidden="true" href="#113-速率波特与带宽-">#</a></h4>
+<ul>
+<li>
+<p>速率：数据率，数据<code>传输速率</code></p>
+<ul>
+<li>码元传输速率（<code>波特率</code>）：单位时间内传输的码元数，单位<code>波特</code>,可以是多进制。码元速率与进制数无关。（比如说2个二进制数组成一个码元，那他就是四进制的）</li>
+<li>信息传输速率：单位时间内传输的二进制码元个数（比特数），单位<code>比特/秒</code></li>
+</ul>
+<blockquote>
+<p>注意：波特和比特是两个不同的概念，码元传输速率也称调制速率、<strong>波形</strong>速率或符号速率。但码元传输速率与信息传输速率在数量上却又有一定的关系。<strong>若一个码元携带n比特的信息量，则M波特率的码元传输速率所对应的信息传输速率为Mn比特/秒。</strong></p>
+</blockquote>
+</li>
+<li>
+<p>带宽：网络的通信线路所能传输数据的能力，表示单位时间内从网络中一点到另一点所能通过的&quot;最高数据率&quot;，单位<code>b/s（Hz）</code></p>
+</li>
+</ul>
+<h3 id="12-奈奎斯特定理香农定理-">1.2. 奈奎斯特定理/香农定理 *<a hidden class="anchor" aria-hidden="true" href="#12-奈奎斯特定理香农定理-">#</a></h3>
+<h4 id="121-奈氏准则-">1.2.1. 奈氏准则 *<a hidden class="anchor" aria-hidden="true" href="#121-奈氏准则-">#</a></h4>
+<p>理想低通信道下<code>极限数据传输速率</code>= $2W\log_2{V}$ ，其中W为理想低通信道带宽，V为每个码元离散电平数目。</p>
+<ul>
+<li>任何信道码元传输速率有上限，超过上限会产生<code>码间串扰</code></li>
+<li>信道频带越宽，信道传输速率越高</li>
+<li>奈氏准则规定码原传输速率，却并未限制码元可以有多少个二进制位。</li>
+</ul>
+<h4 id="122-香农定理-">1.2.2. 香农定理 *<a hidden class="anchor" aria-hidden="true" href="#122-香农定理-">#</a></h4>
+<p>香农定理是奈氏准则的推广，它规定了<code>信息传输速率</code>的上限，即信道的<code>最大信息传输速率</code>= $W\log_{2}{(1+S/N)}$ ，其中W为信道带宽，S/N为信噪比。</p>
+<p>信噪比= $10log_{10}(S/N)$ ，单位<code>dB</code></p>
+<ul>
+<li>信道带宽或信道中<code>信噪比</code>越大，<code>信息极限传输速</code>率越高</li>
+<li><code>传输带宽</code>和<code>信噪比</code>确定，信息传输速率上限<code>确定</code></li>
+<li>信息传输速率<code>低于</code>信道极限传输速率，就能找到某种方法实现<code>无差错传输</code>。</li>
+</ul>
+<p><code>奈氏准则</code>只考虑了带宽与<code>极限码元</code>与<code>传输速率</code>的关系，而<code>香农定理</code>不仅考虑了<code>带宽</code>，也考虑了<code>信噪比</code>。从侧面表明，一个码元对应的二进制位数是<code>有限的</code></p>
+<h3 id="13-编码与调制">1.3. 编码与调制<a hidden class="anchor" aria-hidden="true" href="#13-编码与调制">#</a></h3>
+<p>把数据变换为<code>模拟信号</code>的过程称为<code>调制</code>，把数据变换为<code>数字信号</code>的过程称为<code>编码</code>。</p>
+<h4 id="131-数字数据编码为数字信号">1.3.1. 数字数据编码为数字信号<a hidden class="anchor" aria-hidden="true" href="#131-数字数据编码为数字信号">#</a></h4>
+<ul>
+<li>归零编码(RZ)</li>
+<li>非归零编码(NRZ)</li>
+<li>反向非归零编码(NRZI)</li>
+<li>曼彻斯特编码(<code>以太网</code>)</li>
+<li>差分曼彻斯特编码(<code>局域网</code>)</li>
+<li>4B/5B编码</li>
+</ul>
+<h4 id="132-数字数据编码为模拟信号">1.3.2. 数字数据编码为模拟信号<a hidden class="anchor" aria-hidden="true" href="#132-数字数据编码为模拟信号">#</a></h4>
+<ul>
+<li><code>ASK</code>幅移键控</li>
+<li><code>FSK</code>频移键控</li>
+<li><code>PSK</code>相移键控</li>
+<li><code>QAM</code>正交振幅调制</li>
+</ul>
+<h4 id="133-模拟数据编码为数字信号">1.3.3. 模拟数据编码为数字信号<a hidden class="anchor" aria-hidden="true" href="#133-模拟数据编码为数字信号">#</a></h4>
+<ul>
+<li>采样：时间上连续的信号变为离散的信号</li>
+<li>量化：连续信号的幅度变为离散的数字量</li>
+<li>编码：量化的结果转换为与之对应的二进制编码</li>
+</ul>
+<h4 id="134-模拟数据编码为模拟信号">1.3.4. 模拟数据编码为模拟信号<a hidden class="anchor" aria-hidden="true" href="#134-模拟数据编码为模拟信号">#</a></h4>
+<h3 id="14电路交换报文交换分组交换-">1.4.电路交换/报文交换/分组交换 *<a hidden class="anchor" aria-hidden="true" href="#14电路交换报文交换分组交换-">#</a></h3>
+<p><img loading="lazy" src="https://markdown-blog1.oss-cn-hangzhou.aliyuncs.com/img/202212311011764.png" alt="image-20221210172409791"  />
+</p>
+<h4 id="141电路交换-">1.4.1.电路交换 *<a hidden class="anchor" aria-hidden="true" href="#141电路交换-">#</a></h4>
+<ul>
+<li>连接建立，数据传输，连接释放</li>
+<li>用户始终占用端到端的固定传输宽带</li>
+</ul>
+<p><strong>优点：</strong></p>
+<ul>
+<li>通信时延小</li>
+<li>有序传输</li>
+<li>没有冲突</li>
+<li>适用范围广</li>
+<li>实时性强</li>
+<li>控制简单</li>
+</ul>
+<p><strong>缺点：</strong></p>
+<ul>
+<li>建立连接时间长</li>
+<li>线路独占</li>
+<li>灵活性差</li>
+<li>难以规格化</li>
+</ul>
+<h4 id="142报文交换-">1.4.2.报文交换 *<a hidden class="anchor" aria-hidden="true" href="#142报文交换-">#</a></h4>
+<ul>
+<li>报文携带目标地址，源地址等信息，在交换节点采用存储转发的传输方式。</li>
+</ul>
+<p><strong>优点：</strong></p>
+<ul>
+<li>无需建立连接</li>
+<li>动态分配线路</li>
+<li>提高线路可靠性</li>
+<li>提高线路利用率</li>
+<li>提供多目标服务</li>
+</ul>
+<p><strong>缺点：</strong></p>
+<ul>
+<li>引起转发时延</li>
+<li>报文大小没有限制，要求网络结点有较大缓存空间。</li>
+</ul>
+<h4 id="143-分组交换-">1.4.3. 分组交换 *<a hidden class="anchor" aria-hidden="true" href="#143-分组交换-">#</a></h4>
+<ul>
+<li>限制每次传送数据块大小的上限，把大数据块划分为合理的小数据块，加上控制信息，构成分组。</li>
+</ul>
+<p><strong>优点：</strong></p>
+<ul>
+<li>无建立时延</li>
+<li>线路利用率高</li>
+<li>简化存储管理</li>
+<li>加速传输</li>
+<li>减少出错概率和重发数据量。</li>
+</ul>
+<p><strong>缺点：</strong></p>
+<ul>
+<li>存在传输时延</li>
+<li>需要传输额外信息量</li>
+<li>分组采用数据报形式的时候，可能出现失序、丢失或者重复分组。</li>
+</ul>
+<h3 id="15数据报与虚电路">1.5.数据报与虚电路<a hidden class="anchor" aria-hidden="true" href="#15数据报与虚电路">#</a></h3>
+<h4 id="151数据报">1.5.1.数据报<a hidden class="anchor" aria-hidden="true" href="#151数据报">#</a></h4>
+<ul>
+<li><code>无连接的</code>，<code>不可靠的</code>，<code>尽最大努力交付</code>的服务。</li>
+<li>发送的分组包括<code>发送端</code>和<code>接收端</code>的完整地址。</li>
+<li>分组在交换节点中采用<code>存储转发</code>的方式传输，需要排队等候处理，造成时延。</li>
+<li>网络具有冗余路径。</li>
+<li>存储转发延时一般较小，提高网络吞吐量。</li>
+<li>收发双方不独占某条链路，资源利用率高。</li>
+</ul>
+<p><img loading="lazy" src="https://markdown-blog1.oss-cn-hangzhou.aliyuncs.com/img/202212311011087.png" alt="image-20221210172421199"  />
+</p>
+<h4 id="152虚电路">1.5.2.虚电路<a hidden class="anchor" aria-hidden="true" href="#152虚电路">#</a></h4>
+<ul>
+<li>发送方和接收方建立一条逻辑上相连的虚电路。<strong>与电路交换类似，整个通信过程分为三个阶段：虚电路建立、数据传输与虚电路释放。</strong></li>
+<li>每个数据分组不仅要有分组号、校验和等控制信息，还要有它要通过的虚电路号。</li>
+<li>虚电路通信链路建立和拆除需要时间开销，对交互式应用和小量的短分组情况显得很浪费，但对长时间、频繁的数据交换效率较高。</li>
+<li>虚电路的路由选择体现在连接建立阶段，连接建立后，就确定了传输路径</li>
+<li>虚电路提供了可靠的通信功能，能保证每个分组正确且有序到达。此外，还可以对两个数据端点的流量进行控制。</li>
+<li>网络中某个结点或某条链路出现故障而彻底失效时，所有经过该结点或链路的虚电路将遭到破坏。</li>
+<li>分组首部不包含目的地址，包含的是虚电路标识符，相对于数据报方式，其开销小。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>数据报服务</th>
+<th>虚电路服务</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>连接的建立</td>
+<td>不需要</td>
+<td>必须有</td>
+</tr>
+<tr>
+<td>目的地址</td>
+<td>每个分组都有完整的目的地址</td>
+<td>仅在建立连接阶段使用，之后每个分组使用长度较短的虚电路号</td>
+</tr>
+<tr>
+<td>路由选择</td>
+<td>每个分组独立地进行路由选择和转发</td>
+<td>属于同一条虚电路的分组按照同一路由转发</td>
+</tr>
+<tr>
+<td>分组顺序</td>
+<td>不保证分组有序到达</td>
+<td>保证分组有序到达</td>
+</tr>
+<tr>
+<td>可靠性</td>
+<td>不保证可靠通信，可靠性由用户主机保证</td>
+<td>可靠性由网络保证</td>
+</tr>
+<tr>
+<td>对网络故障的适应性</td>
+<td>出故障的结点丢失分组，其他分组路径选择发生变化时可以正常传输</td>
+<td>所有经过故障结点的虚电路不能正常工作</td>
+</tr>
+<tr>
+<td>差错处理和流量控制</td>
+<td>由用户主机进行流量控制，不保证数据报的可靠性</td>
+<td>可由分组交换网负责，也可由用户主机负责</td>
+</tr>
+</tbody>
+</table>
+<h2 id="2-传输介质-">2. 传输介质 *<a hidden class="anchor" aria-hidden="true" href="#2-传输介质-">#</a></h2>
+<h3 id="21-双绞线同轴电缆光纤与无线传输介质-">2.1. 双绞线，同轴电缆，光纤与无线传输介质 *<a hidden class="anchor" aria-hidden="true" href="#21-双绞线同轴电缆光纤与无线传输介质-">#</a></h3>
+<ul>
+<li>双绞线:<code>绞合</code>减少相邻导线的电磁干扰，局域网/传统电话线
+<ul>
+<li>无屏蔽双绞线</li>
+<li>屏蔽双绞线（金属丝编织成的屏蔽层）</li>
+</ul>
+</li>
+<li>同轴电缆:内导体，绝缘层，网状编织屏蔽层和塑料外层，用于传输较高速率的数据</li>
+<li>光纤:光脉冲
+<ul>
+<li>通信容量非常大</li>
+<li>传输损耗小，中继距离长，对远距离传输特别经济</li>
+<li>抗雷电和电磁干扰性能好</li>
+<li>无串音干扰，保密性好，不易被窃听或截取数据</li>
+<li>体积小，重量轻</li>
+</ul>
+</li>
+<li>无线传输介质
+<ul>
+<li>无线电波</li>
+<li>微波，红外线和激光</li>
+</ul>
+</li>
+</ul>
+<h3 id="22-物理接口的特性">2.2. 物理接口的特性<a hidden class="anchor" aria-hidden="true" href="#22-物理接口的特性">#</a></h3>
+<ul>
+<li>机械特性</li>
+<li>电气特性</li>
+<li>功能特性</li>
+<li>过程特性</li>
+</ul>
+<h2 id="3-物理层设备-">3. 物理层设备 *<a hidden class="anchor" aria-hidden="true" href="#3-物理层设备-">#</a></h2>
+<h3 id="31-中继器--">3.1. 中继器  *<a hidden class="anchor" aria-hidden="true" href="#31-中继器--">#</a></h3>
+<ul>
+<li>
+<p>将信号整形并放大转发，以扩大网络传输距离（信号再生）</p>
+</li>
+<li>
+<p>中继器两端的网络部分是网段，而不是子网，使用中继器连接的几个网段仍然是一个局域网。</p>
+</li>
+<li>
+<p><code>不能</code>连接两个不同速率的局域网</p>
+<blockquote>
+<p>注意：如果某个网络设备具有<strong>存储转发</strong>的功能，那么可以认为它能连接两个<strong>不同的协议</strong>；如果该网络设备没有存储转发功能，那么认为它不能连接两个不同的协议，<strong>中继器没有存储转发功能，因此它不能连接两个选率不同的网段，中继器两端的网段一定要使用同一个协议。</strong></p>
+</blockquote>
+</li>
+<li>
+<p>5-4-3规则:4个中继器串联的5段通信介质只有3段可以挂接计算机。</p>
+</li>
+<li>
+<blockquote>
+<p><strong>放大器和中继器都起放大作用，只不过放大器放大的是模拟信号，原理是将衰减的信号放大，而中继器放大的是数字信号，原理是将衰减的信号整形再生。</strong></p>
+</blockquote>
+</li>
+</ul>
+<h3 id="32-集线器-">3.2. 集线器 *<a hidden class="anchor" aria-hidden="true" href="#32-集线器-">#</a></h3>
+<ul>
+<li>
+<p>多端口中继器，作信号放大和转发作用，扩大网络传输范围</p>
+</li>
+<li>
+<p><strong>至多</strong>有<code>一个</code>端口接收输入，整形放大后<strong>转发</strong>到所有处于工作状态的端口。（若有两个或以上端口输入，输出时会有冲突，导致数据都无效）</p>
+</li>
+<li>
+<p>在网络中只起信号放大和转发作用，目的是扩大网络的传输范围，而不具备信号的定向传送能力，即信号传输的方向是固定的，<strong>是一个标准的共享式设备</strong>。</p>
+</li>
+<li>
+<p>主要使用双绞线组件共享网络</p>
+</li>
+<li>
+<p><strong><code>不能分割冲突域</code></strong></p>
+</li>
+<li>
+<p>比如，一个带宽为10Mb/s的条线器上连接了8台计算机，当这8台计算机同时工作时，每台计算机真正所拥有的带宽为10/8Mb/s=1.25Mb/s.</p>
+</li>
+</ul>
+
+
+        </div>
+        <div class="post-reward">
+            <div style="padding: 0 0 0 0; margin: 0 0 0 0; width: 100%; font-size:16px; text-align: center;">
+                <div id="QR" style="opacity: 0;">
+                    <div id="wechat" style="display: inline-block">
+                        <a class="fancybox" rel="group">
+                            <img id="wechat_qr" src="/img/wechat_pay.jpg" alt="wechat_pay"></a>
+                        <p>微信</p>
+                    </div>
+                    <div id="alipay" style="display: inline-block">
+                        <a class="fancybox" rel="group">
+                            <img id="alipay_qr" src="/img/alipay.jpg" alt="alipay"></a>
+                        <p>支付宝</p>
+                    </div>
+                </div>
+                <button id="rewardButton"
+                        onclick="
+                    var qr = document.getElementById('QR');
+                    if (qr.style.opacity === '0') {
+                        qr.style.opacity='1';
+                    } else {
+                        qr.style.opacity='0'
+                    }"
+                >
+                    <span>🧧 鼓励</span>
+                </button>
+            </div>
+        </div>
+
+        <footer class="post-footer">
+            
+<nav class="paginav">
+  <a class="prev" href="https://mksasx.github.io/posts/tech/algorithm/fft/">
+    <span class="title">« 上一页</span>
+    <br>
+    <span>FFT模板</span>
+  </a>
+  <a class="next" href="https://mksasx.github.io/posts/sport/%E7%AF%AE%E7%90%83%E5%9F%BA%E6%9C%AC%E6%88%98%E6%9C%AF%E5%8F%8A%E5%9B%BE%E8%A7%A3/">
+    <span class="title">下一页 »</span>
+    <br>
+    <span>篮球基本战术及图解</span>
+  </a>
+</nav>
+
+        </footer>
+    </div>
+
+
+
+<div>
+    <div class="pagination__title">
+        <span class="pagination__title-h" style="font-size: 20px;">💬评论</span>
+        <hr />
+    </div>
+
+    <div id="tcomment"></div>
+
+    <script src="https://cdn.staticfile.org/twikoo/1.6.7/twikoo.all.min.js">
+    </script>
+    
+
+    
+
+    <script>
+        twikoo.init({
+            envId: "https://vercal-mogodb-comment.vercel.app/", 
+            el: "#tcomment",
+            lang: 'zh-CN',
+            region: 'ap-guangzhou',
+            path: window.TWIKOO_MAGIC_PATH||window.location.pathname,
+            
+            
+            
+            
+            
+            
+            
+        });
+    </script>
+
+</div>
+</article>
+</main>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css">
+<script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script>
+
+
+<script async src="https://unpkg.com/mermaid@8.8.1/dist/mermaid.min.js"></script>
+
+
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+<meting-js
+        id="8109915341"
+        lrc-type="0"
+        server="tencent"
+        order="random"
+        type="playlist"
+        fixed="true"
+        list-olded="true">
+</meting-js>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<footer class="footer">
+    <span>
+        Copyright
+        &copy;
+        2020-2022 
+        <a href="https://mksasx.github.io/" style="color:#939393;">AustinMa&#39;s Blog</a>
+         All Rights Reserved
+    </span>
+
+    
+
+     <span id="busuanzi_container">
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+        总访客数: <i class="fa fa-user"></i><span id="busuanzi_value_site_uv"></span>
+        总访问量: <i class="fa fa-eye"></i><span id="busuanzi_value_site_pv"></span>
+    </span>
+    
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <span class="topInner">
+        <svg class="topSvg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+            <path d="M12 6H0l6-6z"/>
+        </svg>
+        <span id="read_progress"></span>
+    </span>
+</a>
+
+<script>
+    document.addEventListener('scroll', function (e) {
+        const readProgress = document.getElementById("read_progress");
+        const scrollHeight = document.documentElement.scrollHeight;
+        const clientHeight = document.documentElement.clientHeight;
+        const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
+        
+        readProgress.innerText = ((scrollTop / (scrollHeight - clientHeight)).toFixed(2) * 100).toFixed(0);
+    })
+</script>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 400 || document.documentElement.scrollTop > 400) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+
+<script>
+    document.body.addEventListener('copy', function (e) {
+        if (window.getSelection().toString() && window.getSelection().toString().length > 50) {
+            let clipboardData = e.clipboardData || window.clipboardData;
+            if (clipboardData) {
+                e.preventDefault();
+                let htmlData = window.getSelection().toString() +
+                    '\r\n\n————————————————\r\n' +
+                    '版权声明：本文为「'+"AustinMa's Blog"+'」的原创文章，遵循CC 4.0 BY-SA版权协议，转载请附上原文出处链接及本声明。' +
+                    '\r\n原文链接：' + location.href;
+                let textData = window.getSelection().toString() +
+                    '\r\n\n————————————————\r\n' +
+                    '版权声明：本文为「'+"AustinMa's Blog"+'」的原创文章，遵循CC 4.0 BY-SA版权协议，转载请附上原文出处链接及本声明。' +
+                    '\r\n原文链接：' + location.href;
+                clipboardData.setData('text/html', htmlData);
+                clipboardData.setData('text/plain', textData);
+            }
+        }
+    });
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerText = '📄复制';
+
+        function copyingDone() {
+            copybutton.innerText = '👌🏻已复制!';
+            setTimeout(() => {
+                copybutton.innerText = '📄复制';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                let text = codeblock.textContent +
+                    '\r\n————————————————\r\n' +
+                    '版权声明：本文为「'+"AustinMa's Blog"+'」的原创文章，遵循CC 4.0 BY-SA版权协议，转载请附上原文出处链接及本声明。' +
+                    '\r\n原文链接：' + location.href;
+                navigator.clipboard.writeText(text);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) {
+            }
+            ;
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>
