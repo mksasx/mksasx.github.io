@@ -180,6 +180,7 @@ var _hmt = _hmt || [];
         <img src="https://mksasx.github.io/img/Avator.jpg" alt="profile image"
             height="150" width="200" />
         <h1>┑(￣▽ ￣)┍</h1>
+        <div id="typed-strings"><span id="typed"></span></div>
         <h2 class="p1"></h2>
         <span class="subtitle">Actions speak louder than words<br/></span><div class="social-icons">
     <a href="https://github.com/mksasx" target="_blank" rel="noopener noreferrer me" title="Github">
@@ -230,8 +231,19 @@ var _hmt = _hmt || [];
         </div>
     </div>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.11"></script>
+<script type="text/javascript">
+    var typed = new Typed("#typed", {
+            strings: ['言行如一，谨言慎行'],
+            startDelay: 0,
+            typeSpeed: 200,
+            backSpeed: 100,
+            loop: true,
+            showCursor: true,
+            shuffle: false
+            });
+</script>
 <script>
-    
     function format(newDate) {
         var day = newDate.getDay()
         var y = newDate.getFullYear()
